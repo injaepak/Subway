@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "Subway",
+			"Path": "C:\\Users\\Default.DESKTOP-6F3BTUF\\Desktop\\Subway\\Source\\Subway.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "SubwayEditor",
+			"Path": "C:\\Users\\Default.DESKTOP-6F3BTUF\\Desktop\\Subway\\Source\\SubwayEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
