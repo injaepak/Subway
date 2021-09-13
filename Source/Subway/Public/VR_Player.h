@@ -25,5 +25,39 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+public:
 
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UCapsuleComponent* capsuleComp;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UStaticMeshComponent* bodyComp;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class USceneComponent* cameraRoot;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UCameraComponent* playerCam;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UMotionControllerComponent* leftController;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UMotionControllerComponent* rightController;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class USkeletalMeshComponent* leftHand;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class USkeletalMeshComponent* rightHand;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UMoveActorComponent* moveComp;
+
+private:
+	void Fire1();
+	void Fire2();
+	void HorizontalMove(float value);
+	void VerticalMove(float value);
 };
