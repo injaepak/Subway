@@ -30,4 +30,11 @@ private:
 	void MoveHorizontal(float value);
 	void MoveVertical(float value);
 	void RotateHorizontal(float value);
+	void DrawTrajectory();
+	void ShowLine();
+	void HideLine();
+
+	class AVR_Player* player;
+
+	bool bIsShowingLine = false;
 };

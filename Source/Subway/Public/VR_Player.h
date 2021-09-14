@@ -60,4 +60,8 @@ private:
 	void Fire2();
 	void HorizontalMove(float value);
 	void VerticalMove(float value);
+	void ResetHMD();
+
+	FRotator hmdRotate;
+	FVector hmdLocation;
 };

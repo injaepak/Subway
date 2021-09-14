@@ -2,6 +2,8 @@
 
 
 #include "MoveActorComponent.h"
+#include "VR_Player.h"
+#include "MotionControllerComponent.h"
 
 // Sets default values for this component's properties
 UMoveActorComponent::UMoveActorComponent()
@@ -37,7 +39,7 @@ void UMoveActorComponent::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAxis("RightThumbstick_X", this, &UMoveActorComponent::MoveHorizontal);
 	PlayerInputComponent->BindAxis("RightThumbstick_Y", this, &UMoveActorComponent::MoveVertical);
 	PlayerInputComponent->BindAxis("LeftThumbstick_X", this, &UMoveActorComponent::RotateHorizontal);
-
+	
 }
 
 void UMoveActorComponent::MoveHorizontal(float value)
@@ -52,5 +54,15 @@ void UMoveActorComponent::RotateHorizontal(float value)
 {
 }
 
+void UMoveActorComponent::DrawTrajectory()
+{
 
+}
 
+void UMoveActorComponent::ShowLine()
+{
+}
+
+void UMoveActorComponent::HideLine()
+{
+}
