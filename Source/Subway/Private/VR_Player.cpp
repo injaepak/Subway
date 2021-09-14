@@ -53,6 +53,7 @@ AVR_Player::AVR_Player()
 
     //플레이어 컨트롤러 빙의
     AutoPossessPlayer = EAutoReceiveInput::Player0;
+    //
 
 }
 
