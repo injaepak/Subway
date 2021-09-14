@@ -4,6 +4,9 @@
 #include "WeaponPistol.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
+#include "FPSPlayer.h" // VRPlayer 인클루드해주시면 될것같습니다!
+#include "EnemyA.h"
+#include "EnemyA_FSM.h"
 
 // Sets default values
 AWeaponPistol::AWeaponPistol()
@@ -19,33 +22,61 @@ AWeaponPistol::AWeaponPistol()
 
 void AWeaponPistol::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("SHOOTING PISTOL"));
-
-	FVector Start = WeaponMesh->GetBoneLocation(FName("b_gun_muzzleflash"));
-	FVector Rot = WeaponMesh->GetBoneQuaternion(FName("b_gun_muzzleflash")).Vector();
-	FVector End = Start + Rot * 2000.0f;
-
-	TArray<FHitResult> HitResults;
-	FCollisionQueryParams CollisionParams;
-	FCollisionResponseParams CollisionResponse;
-	CollisionParams.AddIgnoredActor(this);
-
-	if (GetWorld()->LineTraceMultiByChannel(OUT HitResults, Start, End, ECollisionChannel::ECC_GameTraceChannel12, CollisionParams, CollisionResponse))
-	{
-		DrawDebugLine(GetWorld(), Start, End, FColor(255, 0, 0), false, 0.f, 0.f, 10.f);
-		for (FHitResult& Result : HitResults)
+	if (CurrentMagazineAmmo > 0)
 		{
-			if (AActor* HitActor = Result.GetActor())
+		UE_LOG(LogTemp, Warning, TEXT("SHOOTING PISTOL"));
+		FVector Start = WeaponMesh->GetBoneLocation(FName("b_gun_muzzleflash"));
+		FVector Rot = WeaponMesh->GetBoneQuaternion(FName("b_gun_muzzleflash")).Vector();
+		FVector End = Start + Rot * 5000.0f;
+
+		//TArray<FHitResult> HitResults;
+		FHitResult HitResults;
+		FCollisionQueryParams CollisionParams;
+		FCollisionResponseParams CollisionResponse;
+		CollisionParams.AddIgnoredActor(this);
+		// 플레이어 변수이름 넣어주면 플레이어도 무시함
+		//CollisionParams.AddIgnoredActor(ShootingPlayer);
+
+		CurrentMagazineAmmo--;
+
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_GameTraceChannel12, CollisionParams, CollisionResponse);
+
+		// Hit하지 않았더라도 남은 탄약 수 뷰포트상에 출력
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
+
+		if (bHit)
+		{
+			DrawDebugLine(GetWorld(), Start, End, FColor(255, 0, 0), false, 1.f, 0.f, 10.f); // 지속시간 수정
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("HIT!!")));
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Cause Damage: %d"), BaseDamage)); // 가한 데미지 출력
+			/*
+			for (FHitResult& Result : HitResults)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *HitActor->GetName());
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *HitActor->GetName()));
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Cause Damage: %d"), BaseDamage));
+				if (AActor* HitActor = Result.GetActor())
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Actor Name: %s"), *HitActor->GetName());
+					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *HitActor->GetName()));
+				}
+			}
+			*/
+
+
+			// Enemy에 데미지 처리
+			auto enemyA = Cast<AEnemyA>(HitResults.GetActor());
+			if (enemyA)
+			{
+				enemyA->enemyAFSM->OnDamageProcess();
 			}
 		}
-	}
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
+		}
+		
 }
 
 void AWeaponPistol::Reload()
 {
-
+	CurrentMagazineAmmo = MagazineMaxAmmo;
 }

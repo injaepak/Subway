@@ -63,8 +63,11 @@ void AFPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
+	// 총 발사
 	OnInputDelegate.Broadcast(PlayerInputComponent);
 	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AFPSPlayer::OnFire);
+	// 재장전
+	PlayerInputComponent->BindAction(TEXT("Reload"), IE_Pressed, this, &AFPSPlayer::Reload);
 }
 
 void AFPSPlayer::OnFire()
@@ -74,4 +77,13 @@ void AFPSPlayer::OnFire()
 
 void AFPSPlayer::Reload()
 {
+	// 사용하는 무기의 탄창이 가득 찬 상태라면
+	if (CurrentWeapon->CurrentMagazineAmmo == CurrentWeapon->MagazineMaxAmmo)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("No reload required!!!")));
+	}
+	else
+	{
+		CurrentWeapon->Reload();
+	}
 }

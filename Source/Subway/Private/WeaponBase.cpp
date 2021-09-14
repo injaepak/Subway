@@ -12,10 +12,10 @@ AWeaponBase::AWeaponBase()
 
 	WeaponName = "Default";
 	BaseDamage = 100;
-	WeaponMaxAmmo = 255;
+	WeaponMaxAmmo = 255; // 비사용중
 	MagazineMaxAmmo = 30;
 
-	CurrentTotalAmmo = WeaponMaxAmmo;
+	CurrentTotalAmmo = WeaponMaxAmmo; // 비사용중
 	CurrentMagazineAmmo = MagazineMaxAmmo;
 }
 

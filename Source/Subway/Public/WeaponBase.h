@@ -33,12 +33,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Test")
 	int32 WeaponMaxAmmo;
-	UPROPERTY(EditAnywhere, Category = "Test")
-	int32 MagazineMaxAmmo;
+	
 	UPROPERTY(EditAnywhere, Category = "Test")
 	int32 CurrentTotalAmmo;
-	UPROPERTY(EditAnywhere, Category = "Test")
-	int32 CurrentMagazineAmmo;
 
 protected:
 	// Called when the game starts or when spawned
@@ -48,4 +45,10 @@ public:
 	virtual void Fire();
 	virtual void Reload();
 	TArray<int32> GetCurrentAmmo();
+
+public:
+	UPROPERTY(EditAnywhere, Category = "Test")
+	int32 CurrentMagazineAmmo;
+	UPROPERTY(EditAnywhere, Category = "Test")
+	int32 MagazineMaxAmmo;
 };
