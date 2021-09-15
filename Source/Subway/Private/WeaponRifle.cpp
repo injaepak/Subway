@@ -18,7 +18,7 @@ AWeaponRifle::AWeaponRifle() // 생성자에서 속성 설정(속성 선언은 Base파일에 있음
 	CurrentTotalAmmo = WeaponMaxAmmo; // 비사용
 	CurrentMagazineAmmo = MagazineMaxAmmo;
 
-	inHand = false;
+	inHand = true;
 
 }
 

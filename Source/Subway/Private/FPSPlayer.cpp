@@ -32,7 +32,7 @@ AFPSPlayer::AFPSPlayer()
 		bodyMesh->SetSkeletalMesh(tempMesh.Object);
 	}
 
-	//AutoPossessPlayer = EAutoReceiveInput::Player0;
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	WeaponIndex = 0;
 }
