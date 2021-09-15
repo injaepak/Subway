@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "MoveActorComponent.generated.h"
+#include "HandActorComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SUBWAY_API UMoveActorComponent : public UActorComponent
+class SUBWAY_API UHandActorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UMoveActorComponent();
+	UHandActorComponent();
 
 protected:
 	// Called when the game starts
@@ -24,17 +24,15 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
-
-private:
-	void MoveHorizontal(float value);
-	void MoveVertical(float value);
-	void RotateHorizontal(float value);
-	void DrawTrajectory();
-	void GripOn();
-	void GripOff();
-
+	class UVRHandAnimInstance* l_handAnim;
+	class UVRHandAnimInstance* r_handAnim;
 	class AVR_Player* player;
 
-	bool gripCheck = false;
+	float targetGripValueLeft = 0;
+	float targetGripValueRight = 0;
+
+	UPROPERTY(EditAnywhere, Category = HandAnimSettings)
+		float gripSpeed = 50.f;
+
+
 };

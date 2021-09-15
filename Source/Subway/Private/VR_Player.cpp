@@ -10,6 +10,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "MoveActorComponent.h"
 #include "HeadMountedDisPlayFunctionLibrary.h"
+#include "HandActorComponent.h"
+#include "GrabActorComponent.h"
+
 // Sets default values
 AVR_Player::AVR_Player()
 {
@@ -51,6 +54,8 @@ AVR_Player::AVR_Player()
     rightHand->SetRelativeRotation(FRotator(0, 0, 90.0f));
 
     moveComp = CreateDefaultSubobject<UMoveActorComponent>(TEXT("MoveComponent"));
+    handComp = CreateDefaultSubobject<UHandActorComponent>(TEXT("HandComponent"));
+    grabComp = CreateDefaultSubobject<UGrabActorComponent>(TEXT("GrabComponent"));
 
     //플레이어 컨트롤러 빙의
     AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -76,7 +81,7 @@ void AVR_Player::BeginPlay()
 void AVR_Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+    
 }
 
 // Called to bind functionality to input
@@ -85,6 +90,7 @@ void AVR_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
     moveComp->SetupPlayerInputComponent(PlayerInputComponent);
+    grabComp->SetupPlayerInputComponent(PlayerInputComponent);
 
     PlayerInputComponent->BindAction("HMDReset", IE_Pressed, this, &AVR_Player::ResetHMD);
 

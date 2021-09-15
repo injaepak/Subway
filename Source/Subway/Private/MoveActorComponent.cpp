@@ -4,6 +4,8 @@
 #include "MoveActorComponent.h"
 #include "VR_Player.h"
 #include "MotionControllerComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "HandActorComponent.h"
 
 // Sets default values for this component's properties
 UMoveActorComponent::UMoveActorComponent()
@@ -39,6 +41,9 @@ void UMoveActorComponent::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAxis("RightThumbstick_X", this, &UMoveActorComponent::MoveHorizontal);
 	PlayerInputComponent->BindAxis("RightThumbstick_Y", this, &UMoveActorComponent::MoveVertical);
 	PlayerInputComponent->BindAxis("LeftThumbstick_X", this, &UMoveActorComponent::RotateHorizontal);
+	PlayerInputComponent->BindAction("LeftGrip", IE_Pressed, this, &UMoveActorComponent::GripOn);
+	PlayerInputComponent->BindAction("LeftGrip", IE_Released, this, &UMoveActorComponent::GripOff);
+
 	
 }
 
@@ -54,15 +59,33 @@ void UMoveActorComponent::RotateHorizontal(float value)
 {
 }
 
-void UMoveActorComponent::DrawTrajectory()
+void UMoveActorComponent::GripOn()
 {
+	gripCheck = true;
+
+	 //손을 쥐는 애니메이션을 실행한다.
+	/*UVRHandAnimInstance* handAnim = Cast<UVRHandAnimInstance>(player->leftHand->GetAnimInstance());
+
+	if (handAnim)
+	{
+		handAnim->gripValue = 1.0f;
+	}*/
+
+	player->handComp->targetGripValueLeft = 1.0f;
 
 }
 
-void UMoveActorComponent::ShowLine()
+void UMoveActorComponent::GripOff()
 {
-}
+	gripCheck = false;
+	// 손을 펴는 애니메이션을 실행한다.
+	player->handComp->targetGripValueLeft = 0;
 
-void UMoveActorComponent::HideLine()
-{
+	//손을 쥐는 애니메이션을 실행한다.
+	/*UVRHandAnimInstance* handAnim = Cast<UVRHandAnimInstance>(player->leftHand->GetAnimInstance());
+
+	if (handAnim)
+	{
+		handAnim->gripValue = 0.0f;
+	}*/
 }
