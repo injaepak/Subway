@@ -4,7 +4,7 @@
 #include <Camera/CameraComponent.h>
 #include <Components/CapsuleComponent.h>
 #include <Components/SkeletalMeshComponent.h>
-#include <WeaponBase.h>
+#include "WeaponBase.h"
 #include "PlayerMove.h"
 
 // Sets default values
@@ -32,7 +32,7 @@ AFPSPlayer::AFPSPlayer()
 		bodyMesh->SetSkeletalMesh(tempMesh.Object);
 	}
 
-	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	//AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	WeaponIndex = 0;
 }

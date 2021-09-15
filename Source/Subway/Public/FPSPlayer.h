@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "WeaponBase.h"
 #include "FPSPlayer.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FPlayerInputDelegate, class UInputComponent*);
