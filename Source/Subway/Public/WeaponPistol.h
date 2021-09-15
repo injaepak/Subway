@@ -10,11 +10,11 @@ UCLASS()
 class SUBWAY_API AWeaponPistol : public AWeaponBase
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AWeaponPistol();
-	
+
 	virtual void Fire() override;
 	virtual void Reload() override;
 };

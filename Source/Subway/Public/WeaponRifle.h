@@ -4,17 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "WeaponBase.h"
-#include "WeaponShotgun.generated.h"
+#include "WeaponRifle.generated.h"
 
+/**
+ *
+ */
 UCLASS()
-class SUBWAY_API AWeaponShotgun :public AWeaponBase
+class SUBWAY_API AWeaponRifle : public AWeaponBase
 {
 	GENERATED_BODY()
 
+
 public:
-	// Sets default values for this actor's properties
-	AWeaponShotgun();
+	AWeaponRifle();
 
 	virtual void Fire() override;
 	virtual void Reload() override;
+
+	UPROPERTY(EditAnywhere, Category = "Test")
+		float WaitTime;
 };

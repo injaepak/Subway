@@ -1,0 +1,18 @@
+{
+	"source": "UE",
+	"applications": [
+		{
+			"app_key": "application.generated.ue.subway-15973114.ue4editor.exe",
+			"launch_type": "url",
+			"url": "steam://launch/",
+			"action_manifest_path": "C:/Users/Default.DESKTOP-6F3BTUF/Documents/GitHub/Subway/Config/SteamVRBindings/steamvr_manifest.json",
+			"strings":
+			{
+				"en_us":
+				{
+					"name": "Subway-15973114 [UE Editor]"
+				}
+			}
+		}
+	]
+}

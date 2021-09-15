@@ -11,31 +11,31 @@ UCLASS()
 class SUBWAY_API AWeaponBase : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AWeaponBase();
 protected:
 	UPROPERTY(EditAnywhere, Category = "Test")
-	class USkeletalMeshComponent* WeaponMesh;
+		class USkeletalMeshComponent* WeaponMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Test")
-	class UAnimationAsset* FireAnimation;
+		class UAnimationAsset* FireAnimation;
 
 	UPROPERTY(EditAnywhere, Category = "Test")
-	class UAnimationAsset* ReloadAnimation;
+		class UAnimationAsset* ReloadAnimation;
 
 	UPROPERTY(EditAnywhere, Category = "Test")
-	FString WeaponName;
+		FString WeaponName;
 
 	UPROPERTY(EditAnywhere, Category = "Test")
-	int32 BaseDamage;
+		int32 BaseDamage;
 
 	UPROPERTY(EditAnywhere, Category = "Test")
-	int32 WeaponMaxAmmo;
-	
+		int32 WeaponMaxAmmo;
+
 	UPROPERTY(EditAnywhere, Category = "Test")
-	int32 CurrentTotalAmmo;
+		int32 CurrentTotalAmmo;
 
 protected:
 	// Called when the game starts or when spawned
@@ -48,7 +48,9 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, Category = "Test")
-	int32 CurrentMagazineAmmo;
+		int32 CurrentMagazineAmmo;
 	UPROPERTY(EditAnywhere, Category = "Test")
-	int32 MagazineMaxAmmo;
+		int32 MagazineMaxAmmo;
+	UPROPERTY(EditAnywhere, Category = "Test")
+		bool inHand;
 };
