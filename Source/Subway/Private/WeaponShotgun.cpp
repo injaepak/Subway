@@ -7,6 +7,8 @@
 #include "FPSPlayer.h" // VRPlayer 인클루드해주시면 될것같습니다!
 #include "EnemyA.h"
 #include "EnemyA_FSM.h"
+#include "EnemyB.h"
+#include "EnemyB_FSM.h"
 
 // Sets default values
 AWeaponShotgun::AWeaponShotgun()
@@ -21,7 +23,6 @@ AWeaponShotgun::AWeaponShotgun()
 
 }
 
-// inHand 값이 true 라면 함수가 동작하고, 아니라면 동작하지 않는다
 void AWeaponShotgun::Fire()
 {
 
@@ -84,7 +85,6 @@ void AWeaponShotgun::Fire()
 		}
 }
 
-// inHand 값이 true 라면 함수가 동작하고, 아니라면 동작하지 않는다
 void AWeaponShotgun::Reload()
 {
 		CurrentMagazineAmmo = MagazineMaxAmmo;
