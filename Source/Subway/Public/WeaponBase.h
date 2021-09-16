@@ -51,6 +51,4 @@ public:
 		int32 CurrentMagazineAmmo;
 	UPROPERTY(EditAnywhere, Category = "Test")
 		int32 MagazineMaxAmmo;
-	UPROPERTY(EditAnywhere, Category = "Test")
-		bool inHand;
 };

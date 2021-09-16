@@ -17,8 +17,6 @@ AWeaponBase::AWeaponBase()
 
 	CurrentTotalAmmo = WeaponMaxAmmo; // 비사용중
 	CurrentMagazineAmmo = MagazineMaxAmmo;
-
-	inHand = false;
 }
 
 // Called when the game starts or when spawned
