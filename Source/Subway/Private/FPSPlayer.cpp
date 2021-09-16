@@ -34,7 +34,7 @@ AFPSPlayer::AFPSPlayer()
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
-	WeaponIndex = 0;
+	//WeaponIndex = 0;
 }
 
 // Called when the game starts or when spawned
@@ -42,12 +42,13 @@ void AFPSPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	// 시작 시 소켓에 무기 스폰
+	// 커런트웨폰 값을 월드의 스폰한 웨폰베이스타입의 스타팅웨폰클래스로 재정의함
 	CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(StartingWeaponClass);
 	if (CurrentWeapon)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SPAWNED AND ATTEMPTED TO ATTACH WEAPON TO HAND"));
 		CurrentWeapon->AttachToComponent(bodyMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("RightGripPoint"));
-		WeaponArray.Add(CurrentWeapon);
+		//WeaponArray.Add(CurrentWeapon);
 	}
 }
 

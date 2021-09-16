@@ -22,5 +22,7 @@ public:
 	virtual void Reload() override;
 
 	UPROPERTY(EditAnywhere, Category = "Test")
-		float WaitTime;
+	FTimerHandle _timer;
+	UPROPERTY(EditAnywhere, Category = "Test")
+	float waitTime;
 };

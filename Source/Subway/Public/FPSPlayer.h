@@ -24,9 +24,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Test")
 	TSubclassOf<class AWeaponBase> StartingWeaponClass; 
 
-	class AWeaponBase* CurrentWeapon;
-	int32 WeaponIndex;
-	TArray <AWeaponBase*> WeaponArray;
+	class AWeaponBase* CurrentWeapon; // 웨폰베이스 타입의 커런트웨폰 클래스를 지정함
+	//int32 WeaponIndex;
+	//TArray <AWeaponBase*> WeaponArray;
 
 	bool blsAiming;
 

@@ -24,16 +24,19 @@ AWeaponRifle::AWeaponRifle() // 생성자에서 속성 설정(속성 선언은 Base파일에 있음
 void AWeaponRifle::Fire()
 {
 		// (연사 수정중)
-		for (int i = 0; i < 6; i++) // for문이 실행되면
-			/*if (count > 5)
-			{
-			GetWorldTimerManager().ClearTimer(WaitHandle);
-		}*/
-		{
-			FTimerHandle WaitHandle; // 0.2초 딜레이를 준 후 To do list 실행한다 for문의 설정횟수만큼 반복한다
-			WaitTime = 0.2f; // 연사 속도
-			GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
-				{
+	int shootcount = 0; // 선언과 초기화
+
+	//FTimerHandle _timer;
+	//	if (shootcount > 5)
+	//	{
+	//	GetWorldTimerManager().ClearTimer(_timer);
+	//	shootcount = 0;
+	//	}
+	//	else
+	//	{			
+	//		waitTime = 0.2f; // 연사 속도 0.2초
+	//		GetWorld()->GetTimerManager().SetTimer(_timer, FTimerDelegate::CreateLambda([&]()
+	//			{
 					if (CurrentMagazineAmmo > 0) // 현재 총알이 0개보다 많다면
 					{
 						UE_LOG(LogTemp, Warning, TEXT("SHOOTING RIFLE 6SHOT")); // 라이플은 6개 탄환을 발사한다
@@ -99,20 +102,21 @@ void AWeaponRifle::Fire()
 					{
 						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
 					}
-
-				//	count++
-				}), WaitTime,true); //반복도 여기서 추가 변수를 선언해 설정가능
-		} // for 문 끝
-	
-	// 딜레이 수정중
-	
-	// 연사가 가능하면 너무 사기니까 딜레이를 좀 주자 ( 이거 원래는 bool 변수 써서 isCooling상태라면 나와야 하는 문구임. 추후 수정 예정)
-	//FTimerHandle WaitHandle; // 1초 딜레이를 준 후 To do list 실행한다 for문의 설정횟수만큼 반복한다
-	//WaitTime2 = 10.0f; // 연사 속도
-	//GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
-	//	{
-	//		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("2 Sec Wait...")));
-	//	}), WaitTime2, false); //반복도 여기서 추가 변수를 선언해 설정가능
+	//				shootcount++; // 쏜 횟수
+	//	
+	//			}), waitTime, true); //반복도 여기서 추가 변수를 선언해 설정가능
+	//
+	//
+	//// 딜레이 수정중
+	//
+	//// 연사가 가능하면 너무 사기니까 딜레이를 좀 주자 ( 이거 원래는 bool 변수 써서 isCooling상태라면 나와야 하는 문구임. 추후 수정 예정)
+	////FTimerHandle WaitHandle; // 1초 딜레이를 준 후 To do list 실행한다 for문의 설정횟수만큼 반복한다
+	////WaitTime2 = 10.0f; // 연사 속도
+	////GetWorld()->GetTimerManager().SetTimer(WaitHandle, FTimerDelegate::CreateLambda([&]()
+	////	{
+	////		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("2 Sec Wait...")));
+	////	}), WaitTime2, false); //반복도 여기서 추가 변수를 선언해 설정가능
+	//	}
 }
 
 void AWeaponRifle::Reload()
