@@ -101,5 +101,5 @@ void UPlayerMove::LookUp(float value)
 
 void UPlayerMove::Jump()
 {
-	me->Jump();
+	
 }

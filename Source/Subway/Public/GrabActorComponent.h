@@ -35,13 +35,13 @@ private:
 	void ReleaseAction();
 	void Test1();
 	void Test2();
+	void Fire();
 
 	bool bIsShowing = false;
 	class APickUpActor* pickObject;
 	class AVR_Player* player;
+	class AWeaponPistol* pistol;
 	FHitResult grabObject;
-
-
 
 public:
 

@@ -4,6 +4,7 @@
 #include "PickUpActor.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/ChildActorComponent.h"
 
 
 // Sets default values
@@ -22,6 +23,9 @@ APickUpActor::APickUpActor()
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
 	meshComp->SetupAttachment(boxComp);
+
+	gun = CreateDefaultSubobject<UChildActorComponent>(TEXT("Gun"));
+	gun->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned

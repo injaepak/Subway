@@ -7,6 +7,8 @@
 #include "DrawDebugHelpers.h"
 #include "HandActorComponent.h"
 #include "Components/BoxComponent.h"
+#include "WeaponPistol.h"
+#include "Subway.h"
 
 // Sets default values for this component's properties
 UGrabActorComponent::UGrabActorComponent()
@@ -26,8 +28,10 @@ void UGrabActorComponent::BeginPlay()
 
 	player = Cast<AVR_Player>(GetOwner());
 
+
 	player->handComp->targetGripValueRight = 0.0f;
-	
+
+
 }
 
 
@@ -44,8 +48,11 @@ void UGrabActorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UGrabActorComponent::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+
 	PlayerInputComponent->BindAction("RightGrip", IE_Pressed, this, &UGrabActorComponent::GrabAction);
 	PlayerInputComponent->BindAction("RightGrip", IE_Released, this, &UGrabActorComponent::ReleaseAction);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &UGrabActorComponent::Fire);
+
 	//PlayerInputComponent->BindAction("RightTrigger", IE_Pressed, this, &UGrabActorComponent::);
 	//PlayerInputComponent->BindAction("RightTrigger", IE_Released, this, &UGrabActorComponent::);
 }
@@ -76,18 +83,18 @@ void UGrabActorComponent::DrawGrabLine()
 
 		FCollisionQueryParams queryParams;
 		queryParams.AddIgnoredActor(player);
-/*
-		if (GetWorld()->LineTraceSingleByObjectType(hitInfo, startPos, endPos, objParams, queryParams))
-		{
-			DrawDebugLine(GetWorld(), startPos, hitInfo.ImpactPoint, FColor::Green, false, -1, 0, 2);
-			grabObject = hitInfo;
-		}
-		else
-		{
-			DrawDebugLine(GetWorld(), startPos, endPos, FColor::Green, false, -1, 0, 2);;
-			grabObject = FHitResult();
-		}
-*/
+		/*
+				if (GetWorld()->LineTraceSingleByObjectType(hitInfo, startPos, endPos, objParams, queryParams))
+				{
+					DrawDebugLine(GetWorld(), startPos, hitInfo.ImpactPoint, FColor::Green, false, -1, 0, 2);
+					grabObject = hitInfo;
+				}
+				else
+				{
+					DrawDebugLine(GetWorld(), startPos, endPos, FColor::Green, false, -1, 0, 2);;
+					grabObject = FHitResult();
+				}
+		*/
 		if (GetWorld()->SweepSingleByObjectType(hitInfo, startPos, startPos, FQuat::Identity, objParams, FCollisionShape::MakeSphere(15.f), queryParams))
 		{
 			grabObject = hitInfo;
@@ -108,15 +115,22 @@ void UGrabActorComponent::GrabAction()
 	DrawGrabLine();
 
 	AActor* grabActor = grabObject.GetActor();
-	
+
 	if (grabActor == nullptr)
 	{
 		return;
 	}
-	
+
 	if (pickObject == nullptr)
 	{
 		pickObject = Cast<APickUpActor>(grabActor);
+		pistol = Cast<AWeaponPistol>(pickObject->gun->GetChildActor());
+		//pickObject->gun->SetChildActorClass(hitinfo.actor)
+
+		if (pistol)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Blue, pistol->GetName());
+		}
 
 		if (pickObject)
 		{
@@ -135,9 +149,10 @@ void UGrabActorComponent::GrabAction()
 			// 오른손 쥐는 애니메이션
 			player->handComp->targetGripValueRight = 1.0f;
 		}
+
 	}
-	
-	
+
+
 }
 
 void UGrabActorComponent::ReleaseAction()
@@ -170,8 +185,8 @@ void UGrabActorComponent::Test1()
 		FCollisionQueryParams queryParams;
 		queryParams.AddIgnoredActor(player);
 
-		
-		
+
+
 	}
 }
 
@@ -179,5 +194,17 @@ void UGrabActorComponent::Test2()
 {
 	// 오른손 피는 애니메이션
 	player->handComp->targetGripValueRight = 0.0f;
+}
+
+void UGrabActorComponent::Fire()
+{
+	if (pickObject && pistol)
+	{
+		PRINTLOG(TEXT("ddddddddddd"));
+
+		pistol->Fire();
+
+	}
+
 }
 
