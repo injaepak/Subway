@@ -7,6 +7,8 @@
 #include "FPSPlayer.h" // VRPlayer 인클루드해주시면 될것같습니다!
 #include "EnemyA.h"
 #include "EnemyA_FSM.h"
+#include "EnemyB.h"
+#include "EnemyB_FSM.h"
 
 AWeaponRifle::AWeaponRifle() // 생성자에서 속성 설정(속성 선언은 Base파일에 있음)
 {
@@ -19,9 +21,9 @@ AWeaponRifle::AWeaponRifle() // 생성자에서 속성 설정(속성 선언은 Base파일에 있음
 	CurrentMagazineAmmo = MagazineMaxAmmo;
 }
 
-// inHand 값이 true 라면 함수가 동작하고, 아니라면 동작하지 않는다
 void AWeaponRifle::Fire()
 {
+		// (연사 수정중)
 		for (int i = 0; i < 6; i++) // for문이 실행되면
 			/*if (count > 5)
 			{
@@ -96,7 +98,7 @@ void AWeaponRifle::Fire()
 				}), WaitTime,true); //반복도 여기서 추가 변수를 선언해 설정가능
 		} // for 문 끝
 	
-	// 이거 딜레이를 내가 뭔가 잘못 썼는데?? 
+	// 딜레이 수정중
 	
 	// 연사가 가능하면 너무 사기니까 딜레이를 좀 주자 ( 이거 원래는 bool 변수 써서 isCooling상태라면 나와야 하는 문구임. 추후 수정 예정)
 	//FTimerHandle WaitHandle; // 1초 딜레이를 준 후 To do list 실행한다 for문의 설정횟수만큼 반복한다
@@ -107,7 +109,6 @@ void AWeaponRifle::Fire()
 	//	}), WaitTime2, false); //반복도 여기서 추가 변수를 선언해 설정가능
 }
 
-// inHand 값이 true 라면 함수가 동작하고, 아니라면 동작하지 않는다
 void AWeaponRifle::Reload()
 {
 		CurrentMagazineAmmo = MagazineMaxAmmo;

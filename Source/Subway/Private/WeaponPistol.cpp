@@ -7,6 +7,8 @@
 #include "FPSPlayer.h" // VRPlayer 인클루드해주시면 될것같습니다!
 #include "EnemyA.h"
 #include "EnemyA_FSM.h"
+#include "EnemyB.h"
+#include "EnemyB_FSM.h"
 
 // Sets default values
 AWeaponPistol::AWeaponPistol()
@@ -20,7 +22,6 @@ AWeaponPistol::AWeaponPistol()
 	CurrentMagazineAmmo = MagazineMaxAmmo;
 }
 
-// inHand 값이 true 라면 함수가 동작하고, 아니라면 동작하지 않는다
 void AWeaponPistol::Fire()
 {
 		if (CurrentMagazineAmmo > 0)
@@ -40,15 +41,20 @@ void AWeaponPistol::Fire()
 
 			CurrentMagazineAmmo--;
 
-			bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_GameTraceChannel12, CollisionParams, CollisionResponse);
+			//bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_GameTraceChannel12, CollisionParams, CollisionResponse);
+			bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_Pawn, CollisionParams, CollisionResponse);
 
 			// Hit하지 않았더라도 남은 탄약 수 뷰포트상에 출력
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
 
 			if (bHit)
 			{
-				DrawDebugLine(GetWorld(), Start, End, FColor(255, 0, 0), false, 1.f, 0.f, 10.f); // 지속시간 수정
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("HIT!!")));
+				//시작점, 종착점, 색상, persistentLine 유무, LifeTime, Thickness
+				DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
+				//debugMessage
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
+				//DrawDebugLine(GetWorld(), Start, End, FColor(255, 0, 0), false, 1.f, 0.f, 10.f); // 지속시간 수정
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("HIT!!")));
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Cause Damage: %d"), BaseDamage)); // 가한 데미지 출력
 				/*
 				for (FHitResult& Result : HitResults)
@@ -76,7 +82,6 @@ void AWeaponPistol::Fire()
 		}
 }
 
-// inHand 값이 true 라면 함수가 동작하고, 아니라면 동작하지 않는다
 void AWeaponPistol::Reload()
 {
 		CurrentMagazineAmmo = MagazineMaxAmmo;
