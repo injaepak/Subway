@@ -39,7 +39,8 @@ public:
 	class AEnemyA* me;
 
 	UPROPERTY(EditAnywhere, Category = Target)
-	class AFPSPlayer* target;
+	class AVR_Player* target;
+	//class AFPSPlayer* target;
 
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
 	EEnemyAState m_state_A;

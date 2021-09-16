@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "HandActorComponent.h"
 #include "Components/BoxComponent.h"
+#include "WeaponPistol.h"
 
 // Sets default values for this component's properties
 UGrabActorComponent::UGrabActorComponent()
@@ -28,6 +29,7 @@ void UGrabActorComponent::BeginPlay()
 
 	player->handComp->targetGripValueRight = 0.0f;
 	
+
 }
 
 
@@ -46,6 +48,8 @@ void UGrabActorComponent::SetupPlayerInputComponent(UInputComponent* PlayerInput
 {
 	PlayerInputComponent->BindAction("RightGrip", IE_Pressed, this, &UGrabActorComponent::GrabAction);
 	PlayerInputComponent->BindAction("RightGrip", IE_Released, this, &UGrabActorComponent::ReleaseAction);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &UGrabActorComponent::Fire);
+
 	//PlayerInputComponent->BindAction("RightTrigger", IE_Pressed, this, &UGrabActorComponent::);
 	//PlayerInputComponent->BindAction("RightTrigger", IE_Released, this, &UGrabActorComponent::);
 }
@@ -135,6 +139,7 @@ void UGrabActorComponent::GrabAction()
 			// 오른손 쥐는 애니메이션
 			player->handComp->targetGripValueRight = 1.0f;
 		}
+
 	}
 	
 	
@@ -179,5 +184,14 @@ void UGrabActorComponent::Test2()
 {
 	// 오른손 피는 애니메이션
 	player->handComp->targetGripValueRight = 0.0f;
+}
+
+void UGrabActorComponent::Fire()
+{
+	if (pickObject)
+	{
+		/*weaponPistol->Fire();*/
+	}
+
 }
 

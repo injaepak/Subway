@@ -18,16 +18,11 @@ AWeaponPistol::AWeaponPistol()
 
 	CurrentTotalAmmo = WeaponMaxAmmo;
 	CurrentMagazineAmmo = MagazineMaxAmmo;
-
-	inHand = false;
-
 }
 
 // inHand 값이 true 라면 함수가 동작하고, 아니라면 동작하지 않는다
 void AWeaponPistol::Fire()
 {
-	if (inHand == true)
-	{
 		if (CurrentMagazineAmmo > 0)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("SHOOTING PISTOL"));
@@ -79,23 +74,11 @@ void AWeaponPistol::Fire()
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
 		}
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("PISTOL IS NOT INHAND"))); // 디버그 문구 출력
-	}
 }
 
 // inHand 값이 true 라면 함수가 동작하고, 아니라면 동작하지 않는다
 void AWeaponPistol::Reload()
 {
-	if (inHand == true)
-	{
 		CurrentMagazineAmmo = MagazineMaxAmmo;
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("PISTOL IS NOT INHAND"))); // 디버그 문구 출력
-	}
 }
 
