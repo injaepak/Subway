@@ -42,9 +42,9 @@ void AWeaponRifle::Fire()
 						UE_LOG(LogTemp, Warning, TEXT("SHOOTING RIFLE 6SHOT")); // 라이플은 6개 탄환을 발사한다
 
 
-						FVector Start = WeaponMesh->GetBoneLocation(FName("b_gun_muzzleflash")); // 시작지점 변수 선언&구현
-						FVector Rot = WeaponMesh->GetBoneQuaternion(FName("b_gun_muzzleflash")).Vector(); // 시작회전값 변수 선언&구현
-						FVector End = Start + Rot * 5000.0f; // 언리얼은 cm단위. 사거리 50m
+						FVector Start = WeaponMesh->GetBoneLocation(FName("b_gun_muzzleflash"));
+						FVector Rot = WeaponMesh->GetForwardVector();
+						FVector End = Start + Rot * 5000.f;
 
 						//TArray<FHitResult> HitResults;
 						FHitResult HitResults; // 라인트레이스가 부딪힌 대상의 정보를 담을 변수를 설정 

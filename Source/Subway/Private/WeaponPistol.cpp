@@ -28,8 +28,8 @@ void AWeaponPistol::Fire()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("SHOOTING PISTOL"));
 			FVector Start = WeaponMesh->GetBoneLocation(FName("b_gun_muzzleflash"));
-			FVector Rot = WeaponMesh->GetBoneQuaternion(FName("b_gun_muzzleflash")).Vector();
-			FVector End = Start * Rot * 5000.0f;
+			FVector Rot = WeaponMesh->GetForwardVector();
+			FVector End = Start + Rot * 5000.f;
 
 			//TArray<FHitResult> HitResults;
 			FHitResult HitResults;
