@@ -68,11 +68,18 @@ void AWeaponPistol::Fire()
 				*/
 
 
-				// Enemy俊 单固瘤 贸府
+				// EnemyA俊 单固瘤 贸府
+				// EnemyB俊 单固瘤 贸府
 				auto enemyA = Cast<AEnemyA>(HitResults.GetActor());
+				auto enemyB = Cast<AEnemyB>(HitResults.GetActor());
+
 				if (enemyA)
 				{
 					enemyA->enemyAFSM->OnDamageProcess();
+				}
+				else if (enemyB)
+				{
+					enemyB->enemyBFSM->OnDamageProcess();
 				}
 			}
 		}
