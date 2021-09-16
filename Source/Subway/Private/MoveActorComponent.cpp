@@ -24,7 +24,9 @@ void UMoveActorComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	UE_LOG(LogTemp, Warning, TEXT("START!!!!!!!!!!!!!!"));
+
+	player = Cast<AVR_Player>(GetOwner());
 }
 
 
@@ -61,6 +63,8 @@ void UMoveActorComponent::RotateHorizontal(float value)
 
 void UMoveActorComponent::GripOn()
 {
+	
+
 	gripCheck = true;
 
 	 //손을 쥐는 애니메이션을 실행한다.

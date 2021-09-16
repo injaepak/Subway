@@ -2,6 +2,11 @@
 
 
 #include "GrabActorComponent.h"
+#include "PickUpActor.h"
+#include "VR_Player.h"
+#include "DrawDebugHelpers.h"
+#include "HandActorComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values for this component's properties
 UGrabActorComponent::UGrabActorComponent()
@@ -19,7 +24,9 @@ void UGrabActorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	player = Cast<AVR_Player>(GetOwner());
+
+	player->handComp->targetGripValueRight = 0.0f;
 	
 }
 
@@ -29,11 +36,148 @@ void UGrabActorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (bIsShowing)
+	{
+		DrawGrabLine();
+	}
 }
 
 void UGrabActorComponent::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	PlayerInputComponent->BindAction("RightGrip", IE_Pressed, this, &UGrabActorComponent::GrabAction);
+	PlayerInputComponent->BindAction("RightGrip", IE_Released, this, &UGrabActorComponent::ReleaseAction);
+	//PlayerInputComponent->BindAction("RightTrigger", IE_Pressed, this, &UGrabActorComponent::);
+	//PlayerInputComponent->BindAction("RightTrigger", IE_Released, this, &UGrabActorComponent::);
+}
 
+void UGrabActorComponent::ShowGrabLine()
+{
+	bIsShowing = true;
+}
+
+void UGrabActorComponent::HideGrabLine()
+{
+	bIsShowing = false;
+	grabObject = FHitResult();
+
+}
+
+void UGrabActorComponent::DrawGrabLine()
+{
+	if (pickObject == nullptr)
+	{
+		FHitResult hitInfo;
+		FVector startPos = player->rightHand->GetComponentLocation();
+		FVector endPos = startPos + player->rightHand->GetForwardVector() * grabDistance;
+
+		FCollisionObjectQueryParams objParams;
+		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+
+		FCollisionQueryParams queryParams;
+		queryParams.AddIgnoredActor(player);
+/*
+		if (GetWorld()->LineTraceSingleByObjectType(hitInfo, startPos, endPos, objParams, queryParams))
+		{
+			DrawDebugLine(GetWorld(), startPos, hitInfo.ImpactPoint, FColor::Green, false, -1, 0, 2);
+			grabObject = hitInfo;
+		}
+		else
+		{
+			DrawDebugLine(GetWorld(), startPos, endPos, FColor::Green, false, -1, 0, 2);;
+			grabObject = FHitResult();
+		}
+*/
+		if (GetWorld()->SweepSingleByObjectType(hitInfo, startPos, startPos, FQuat::Identity, objParams, FCollisionShape::MakeSphere(15.f), queryParams))
+		{
+			grabObject = hitInfo;
+
+			// 오른손 쥐는 애니메이션
+			//player->handComp->targetGripValueRight = 1.0f;
+		}
+		else
+		{
+			grabObject = FHitResult();
+		}
+		DrawDebugSphere(GetWorld(), startPos, 15.f, 30, FColor::Green, false, -1, 0, 1);
+	}
+}
+
+void UGrabActorComponent::GrabAction()
+{
+	DrawGrabLine();
+
+	AActor* grabActor = grabObject.GetActor();
+	
+	if (grabActor == nullptr)
+	{
+		return;
+	}
+	
+	if (pickObject == nullptr)
+	{
+		pickObject = Cast<APickUpActor>(grabActor);
+
+		if (pickObject)
+		{
+			//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+			FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+			// 손에 붙이기
+			pickObject->boxComp->SetSimulatePhysics(false);
+			pickObject->AttachToComponent(player->rightHand, attachRules, TEXT("GrabPoint"));
+
+			// 오브젝트를 잡았을때 위치 잡기
+			pickObject->boxComp->SetRelativeLocation((pickObject->grabOffset));
+
+			pickObject->boxComp->SetEnableGravity(false);
+
+			// 오른손 쥐는 애니메이션
+			player->handComp->targetGripValueRight = 1.0f;
+		}
+	}
+	
+	
+}
+
+void UGrabActorComponent::ReleaseAction()
+{
+	if (pickObject)
+	{
+		pickObject->boxComp->SetEnableGravity(true);
+		// 그 자리에서 떨어지게
+		pickObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		pickObject->boxComp->SetSimulatePhysics(true);
+
+		// 오른손 피는 애니메이션
+		player->handComp->targetGripValueRight = 0.0f;
+
+		pickObject = nullptr;
+	}
+}
+
+void UGrabActorComponent::Test1()
+{
+	if (pickObject == nullptr)
+	{
+		FHitResult hitInfo;
+		FVector startPos = player->rightHand->GetComponentLocation();
+
+		FCollisionObjectQueryParams objParams;
+		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+
+		FCollisionQueryParams queryParams;
+		queryParams.AddIgnoredActor(player);
+
+		
+		
+	}
+}
+
+void UGrabActorComponent::Test2()
+{
+	// 오른손 피는 애니메이션
+	player->handComp->targetGripValueRight = 0.0f;
 }
 

@@ -7,6 +7,7 @@
 #include "GrabActorComponent.generated.h"
 
 
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SUBWAY_API UGrabActorComponent : public UActorComponent
 {
@@ -25,4 +26,25 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent);
+
+private:
+	void ShowGrabLine();
+	void HideGrabLine();
+	void DrawGrabLine();
+	void GrabAction();
+	void ReleaseAction();
+	void Test1();
+	void Test2();
+
+	bool bIsShowing = false;
+	class APickUpActor* pickObject;
+	class AVR_Player* player;
+	FHitResult grabObject;
+
+
+
+public:
+
+	UPROPERTY(EditAnywhere, Category = GravSettings)
+	float grabDistance = 1000.f;
 };

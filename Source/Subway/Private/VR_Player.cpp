@@ -23,6 +23,7 @@ AVR_Player::AVR_Player()
     SetRootComponent(capsuleComp);
     capsuleComp->SetCapsuleHalfHeight(65.0f);
     capsuleComp->SetCapsuleRadius(40.0f);
+    capsuleComp->SetCollisionProfileName(TEXT("VR_Player"));
 
     cameraRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Camera Root"));
     cameraRoot->SetupAttachment(RootComponent);
@@ -48,7 +49,7 @@ AVR_Player::AVR_Player()
     leftHand->SetupAttachment(leftController);
     leftHand->SetRelativeRotation(FRotator(0, 0, -90.0f));
     leftHand->SetRelativeScale3D(FVector(1.0f, -1.0f, 1.0f));
-
+    
     rightHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Right Hand"));
     rightHand->SetupAttachment(rightController);
     rightHand->SetRelativeRotation(FRotator(0, 0, 90.0f));

@@ -30,7 +30,7 @@ private:
 	void MoveHorizontal(float value);
 	void MoveVertical(float value);
 	void RotateHorizontal(float value);
-	void DrawTrajectory();
+	//void DrawTrajectory();
 	void GripOn();
 	void GripOff();
 
