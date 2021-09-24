@@ -19,6 +19,7 @@ UEnemyA_FSM::UEnemyA_FSM()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	bCanDie = true;
+	bCanHit = false;
 }
 
 // Called when the game starts
@@ -51,6 +52,9 @@ void UEnemyA_FSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 		break;
 	case EEnemyAState::Move:
 		MoveState();
+		break;
+	case EEnemyAState::Run:
+		RunState();
 		break;
 	case EEnemyAState::Attack:
 		AttackState();
@@ -107,7 +111,10 @@ void UEnemyA_FSM::MoveState()
 
 	//Debug Sphere 시각화
 	DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
-
+	
+	// Timing
+	currentTime += GetWorld()->DeltaTimeSeconds;
+	
 	// 속도가 있을 때, AnimInstance Bool 변경
 	if (anim->isMoving == false)
 	{
@@ -117,6 +124,14 @@ void UEnemyA_FSM::MoveState()
 		{
 			anim->isMoving = true;
 		}
+	}
+
+	if (bCanHit == true && currentTime >= RunDelayTime)
+	{
+		m_state_A = EEnemyAState::Run;
+		anim->isMoving = false;
+		anim->isRunning = true;
+		currentTime = 0;
 	}
 
 	// state 경과
@@ -137,6 +152,48 @@ void UEnemyA_FSM::MoveState()
 	}
 }
 
+void UEnemyA_FSM::RunState()
+{
+	me->GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	// Target인 Player 방향으로 이동
+	// 	방향이 필요
+	FVector dir = target->GetActorLocation() - me->GetActorLocation();
+	// 둘사이의 거리
+	float distance = dir.Size();
+	dir.Normalize();
+
+	// character movement로 사용해서 따라가게 만들기
+	me->AddMovementInput(dir, true);
+
+	// 타겟 방향으로 회전한다.		
+	FRotator targetRot = dir.ToOrientationRotator();
+	FRotator myRot = me->GetActorRotation();
+
+	//회전 부드럽게
+	myRot = FMath::Lerp(myRot, targetRot, 5 * GetWorld()->DeltaTimeSeconds);
+	me->SetActorRotation(myRot);
+
+	//Debug Sphere 시각화
+	DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
+	// 공격 범위에 가까워지면
+	
+	if (distance <= attackRange)
+	{
+		m_state_A = EEnemyAState::Attack;
+		anim->isMoving = false;
+		anim->isRunning = false;
+		anim->isAttacking = true;
+		currentTime = attackDelayTime;
+	}
+
+	// HP = 0, isDie가 False라면
+	if (Health == 0 && anim->isDie == false)
+	{
+		m_state_A = EEnemyAState::Die;
+		currentTime = 0;
+	}
+}
+
 void UEnemyA_FSM::AttackState()
 {
 	// 시간이 흐른다.
@@ -145,7 +202,7 @@ void UEnemyA_FSM::AttackState()
 	// 일정 시간이 지났으니 공격으로 변경
 	if (currentTime > attackDelayTime)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ATTACK!!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ATTACK!!")));
 		// 시간 초기화
 		currentTime = 0;
 	}
@@ -179,17 +236,27 @@ void UEnemyA_FSM::DieState()
 
 void UEnemyA_FSM::OnDamageProcess()
 {
-	Health--;
-	if (Health <= 0)
+	if (Health > 0)
 	{
-		m_state_A = EEnemyAState::Die;
-		//me->Destroy();
-		return;
-	}
+		if (bCanHit == false)
+		{
+			bCanHit = true;
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("bCanHit In!!")));
+			//m_state_A = EEnemyAState::Run;
+			return;
+		}
+		Health--;
+		if (Health <= 0)
+		{
+			m_state_A = EEnemyAState::Die;
+			//me->Destroy();
+			return;
+		}
 
-	//상태를 DamageState로 이동
-	//m_state_A = EEnemyAState::Damage;
-	//currentTime = 0;
+		//상태를 DamageState로 이동
+		//m_state_A = EEnemyAState::Damage;
+		//currentTime = 0;
+	}
 }
 
 void UEnemyA_FSM::Die()
