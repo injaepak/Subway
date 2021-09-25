@@ -13,5 +13,15 @@ UCLASS()
 class SUBWAY_API UBossAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-	
+public:
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isTrans = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isTaunt = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isMoving = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isAttacking = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isDie = false;
 };

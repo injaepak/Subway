@@ -32,10 +32,10 @@ void UEnemyA_FSM::BeginPlay()
 	anim = Cast<UEnemyAAnimInstance>(me->GetMesh()->GetAnimInstance());
 	//target 찾기
 	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AVR_Player::StaticClass(), actors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFPSPlayer::StaticClass(), actors);
 	for (auto tgt : actors)
 	{
-		target = Cast<AVR_Player>(tgt);
+		target = Cast<AFPSPlayer>(tgt);
 		break;
 	}
 }
@@ -252,10 +252,6 @@ void UEnemyA_FSM::OnDamageProcess()
 			//me->Destroy();
 			return;
 		}
-
-		//상태를 DamageState로 이동
-		//m_state_A = EEnemyAState::Damage;
-		//currentTime = 0;
 	}
 }
 

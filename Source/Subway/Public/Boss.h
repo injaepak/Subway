@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Boss_FSM.h"
 #include "GameFramework/Character.h"
 #include "Boss.generated.h"
 
@@ -25,5 +26,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+public:
+	UPROPERTY(VisibleAnywhere, Category = BossFSM, BlueprintReadWrite)
+	class UBoss_FSM* BossFSM;
 
+public:
+	// Health System
+	bool bCanBeDamaged;
 };

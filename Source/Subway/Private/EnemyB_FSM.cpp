@@ -17,8 +17,6 @@
 // Sets default values for this component's properties
 UEnemyB_FSM::UEnemyB_FSM()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	bCanDie = true;
 }
@@ -33,10 +31,10 @@ void UEnemyB_FSM::BeginPlay()
 	anim = Cast<UEnemyBAnimInstance>(me->GetMesh()->GetAnimInstance());
 	//target Ã£±â
 	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AVR_Player::StaticClass(), actors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFPSPlayer::StaticClass(), actors);
 	for (auto tgt : actors)
 	{
-		target = Cast<AVR_Player>(tgt);
+		target = Cast<AFPSPlayer>(tgt);
 		break;
 	}
 }
