@@ -31,10 +31,10 @@ void UEnemyB_FSM::BeginPlay()
 	anim = Cast<UEnemyBAnimInstance>(me->GetMesh()->GetAnimInstance());
 	//target Ã£±â
 	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFPSPlayer::StaticClass(), actors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AVR_Player::StaticClass(), actors);
 	for (auto tgt : actors)
 	{
-		target = Cast<AFPSPlayer>(tgt);
+		target = Cast<AVR_Player>(tgt);
 		break;
 	}
 }
