@@ -36,6 +36,7 @@ private:
 	void Test1();
 	void Test2();
 	void Fire();
+	void Reload();
 
 	bool bIsShowing = false;
 	class APickUpActor* pickObject;
@@ -47,4 +48,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = GravSettings)
 	float grabDistance = 1000.f;
+
+	UPROPERTY(EditAnywhere, Category = GravSettings)
+	class UHapticFeedbackEffect_Base* shotHaptic;
 };

@@ -26,12 +26,11 @@ void UGrabActorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// 플레이어를 캐스팅
 	player = Cast<AVR_Player>(GetOwner());
 
 
 	player->handComp->targetGripValueRight = 0.0f;
-
-
 }
 
 
@@ -71,6 +70,7 @@ void UGrabActorComponent::HideGrabLine()
 
 void UGrabActorComponent::DrawGrabLine()
 {
+	// 손에 든게 없다면
 	if (pickObject == nullptr)
 	{
 		FHitResult hitInfo;
@@ -204,6 +204,11 @@ void UGrabActorComponent::Fire()
 
 		pistol->Fire();
 
+		// 진동효과
+		GetWorld()->GetFirstPlayerController()->PlayHapticEffect(shotHaptic, EControllerHand::Right, 1.f, false);
+
+		// 여기에 사운드 추가
+		
 	}
 
 }
