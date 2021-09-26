@@ -10,7 +10,6 @@ UENUM(BlueprintType)
 enum class EEnemyBState : uint8
 {
 	Idle,
-	TransitionA,
 	Move,
 	Attack,
 	Damage,
@@ -66,10 +65,10 @@ public:
 	float attackRange = 100;
 
 	//Boss Movement
-	UPROPERTY(EditAnywhere, Category = EnemyAStats)
-	float walkSpeed = 150;
-	UPROPERTY(EditAnywhere, Category = EnemyAStats)
-	float RunSpeed = 350;
+	UPROPERTY(EditAnywhere, Category = EnemyBStats)
+	float walkSpeed = 80;
+	UPROPERTY(EditAnywhere, Category = EnemyBStats)
+	float RunSpeed = 180;
 
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM)

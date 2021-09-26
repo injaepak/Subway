@@ -28,7 +28,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-	UPROPERTY(VisibleAnywhere, Category = EnemyAFSM, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, Category = EnemyBFSM, BlueprintReadWrite)
 	class UEnemyB_FSM* enemyBFSM;
 
 public:

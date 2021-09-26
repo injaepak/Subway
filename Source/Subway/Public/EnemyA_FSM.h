@@ -11,6 +11,7 @@ enum class EEnemyAState : uint8
 {
 	Idle,
 	Move,
+	Run,
 	Attack,
 	Damage,
 	Die,
@@ -49,12 +50,15 @@ public:
 public:
 	//boolean
 	bool bCanDie;
+	bool bCanHit;
 
 	//½Ã°£
 	UPROPERTY(EditAnywhere, Category = FSM)
 	float idleDelayTime = 2;
 	UPROPERTY()
 	float currentTime = 0;
+	UPROPERTY(EditAnywhere, Category = FSM)
+	float RunDelayTime = 2;
 	UPROPERTY(EditAnywhere, Category = FSM)
 	float attackDelayTime = 1;
 
@@ -66,14 +70,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
 	float walkSpeed = 50;
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
-	float RunSpeed = 100;
+	float RunSpeed = 180;
 
 	// health System
-	UPROPERTY(EditAnywhere, Category = FSM)
+	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
 	int Health = 5;
 private:
 	void IdleState();
 	void MoveState();
+	void RunState();
 	void AttackState();
 	//void DamageState();
 	void DieState();

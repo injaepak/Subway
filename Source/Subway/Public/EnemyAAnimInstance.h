@@ -18,6 +18,8 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
 	bool isMoving = false;
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isRunning = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
 	bool isAttacking = false;
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
 	bool isDie = false;
