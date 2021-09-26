@@ -66,9 +66,9 @@ public:
 
 	//Boss Movement
 	UPROPERTY(EditAnywhere, Category = EnemyBStats)
-	float walkSpeed = 150;
+	float walkSpeed = 80;
 	UPROPERTY(EditAnywhere, Category = EnemyBStats)
-	float RunSpeed = 350;
+	float RunSpeed = 180;
 
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM)

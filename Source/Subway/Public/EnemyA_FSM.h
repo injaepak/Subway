@@ -70,7 +70,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
 	float walkSpeed = 50;
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
-	float RunSpeed = 250;
+	float RunSpeed = 180;
 
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
