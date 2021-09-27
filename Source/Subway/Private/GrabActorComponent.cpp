@@ -29,8 +29,11 @@ void UGrabActorComponent::BeginPlay()
 	// 플레이어를 캐스팅
 	player = Cast<AVR_Player>(GetOwner());
 
-
 	player->handComp->targetGripValueRight = 0.0f;
+
+	// 임시 총 변수
+	bIsPistol = true;
+	bIsShotgun = false;
 }
 
 

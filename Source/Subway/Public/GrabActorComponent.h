@@ -42,6 +42,7 @@ private:
 	class APickUpActor* pickObject;
 	class AVR_Player* player;
 	class AWeaponPistol* pistol;
+	
 	FHitResult grabObject;
 
 public:
@@ -51,4 +52,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = GravSettings)
 	class UHapticFeedbackEffect_Base* shotHaptic;
+
+	bool bIsPistol = false;
+	bool bIsShotgun = false;
 };
