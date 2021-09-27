@@ -3,11 +3,13 @@
 
 #include "GrabActorComponent.h"
 #include "PickUpActor.h"
+#include "ShotGunActor.h"
 #include "VR_Player.h"
 #include "DrawDebugHelpers.h"
 #include "HandActorComponent.h"
 #include "Components/BoxComponent.h"
 #include "WeaponPistol.h"
+#include "WeaponShotgun.h"
 #include "Subway.h"
 
 // Sets default values for this component's properties
@@ -126,35 +128,63 @@ void UGrabActorComponent::GrabAction()
 
 	if (pickObject == nullptr)
 	{
-		pickObject = Cast<APickUpActor>(grabActor);
-		pistol = Cast<AWeaponPistol>(pickObject->gun->GetChildActor());
-		//pickObject->gun->SetChildActorClass(hitinfo.actor)
-
-		if (pistol)
+		FString gunName = grabActor->GetName();
+		if(gunName.Contains("PickUpActor"))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Blue, pistol->GetName());
-		}
+			pickObject = Cast<APickUpActor>(grabActor);
+			pistol = Cast<AWeaponPistol>(pickObject->gun->GetChildActor());
+	
+			/*if (pistol)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Blue, pistol->GetName());
+			}*/
 
-		if (pickObject)
+			if (pickObject)
+			{
+				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+				// 손에 붙이기
+				pickObject->boxComp->SetSimulatePhysics(false);
+				pickObject->AttachToComponent(player->rightHand, attachRules, TEXT("GrabPoint"));
+
+				// 오브젝트를 잡았을때 위치 잡기
+				pickObject->boxComp->SetRelativeLocation((pickObject->grabOffset));
+
+				pickObject->boxComp->SetEnableGravity(false);
+
+				// 오른손 쥐는 애니메이션
+				player->handComp->targetGripValueRight = 1.0f;
+			}
+		}
+		else if (gunName.Contains("ShotgunActor"))
 		{
-			//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
-			FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+			shotgunobject = Cast<AShotGunActor>(grabActor);
+			shotgun = Cast<AWeaponShotgun>(shotgunobject->shotgun->GetChildActor());
 
-			// 손에 붙이기
-			pickObject->boxComp->SetSimulatePhysics(false);
-			pickObject->AttachToComponent(player->rightHand, attachRules, TEXT("GrabPoint"));
+			if (shotgunobject)
+			{
+				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
 
-			// 오브젝트를 잡았을때 위치 잡기
-			pickObject->boxComp->SetRelativeLocation((pickObject->grabOffset));
+				// 손에 붙이기
+				shotgunobject->boxComp->SetSimulatePhysics(false);
+				shotgunobject->AttachToComponent(player->rightHand, attachRules, TEXT("GrabPoint"));
 
-			pickObject->boxComp->SetEnableGravity(false);
+				// 오브젝트를 잡았을때 위치 잡기
+				shotgunobject->boxComp->SetRelativeLocation((shotgunobject->grabOffset));
 
-			// 오른손 쥐는 애니메이션
-			player->handComp->targetGripValueRight = 1.0f;
+				shotgunobject->boxComp->SetEnableGravity(false);
+
+				// 오른손 쥐는 애니메이션
+				player->handComp->targetGripValueRight = 1.0f;
+			}
 		}
-
 	}
-
+	else
+	{
+		return;
+	}
 
 }
 
@@ -172,6 +202,19 @@ void UGrabActorComponent::ReleaseAction()
 
 		pickObject = nullptr;
 	}
+
+	else if (shotgunobject)
+	{
+		shotgunobject->boxComp->SetEnableGravity(true);
+		// 그 자리에서 떨어지게
+		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		shotgunobject->boxComp->SetSimulatePhysics(true);
+
+		// 오른손 피는 애니메이션
+		player->handComp->targetGripValueRight = 0.0f;
+
+		shotgunobject = nullptr;
+	}
 }
 
 void UGrabActorComponent::Test1()
@@ -187,9 +230,6 @@ void UGrabActorComponent::Test1()
 
 		FCollisionQueryParams queryParams;
 		queryParams.AddIgnoredActor(player);
-
-
-
 	}
 }
 
@@ -214,5 +254,18 @@ void UGrabActorComponent::Fire()
 		
 	}
 
+	if (shotgunobject && shotgun)
+	{
+		PRINTLOG(TEXT("ddddddddddd"));
+
+		shotgun->Fire();
+
+		// 진동효과
+		GetWorld()->GetFirstPlayerController()->PlayHapticEffect(shotHaptic, EControllerHand::Right, 10.f, false);
+		GetWorld()->GetFirstPlayerController()->PlayHapticEffect(shotHaptic, EControllerHand::Left, 10.f, false);
+
+		// 여기에 사운드 추가
+
+	}
 }
 

@@ -40,8 +40,10 @@ private:
 
 	bool bIsShowing = false;
 	class APickUpActor* pickObject;
+	class AShotGunActor* shotgunobject;
 	class AVR_Player* player;
 	class AWeaponPistol* pistol;
+	class AWeaponShotgun* shotgun;
 	
 	FHitResult grabObject;
 
