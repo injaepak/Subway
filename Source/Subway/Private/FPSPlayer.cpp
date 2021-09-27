@@ -24,7 +24,7 @@ AFPSPlayer::AFPSPlayer()
 
 	// bodyMesh 의 SkeletalMesh 데이터 할당하기
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempMesh(TEXT("SkeletalMesh'/Game/FirstPerson/Character/Mesh/SK_Mannequin_Arms.SK_Mannequin_Arms'"));
-	
+
 	// 로드가 성공하면
 	if (tempMesh.Succeeded())
 	{
@@ -63,7 +63,7 @@ void AFPSPlayer::Tick(float DeltaTime)
 void AFPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
+
 	// 총 발사
 	OnInputDelegate.Broadcast(PlayerInputComponent);
 	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AFPSPlayer::OnFire);
@@ -86,5 +86,19 @@ void AFPSPlayer::Reload()
 	else
 	{
 		CurrentWeapon->Reload();
+	}
+}
+
+void AFPSPlayer::OnDamageProcess()
+{
+	if (PlayerHP > 0)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("TEST HIT!!")));
+		/*PlayerHP--;
+		if (PlayerHP <=0)
+		{
+			this->Destroy();
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DEADDD!!")));
+		}*/
 	}
 }

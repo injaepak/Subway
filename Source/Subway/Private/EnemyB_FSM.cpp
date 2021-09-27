@@ -19,6 +19,7 @@ UEnemyB_FSM::UEnemyB_FSM()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	bCanDie = true;
+	//bCanHit = false;
 }
 
 
@@ -138,13 +139,14 @@ void UEnemyB_FSM::MoveState()
 
 void UEnemyB_FSM::AttackState()
 {
+	me->bCanAttack = true;
 	// 시간이 흐른다.
 	currentTime += GetWorld()->DeltaTimeSeconds;
 
 	// 일정 시간이 지났으니 공격으로 변경
 	if (currentTime > attackDelayTime)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ATTACK!!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ATTACK!!")));
 		// 시간 초기화
 		currentTime = 0;
 	}
@@ -163,6 +165,7 @@ void UEnemyB_FSM::AttackState()
 
 void UEnemyB_FSM::DieState()
 {
+	me->bCanAttack = false;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Dead!!")));
 	//anim->isTransA = false;
 	anim->isMoving = false;
@@ -176,19 +179,25 @@ void UEnemyB_FSM::DieState()
 	}
 }
 
-void UEnemyB_FSM::OnDamageProcess()
+void UEnemyB_FSM::OnDamageProcess(float damage)
 {
-	Health--;
-	if (Health <= 0)
+	if (Health > 0)
 	{
-		m_state_B = EEnemyBState::Die;
-		//me->Destroy();
-		return;
-	}
+		if (bCanHit == false)
+		{
+			bCanHit = true;
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("bCanHit!!")));
+			return;
+		}
 
-	//상태를 DamageState로 이동
-	//m_state_A = EEnemyAState::Damage;
-	//currentTime = 0;
+		Health -= damage;
+		if (Health < 0)
+		{
+			m_state_B = EEnemyBState::Die;
+			//me->Destroy();
+			return;
+		}
+	}
 }
 
 void UEnemyB_FSM::Die()

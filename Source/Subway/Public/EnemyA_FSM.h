@@ -85,7 +85,7 @@ private:
 
 public:
 	// 피격 함수
-	void OnDamageProcess();	
+	void OnDamageProcess(float damage);	
 	
 	void Die();
 	FTimerHandle DieTimerHandle;

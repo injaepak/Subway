@@ -49,13 +49,13 @@ void AWeaponPistol::Fire()
 
 			if (bHit)
 			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Cause Damage: %d"), BaseDamage)); // 가한 데미지 출력
 				//시작점, 종착점, 색상, persistentLine 유무, LifeTime, Thickness
 				DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
 				//debugMessage
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
 				//DrawDebugLine(GetWorld(), Start, End, FColor(255, 0, 0), false, 1.f, 0.f, 10.f); // 지속시간 수정
 				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("HIT!!")));
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Cause Damage: %d"), BaseDamage)); // 가한 데미지 출력
 				/*
 				for (FHitResult& Result : HitResults)
 				{
@@ -75,11 +75,11 @@ void AWeaponPistol::Fire()
 
 				if (enemyA)
 				{
-					enemyA->enemyAFSM->OnDamageProcess();
+					enemyA->enemyAFSM->OnDamageProcess(2.f);
 				}
 				else if (enemyB)
 				{
-					enemyB->enemyBFSM->OnDamageProcess();
+					enemyB->enemyBFSM->OnDamageProcess(2.f);
 				}
 			}
 		}

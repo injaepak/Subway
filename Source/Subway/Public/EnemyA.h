@@ -30,15 +30,24 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = EnemyAFSM, BlueprintReadWrite)
 	class UEnemyA_FSM* enemyAFSM;
 
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class USphereComponent* HeadCollision;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class UBoxComponent* BodyCollision;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class USphereComponent* RtCollision;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class USphereComponent* LtCollision;
+
+	UFUNCTION()
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 public:
 	// Health System
 	bool bCanBeDamaged;
+	bool bCanAttack;
 
-	/*
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)		float EnemyAMaxHealth;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
-	float EnemyAHealth;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
-	float EnemyAHealthPercentage;
-	*/
+	bool bCanOverlap;
+	void ResetOverlapTimer();
+	FTimerHandle EnemyAOverlapTimerHandle;
 };

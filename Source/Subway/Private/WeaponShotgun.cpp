@@ -55,7 +55,7 @@ void AWeaponShotgun::Fire()
 			//bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_Pawn, CollisionParams, CollisionResponse);
 			
 			// Sphere 형태의 SweepTrace를 5000.f 거리까지 발사
-			bool bHit = GetWorld()->SweepSingleByChannel(HitResults, Start, End, FQuat::Identity, ECollisionChannel::ECC_WorldStatic, FCollisionShape::MakeSphere(10.0f), CollisionParams, CollisionResponse);
+			bool bHit = GetWorld()->SweepSingleByChannel(HitResults, Start, End, FQuat::Identity, ECollisionChannel::ECC_Visibility, FCollisionShape::MakeSphere(50.0f), CollisionParams, CollisionResponse);
 
 
 			// Hit하지 않았더라도 남은 탄약 수 뷰포트상에 출력
@@ -63,17 +63,13 @@ void AWeaponShotgun::Fire()
 
 			if (bHit)
 			{
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Cause Damage: %d"), BaseDamage)); // 가한 데미지 출력
 				//시작점, 종착점, 색상, persistentLine 유무, LifeTime, Thickness
 				//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
 				
 				// 구체 모양을 쐈으므로 디버그스피어를 Hit한 Actor의 위치에, 구체의 크기만큼, 2초 동안 보여준다.
-				DrawDebugSphere(GetWorld(), HitResults.GetActor()->GetActorLocation(), 50, 30, FColor::Red, false, 2.0f, 10, 0);
-
-				//debugMessage
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
-				//DrawDebugLine(GetWorld(), Start, End, FColor(255, 0, 0), false, 1.f, 0.f, 10.f); // 지속시간 수정
-				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("HIT!!")));
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Cause Damage: %d"), BaseDamage)); // 가한 데미지 출력
+				//DrawDebugSphere(GetWorld(), HitResults.GetActor()->GetActorLocation(), 50, 30, FColor::Red, false, 2.0f, 10, 0);
+				
 				/*
 				for (FHitResult& Result : HitResults)
 				{
@@ -93,11 +89,11 @@ void AWeaponShotgun::Fire()
 				
 				if (enemyA)
 				{
-					enemyA->enemyAFSM->OnDamageProcess();
+					enemyA->enemyAFSM->OnDamageProcess(4.f);
 				}
 				else if (enemyB)
 				{
-					enemyB->enemyBFSM->OnDamageProcess();
+					enemyB->enemyBFSM->OnDamageProcess(4.f);
 				}
 			}
 		}

@@ -19,10 +19,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
 	// StartingWeaponClass 프로퍼티에 AWeaponBase 타입인 애들만 할당(TSubclassOf)해줘
 	UPROPERTY(EditAnywhere, Category = "Test")
-	TSubclassOf<class AWeaponBase> StartingWeaponClass; 
+	TSubclassOf<class AWeaponBase> StartingWeaponClass;
 
 	class AWeaponBase* CurrentWeapon; // 웨폰베이스 타입의 커런트웨폰 클래스를 지정함
 	//int32 WeaponIndex;
@@ -30,7 +30,7 @@ protected:
 
 	bool blsAiming;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -51,4 +51,11 @@ public:
 
 	void OnFire();
 	void Reload();
+public:
+	// health System
+	UPROPERTY(EditAnywhere, Category = PlayerHP)
+	int PlayerHP = 5;
+
+	// 피격 함수
+	void OnDamageProcess();
 };

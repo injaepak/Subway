@@ -196,6 +196,7 @@ void UEnemyA_FSM::RunState()
 
 void UEnemyA_FSM::AttackState()
 {
+	me->bCanAttack = true;
 	// 시간이 흐른다.
 	currentTime += GetWorld()->DeltaTimeSeconds;
 
@@ -222,6 +223,7 @@ void UEnemyA_FSM::AttackState()
 
 void UEnemyA_FSM::DieState()
 {
+	me->bCanAttack = false;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Dead!!")));
 	anim->isMoving = false;
 	anim->isAttacking = false;
@@ -234,19 +236,19 @@ void UEnemyA_FSM::DieState()
 	}
 }
 
-void UEnemyA_FSM::OnDamageProcess()
+void UEnemyA_FSM::OnDamageProcess(float damage)
 {
 	if (Health > 0)
 	{
 		if (bCanHit == false)
 		{
 			bCanHit = true;
+			anim->isRunning = true;
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("bCanHit In!!")));
-			//m_state_A = EEnemyAState::Run;
 			return;
 		}
-		Health--;
-		if (Health <= 0)
+		Health-= damage;
+		if (Health < 0)
 		{
 			m_state_A = EEnemyAState::Die;
 			//me->Destroy();
