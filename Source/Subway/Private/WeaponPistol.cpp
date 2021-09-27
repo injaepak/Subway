@@ -4,7 +4,7 @@
 #include "WeaponPistol.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
-#include "FPSPlayer.h" // VRPlayer 인클루드해주시면 될것같습니다!
+#include "FPSPlayer.h" // 테스트용 플레이어 참조
 #include "EnemyA.h"
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"

@@ -4,7 +4,7 @@
 #include "WeaponShotgun.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
-#include "FPSPlayer.h" // VRPlayer 인클루드해주시면 될것같습니다!
+#include "FPSPlayer.h" // 테스트용 플레이어 참조
 #include "EnemyA.h"
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"
@@ -20,12 +20,17 @@ AWeaponShotgun::AWeaponShotgun()
 
 	CurrentTotalAmmo = WeaponMaxAmmo;
 	CurrentMagazineAmmo = MagazineMaxAmmo;
-
+	needToReroad = false;
 }
 
 void AWeaponShotgun::Fire()
 {
-
+	// 재장전이 필요한 상태라면
+	if(needToReroad == true)
+	{GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("put the bullet")));}
+	// 아니라면 
+	else
+	{
 		if (CurrentMagazineAmmo > 0)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("SHOOTING SHOTGUN"));
@@ -43,9 +48,15 @@ void AWeaponShotgun::Fire()
 
 			// 탄약 소모
 			CurrentMagazineAmmo--;
+			// 재장전이 필요한 상태로 전환
+			needToReroad = true;
 
 			//bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_GameTraceChannel12, CollisionParams, CollisionResponse);
-			bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_Pawn, CollisionParams, CollisionResponse);
+			//bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_Pawn, CollisionParams, CollisionResponse);
+			
+			// Sphere 형태의 SweepTrace를 5000.f 거리까지 발사
+			bool bHit = GetWorld()->SweepSingleByChannel(HitResults, Start, End, FQuat::Identity, ECollisionChannel::ECC_WorldStatic, FCollisionShape::MakeSphere(10.0f), CollisionParams, CollisionResponse);
+
 
 			// Hit하지 않았더라도 남은 탄약 수 뷰포트상에 출력
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
@@ -53,7 +64,11 @@ void AWeaponShotgun::Fire()
 			if (bHit)
 			{
 				//시작점, 종착점, 색상, persistentLine 유무, LifeTime, Thickness
-				DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
+				//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
+				
+				// 구체 모양을 쐈으므로 디버그스피어를 Hit한 Actor의 위치에, 구체의 크기만큼, 2초 동안 보여준다.
+				DrawDebugSphere(GetWorld(), HitResults.GetActor()->GetActorLocation(), 50, 30, FColor::Red, false, 2.0f, 10, 0);
+
 				//debugMessage
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
 				//DrawDebugLine(GetWorld(), Start, End, FColor(255, 0, 0), false, 1.f, 0.f, 10.f); // 지속시간 수정
@@ -90,10 +105,21 @@ void AWeaponShotgun::Fire()
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
 		}
+	}
 }
 
 void AWeaponShotgun::Reload()
 {
-		CurrentMagazineAmmo = MagazineMaxAmmo;
+		// 만약 현재 탄창이 7보다 작다면
+	if (CurrentMagazineAmmo < 7)
+	{
+		// 탄환을 1개 장전
+		CurrentMagazineAmmo++;
+		needToReroad = false;
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("No reload required!!!")));
+	}
 }
 
