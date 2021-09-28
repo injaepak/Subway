@@ -19,7 +19,6 @@ UEnemyB_FSM::UEnemyB_FSM()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	bCanDie = true;
-	//bCanHit = false;
 }
 
 
@@ -32,10 +31,10 @@ void UEnemyB_FSM::BeginPlay()
 	anim = Cast<UEnemyBAnimInstance>(me->GetMesh()->GetAnimInstance());
 	//target 찾기
 	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AVR_Player::StaticClass(), actors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFPSPlayer::StaticClass(), actors);
 	for (auto tgt : actors)
 	{
-		target = Cast<AVR_Player>(tgt);
+		target = Cast<AFPSPlayer>(tgt);
 		break;
 	}
 }
@@ -56,9 +55,9 @@ void UEnemyB_FSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	case EEnemyBState::Attack:
 		AttackState();
 		break;
-	//case EEnemyBState::Damage:
-	//	DamageState();
-	//	break;
+	case EEnemyBState::Damage:
+		DamageState();
+		break;
 	case EEnemyBState::Die:
 		DieState();
 		break;
@@ -86,6 +85,8 @@ void UEnemyB_FSM::IdleState()
 
 void UEnemyB_FSM::MoveState()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Move STATE!!")));
+
 	me->GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
 	// Target인 Player 방향으로 이동
 	// 	방향이 필요
@@ -139,15 +140,41 @@ void UEnemyB_FSM::MoveState()
 
 void UEnemyB_FSM::AttackState()
 {
+	//EnemyB 어택 상태가 true 때만 Player 피격 판정 유효
 	me->bCanAttack = true;
 	// 시간이 흐른다.
 	currentTime += GetWorld()->DeltaTimeSeconds;
 
-	// 일정 시간이 지났으니 공격으로 변경
-	if (currentTime > attackDelayTime)
+	// HP = 0, isDie가 False라면
+	if (Health == 0 && anim->isDie == false)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ATTACK!!")));
-		// 시간 초기화
+		m_state_B = EEnemyBState::Die;
+		currentTime = 0;
+	}
+}
+
+void UEnemyB_FSM::DamageState()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DAMAGE STATE!!")));
+	anim->isMoving = false;
+	anim->isDamaging = true;
+
+	// Lerp 를 이용하여 knock back 구현
+	FVector myPos = me->GetActorLocation();
+	//knockbackPos 는 OnDamageProcess에서 계산
+	myPos = FMath::Lerp(myPos, knockbackPos, 10 * GetWorld()->DeltaTimeSeconds);
+	me->SetActorLocation(myPos);
+
+	//거리 측정
+	float distance = FVector::Dist(myPos, knockbackPos);
+
+	currentTime += GetWorld()->DeltaTimeSeconds;
+
+	if (currentTime > 1.2f)
+	{
+		anim->isMoving = true;
+		anim->isDamaging = false;
+		m_state_B = EEnemyBState::Move;
 		currentTime = 0;
 	}
 	// HP = 0, isDie가 False라면
@@ -156,12 +183,18 @@ void UEnemyB_FSM::AttackState()
 		m_state_B = EEnemyBState::Die;
 		currentTime = 0;
 	}
-}
 
-//void UEnemyB_FSM::DamageState()
-//{
-//
-//}
+	// 최종 위치와 나와의 거리가 아주 작으면 Attack으로 상태 변경
+	/*if (distance < 95.f)
+	{
+		myPos = knockbackPos;
+		m_state_B = EEnemyBState::Attack;
+		anim->isDamaging = false;
+		anim->isAttacking = true;
+		currentTime = 0;
+	}*/
+
+}
 
 void UEnemyB_FSM::DieState()
 {
@@ -179,17 +212,21 @@ void UEnemyB_FSM::DieState()
 	}
 }
 
-void UEnemyB_FSM::OnDamageProcess(float damage)
+void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection)
 {
 	if (Health > 0)
 	{
-		if (bCanHit == false)
-		{
-			bCanHit = true;
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("bCanHit!!")));
-			return;
-		}
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("KnockBack!!")));
 
+		// Z 방향은 0으로 고정
+		KBDirection.Z = 0;
+		// 맞으면 뒤로 넉백
+		knockbackPos = me->GetActorLocation() + KBDirection * knockback;
+
+		// 상태를 Damage 로 이동
+		m_state_B = EEnemyBState::Damage;
+
+		// 데미지 처리
 		Health -= damage;
 		if (Health < 0)
 		{

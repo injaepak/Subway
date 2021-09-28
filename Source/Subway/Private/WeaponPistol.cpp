@@ -75,11 +75,11 @@ void AWeaponPistol::Fire()
 
 				if (enemyA)
 				{
-					enemyA->enemyAFSM->OnDamageProcess(2.f);
+					enemyA->enemyAFSM->OnDamageProcess(2.f, Rot);
 				}
 				else if (enemyB)
 				{
-					enemyB->enemyBFSM->OnDamageProcess(2.f);
+					enemyB->enemyBFSM->OnDamageProcess(2.f, Rot);
 				}
 			}
 		}

@@ -86,14 +86,25 @@ void AWeaponShotgun::Fire()
 				// EnemyB에 데미지 처리
 				auto enemyA = Cast<AEnemyA>(HitResults.GetActor());
 				auto enemyB = Cast<AEnemyB>(HitResults.GetActor());
-				
+				/*if (enemyA)
+				{
+					if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
+					}
+					else if (HitResults.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
+					}
+				}*/
+
 				if (enemyA)
 				{
-					enemyA->enemyAFSM->OnDamageProcess(4.f);
+					enemyA->enemyAFSM->OnDamageProcess(4.f, Rot);
 				}
 				else if (enemyB)
 				{
-					enemyB->enemyBFSM->OnDamageProcess(4.f);
+					enemyB->enemyBFSM->OnDamageProcess(4.f, Rot);
 				}
 			}
 		}

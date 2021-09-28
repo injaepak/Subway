@@ -7,7 +7,7 @@
 #include "EnemyBAnimInstance.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class SUBWAY_API UEnemyBAnimInstance : public UAnimInstance
@@ -17,6 +17,8 @@ class SUBWAY_API UEnemyBAnimInstance : public UAnimInstance
 public:
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
 	bool isMoving = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isDamaging = false;
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
 	bool isAttacking = false;
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)

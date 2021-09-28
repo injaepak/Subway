@@ -23,7 +23,7 @@ AEnemyB::AEnemyB()
 	//CollisionComponent Attachment
 	HeadCollision = CreateDefaultSubobject<USphereComponent>(TEXT("HeadCollision"));
 	HeadCollision->SetupAttachment(GetMesh(), "HeadTarget");
-	
+
 	BodyCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	BodyCollision->SetupAttachment(GetMesh(), "Spine1");
 

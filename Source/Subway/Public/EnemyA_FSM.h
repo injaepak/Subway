@@ -40,8 +40,8 @@ public:
 	class AEnemyA* me;
 
 	UPROPERTY(EditAnywhere, Category = Target)
-	class AVR_Player* target;
-	//class AFPSPlayer* target;
+	class AFPSPlayer* target;
+	//class AVR_Player* target;
 
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
 	EEnemyAState m_state_A;
@@ -75,17 +75,27 @@ public:
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
 	int Health = 5;
+
+
+	// 피격 받을 때 넉백 힘
+	UPROPERTY(EditAnywhere, Category = FSM)
+	float knockback = 50;
+
+	// 피격 받을 때 넉백 종료 지점
+	UPROPERTY()
+	FVector knockbackPos;
+
 private:
 	void IdleState();
 	void MoveState();
 	void RunState();
 	void AttackState();
-	//void DamageState();
+	void DamageState();
 	void DieState();
 
 public:
 	// 피격 함수
-	void OnDamageProcess(float damage);	
+	void OnDamageProcess(float damage, FVector KBDirection);
 	
 	void Die();
 	FTimerHandle DieTimerHandle;

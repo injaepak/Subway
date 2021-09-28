@@ -90,11 +90,11 @@ void AWeaponRifle::Fire()
 							auto enemyB = Cast<AEnemyB>(HitResults.GetActor());
 							if (enemyA)
 							{
-								enemyA->enemyAFSM->OnDamageProcess(1.f);
+								enemyA->enemyAFSM->OnDamageProcess(1.f, Rot);
 							}
 							else if (enemyB)
 							{
-								enemyB->enemyBFSM->OnDamageProcess(1.f);
+								enemyB->enemyBFSM->OnDamageProcess(1.f, Rot);
 							}
 						}
 					}
