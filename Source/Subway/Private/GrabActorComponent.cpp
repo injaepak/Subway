@@ -11,6 +11,7 @@
 #include "WeaponPistol.h"
 #include "WeaponShotgun.h"
 #include "Subway.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values for this component's properties
 UGrabActorComponent::UGrabActorComponent()
@@ -36,6 +37,8 @@ void UGrabActorComponent::BeginPlay()
 	// 임시 총 변수
 	bIsPistol = true;
 	bIsShotgun = false;
+
+	gunTarget = UGameplayStatics::GetActorOfClass(GetWorld(), AVR_Player::StaticClass());
 }
 
 
@@ -192,23 +195,26 @@ void UGrabActorComponent::ReleaseAction()
 {
 	if (pickObject)
 	{
-		pickObject->boxComp->SetEnableGravity(true);
+		pickObject->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		pickObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		pickObject->boxComp->SetSimulatePhysics(true);
+		pickObject->boxComp->SetSimulatePhysics(false);
+		
+		pickObject->SetActorLocation(player->gunComp->GetComponentLocation());
 
+		pickObject->SetActorRelativeRotation(FRotator(-90.f, -90.f, 0.f));
 		// 오른손 피는 애니메이션
 		player->handComp->targetGripValueRight = 0.0f;
-
+		
 		pickObject = nullptr;
 	}
 
 	else if (shotgunobject)
 	{
-		shotgunobject->boxComp->SetEnableGravity(true);
+		shotgunobject->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		shotgunobject->boxComp->SetSimulatePhysics(true);
+		shotgunobject->boxComp->SetSimulatePhysics(false);
 
 		// 오른손 피는 애니메이션
 		player->handComp->targetGripValueRight = 0.0f;

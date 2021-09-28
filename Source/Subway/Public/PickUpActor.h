@@ -21,7 +21,7 @@ protected:
 
 public:	
 	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaTime) override;
 
 	
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
@@ -36,4 +36,10 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 	class UChildActorComponent* gun;
+
+	class AVR_Player* player;
+
+	bool bGrip = false;
+
+	float speed = 1000;
 };

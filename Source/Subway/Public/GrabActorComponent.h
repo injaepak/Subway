@@ -42,6 +42,7 @@ private:
 	class APickUpActor* pickObject;
 	class AShotGunActor* shotgunobject;
 	class AVR_Player* player;
+	class AActor* gunTarget;
 	class AWeaponPistol* pistol;
 	class AWeaponShotgun* shotgun;
 	

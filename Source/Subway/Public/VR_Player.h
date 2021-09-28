@@ -38,6 +38,18 @@ public:
 		class UStaticMeshComponent* bodyComp;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class USceneComponent* weaponsMain;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UStaticMeshComponent* magComp;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UStaticMeshComponent* shotgunComp;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class UStaticMeshComponent* gunComp;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class USceneComponent* cameraRoot;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
@@ -64,6 +76,8 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
 		class UGrabActorComponent* grabComp;
 
+	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+		class UChildActorComponent* gun;
 
 private:
 	void Fire1();
@@ -74,4 +88,8 @@ private:
 
 	FRotator hmdRotate;
 	FVector hmdLocation;
+
+	FRotator WeaponsRotate;
+	FVector WeaponsLocation;
+
 };

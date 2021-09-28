@@ -12,6 +12,7 @@
 #include "HeadMountedDisPlayFunctionLibrary.h"
 #include "HandActorComponent.h"
 #include "GrabActorComponent.h"
+#include "PickUpActor.h"
 
 // Sets default values
 AVR_Player::AVR_Player()
@@ -45,6 +46,18 @@ AVR_Player::AVR_Player()
     bodyComp->SetupAttachment(RootComponent);
     bodyComp->SetRelativeScale3D(FVector(0.8f, 0.8f, 1.2f));
 
+    weaponsMain = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponsMain"));
+    weaponsMain->SetupAttachment(cameraRoot);
+
+	magComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MagMesh"));
+    magComp->SetupAttachment(weaponsMain);
+
+    shotgunComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShotgunComp"));
+    shotgunComp->SetupAttachment(weaponsMain);
+
+	gunComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunComp"));
+	gunComp->SetupAttachment(weaponsMain);
+
     leftHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Left Hand"));
     leftHand->SetupAttachment(leftController);
     leftHand->SetRelativeRotation(FRotator(0, 0, -90.0f));
@@ -57,6 +70,10 @@ AVR_Player::AVR_Player()
     moveComp = CreateDefaultSubobject<UMoveActorComponent>(TEXT("MoveComponent"));
     handComp = CreateDefaultSubobject<UHandActorComponent>(TEXT("HandComponent"));
     grabComp = CreateDefaultSubobject<UGrabActorComponent>(TEXT("GrabComponent"));
+
+	gun = CreateDefaultSubobject<UChildActorComponent>(TEXT("Gun"));
+	gun->SetupAttachment(weaponsMain);
+
 
     //플레이어 컨트롤러 빙의
     AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -82,7 +99,10 @@ void AVR_Player::BeginPlay()
 void AVR_Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    
+
+	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(WeaponsRotate, WeaponsLocation);
+
+    weaponsMain->SetRelativeRotation(WeaponsRotate);
 }
 
 // Called to bind functionality to input
