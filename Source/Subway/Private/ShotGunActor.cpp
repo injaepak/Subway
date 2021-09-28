@@ -18,7 +18,7 @@ AShotGunActor::AShotGunActor()
 	// 물리 관련 설정
 	boxComp->SetSimulatePhysics(true);
 	boxComp->SetEnableGravity(true);
-	//boxComp->SetCollisionProfileName(TEXT("PickUP"));
+	boxComp->SetCollisionProfileName(TEXT("PickUP"));
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
 	meshComp->SetupAttachment(boxComp);

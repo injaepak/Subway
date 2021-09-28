@@ -2,12 +2,9 @@
 
 
 #include "PickUpActor.h"
-#include "VR_Player.h"
-#include <Kismet/GameplayStatics.h>
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/ChildActorComponent.h"
-
 
 // Sets default values
 APickUpActor::APickUpActor()
@@ -34,33 +31,11 @@ APickUpActor::APickUpActor()
 void APickUpActor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AVR_Player::StaticClass(), actors);
-
-	for (auto tgt : actors)
-	{
-		player = Cast<AVR_Player>(tgt);
-		break;
-	}
-
 }
 
  //Called every frame
 void APickUpActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	if (bGrip == false)
-	{	
-		/*FVector me = GetActorLocation();
-		FVector dir = player->gunComp->GetComponentLocation() - me;
-		dir.Normalize();
-
-		FVector P = me + dir * DeltaTime * speed;
-
-
-		SetActorLocation(P);*/
-	}
 }
 

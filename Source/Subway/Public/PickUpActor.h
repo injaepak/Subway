@@ -41,5 +41,5 @@ public:
 
 	bool bGrip = false;
 
-	float speed = 1000;
+	float speed = 250;
 };

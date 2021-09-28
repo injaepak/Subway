@@ -73,7 +73,9 @@ AVR_Player::AVR_Player()
 
 	gun = CreateDefaultSubobject<UChildActorComponent>(TEXT("Gun"));
 	gun->SetupAttachment(weaponsMain);
-
+   
+	shotgun = CreateDefaultSubobject<UChildActorComponent>(TEXT("Shotgun"));
+	shotgun->SetupAttachment(weaponsMain);
 
     //플레이어 컨트롤러 빙의
     AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -93,6 +95,8 @@ void AVR_Player::BeginPlay()
 
     // HMD 장치의 위치를 초기화하기
     UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
+
+   
 }
 
 // Called every frame
@@ -101,8 +105,8 @@ void AVR_Player::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(WeaponsRotate, WeaponsLocation);
-
-    weaponsMain->SetRelativeRotation(WeaponsRotate);
+    weaponsRotateYaw = WeaponsRotate.Yaw;
+    weaponsMain->SetRelativeRotation(FRotator(0.f, weaponsRotateYaw, 0.f));
 }
 
 // Called to bind functionality to input

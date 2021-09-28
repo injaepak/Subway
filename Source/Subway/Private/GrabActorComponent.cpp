@@ -150,7 +150,6 @@ void UGrabActorComponent::GrabAction()
 				// 손에 붙이기
 				pickObject->boxComp->SetSimulatePhysics(false);
 				pickObject->AttachToComponent(player->rightHand, attachRules, TEXT("GrabPoint"));
-
 				// 오브젝트를 잡았을때 위치 잡기
 				pickObject->boxComp->SetRelativeLocation((pickObject->grabOffset));
 
@@ -198,11 +197,16 @@ void UGrabActorComponent::ReleaseAction()
 		pickObject->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		pickObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+		FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+		pickObject->AttachToComponent(player->gunComp, attachRules);
+
 		pickObject->boxComp->SetSimulatePhysics(false);
 		
 		pickObject->SetActorLocation(player->gunComp->GetComponentLocation());
-
-		pickObject->SetActorRelativeRotation(FRotator(-90.f, -90.f, 0.f));
+		player->gun->SetRelativeRotation(FRotator(0, 90.f, 90.0f));
+		pickObject->SetActorRelativeRotation(FRotator(-90.f, 0.f, 0.f));
 		// 오른손 피는 애니메이션
 		player->handComp->targetGripValueRight = 0.0f;
 		
@@ -214,7 +218,16 @@ void UGrabActorComponent::ReleaseAction()
 		shotgunobject->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		
+		FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+		shotgunobject->AttachToComponent(player->shotgunComp, attachRules);
+
 		shotgunobject->boxComp->SetSimulatePhysics(false);
+
+		shotgunobject->SetActorLocation(player->shotgunComp->GetComponentLocation());
+		player->shotgun->SetRelativeRotation(FRotator(0, 90.f, 90.0f));
+		shotgunobject->SetActorRelativeRotation(FRotator(-90.f, 0.f, 0.f));
 
 		// 오른손 피는 애니메이션
 		player->handComp->targetGripValueRight = 0.0f;

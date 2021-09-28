@@ -79,6 +79,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		class UChildActorComponent* gun;
 
+	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+		class UChildActorComponent* shotgun;
+
 private:
 	void Fire1();
 	void Fire2();
@@ -92,4 +95,5 @@ private:
 	FRotator WeaponsRotate;
 	FVector WeaponsLocation;
 
+	float weaponsRotateYaw;
 };
