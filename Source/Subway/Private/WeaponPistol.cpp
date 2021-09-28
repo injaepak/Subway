@@ -16,7 +16,7 @@ AWeaponPistol::AWeaponPistol()
 	WeaponName = "Pistol";
 	BaseDamage = 100;
 	WeaponMaxAmmo = 98;
-	MagazineMaxAmmo = 7;
+	MagazineMaxAmmo = 15;
 
 	CurrentTotalAmmo = WeaponMaxAmmo;
 	CurrentMagazineAmmo = MagazineMaxAmmo;
@@ -49,9 +49,14 @@ void AWeaponPistol::Fire()
 
 			if (bHit)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Cause Damage: %d"), BaseDamage)); // 가한 데미지 출력
-				//시작점, 종착점, 색상, persistentLine 유무, LifeTime, Thickness
 				DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
+				if (HitResults.GetComponent()->GetAttachmentRootActor() != NULL) // 지오메트리(Brush 타입)일 때 크래시 나지 않게 한다
+				{
+					//타격한 대상의 이름을 출력
+					//debugMessage
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetComponent()->GetName());
+				}
 				//debugMessage
 				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
 				//DrawDebugLine(GetWorld(), Start, End, FColor(255, 0, 0), false, 1.f, 0.f, 10.f); // 지속시간 수정
@@ -75,12 +80,35 @@ void AWeaponPistol::Fire()
 
 				if (enemyA)
 				{
+					if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
+					}
+					else if (HitResults.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
+					}
+				}
+				else if (enemyB)
+				{
+					if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
+					}
+					else if (HitResults.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
+					}
+				}
+
+				/*if (enemyA)
+				{
 					enemyA->enemyAFSM->OnDamageProcess(2.f, Rot);
 				}
 				else if (enemyB)
 				{
 					enemyB->enemyBFSM->OnDamageProcess(2.f, Rot);
-				}
+				}*/
 			}
 		}
 		else

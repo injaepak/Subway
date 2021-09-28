@@ -42,6 +42,8 @@ void AWeaponShotgun::Fire()
 			FHitResult HitResults;
 			FCollisionQueryParams CollisionParams;
 			FCollisionResponseParams CollisionResponse;
+			FCollisionObjectQueryParams QuaryParams;
+
 			CollisionParams.AddIgnoredActor(this);
 			// 플레이어 변수이름 넣어주면 플레이어도 무시함
 			//CollisionParams.AddIgnoredActor(ShootingPlayer);
@@ -55,15 +57,23 @@ void AWeaponShotgun::Fire()
 			//bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_Pawn, CollisionParams, CollisionResponse);
 			
 			// Sphere 형태의 SweepTrace를 5000.f 거리까지 발사
-			bool bHit = GetWorld()->SweepSingleByChannel(HitResults, Start, End, FQuat::Identity, ECollisionChannel::ECC_Visibility, FCollisionShape::MakeSphere(50.0f), CollisionParams, CollisionResponse);
-
+			bool bHit = GetWorld()->LineTraceSingleByObjectType
+			(HitResults, Start, End, QuaryParams, CollisionParams);
 
 			// Hit하지 않았더라도 남은 탄약 수 뷰포트상에 출력
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
 
 			if (bHit)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Cause Damage: %d"), BaseDamage)); // 가한 데미지 출력
+				DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f, 0.f, 5.f);
+				if (HitResults.GetComponent()->GetAttachmentRootActor() != NULL) // 지오메트리(Brush 타입)일 때 크래시 나지 않게 한다
+				{
+					//타격한 대상의 이름을 출력
+					//debugMessage
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetComponent()->GetName());
+				}
+
 				//시작점, 종착점, 색상, persistentLine 유무, LifeTime, Thickness
 				//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
 				
@@ -86,7 +96,7 @@ void AWeaponShotgun::Fire()
 				// EnemyB에 데미지 처리
 				auto enemyA = Cast<AEnemyA>(HitResults.GetActor());
 				auto enemyB = Cast<AEnemyB>(HitResults.GetActor());
-				/*if (enemyA)
+				if (enemyA)
 				{
 					if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
 					{
@@ -96,16 +106,26 @@ void AWeaponShotgun::Fire()
 					{
 						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
 					}
-				}*/
-
-				if (enemyA)
+				}
+				else if (enemyB)
+				{
+					if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
+					}
+					else if (HitResults.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
+					}
+				}
+				/*if (enemyA)
 				{
 					enemyA->enemyAFSM->OnDamageProcess(4.f, Rot);
 				}
 				else if (enemyB)
 				{
 					enemyB->enemyBFSM->OnDamageProcess(4.f, Rot);
-				}
+				}*/
 			}
 		}
 		else
