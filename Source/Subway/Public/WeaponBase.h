@@ -47,9 +47,9 @@ public:
 	TArray<int32> GetCurrentAmmo();
 
 public:
-	UPROPERTY(EditAnywhere, Category = "Test")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Test")
 		int32 CurrentMagazineAmmo;
-	UPROPERTY(EditAnywhere, Category = "Test")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Test")
 		int32 MagazineMaxAmmo;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Test")

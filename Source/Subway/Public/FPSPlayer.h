@@ -7,6 +7,8 @@
 #include "FPSPlayer.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FPlayerInputDelegate, class UInputComponent*);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAmmoChanged, int32, CurrantAmmo, int32, MagazineAmmo);
+
 UCLASS()
 class SUBWAY_API AFPSPlayer : public ACharacter
 {
@@ -19,6 +21,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintAssignable)
+	FAmmoChanged OnAmmoChanged;
 
 	// StartingWeaponClass 프로퍼티에 AWeaponBase 타입인 애들만 할당(TSubclassOf)해줘
 	UPROPERTY(EditAnywhere, Category = "Test")
