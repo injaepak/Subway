@@ -18,6 +18,4 @@ public:
 	virtual void Fire() override;
 	virtual void Reload() override;
 
-	float WaitHandle;
-
 };
