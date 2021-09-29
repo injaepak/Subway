@@ -11,6 +11,8 @@
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"
 #include "EnemyB_FSM.h"
+#include "GunTargetActor.h"
+#include "DoorOpenActor.h"
 
 // Sets default values
 AWeaponShotgun::AWeaponShotgun()
@@ -103,6 +105,18 @@ void AWeaponShotgun::Fire()
 
 						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
 
+					}
+					// 만약 GunTargetActor를 쳤다면
+					auto GunTargetActor = Cast<AGunTargetActor>(HitResults.GetActor());
+					if (GunTargetActor)
+					{
+						GunTargetActor->OnDamageProcess();
+					}
+					//만약 DoorOpenActor를 쳤다면
+					auto DoorOpenActor = Cast<ADoorOpenActor>(HitResults.GetActor());
+					if (DoorOpenActor)
+					{
+						DoorOpenActor->OnDamageProcess();
 					}
 				}
 
