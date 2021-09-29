@@ -6,6 +6,7 @@
 #include "DrawDebugHelpers.h"
 #include "FPSPlayer.h" // 테스트용 플레이어 참조
 #include "Kismet/GameplayStatics.h" // 파티클시스템 위해 참조
+#include "TriggerBoxBase.h" // 트리거박스인지 검사를 위해 참조
 #include "EnemyA.h"
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"
@@ -70,6 +71,23 @@ void AWeaponPistol::Fire()
 					FTransform hitTrans;
 					hitTrans.SetLocation(HitResults.ImpactPoint);
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletHitEffect, hitTrans);
+
+					// ----------------------------------------------------------------------
+
+					// 만약 트리거박스를 쳤다면 문 여는 변수를 true로 변경
+					auto triggerBox = Cast<ATriggerBoxBase>(HitResults.GetActor());
+
+					if (triggerBox)
+					{
+
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("TRIGGER IN!!")));
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
+
+						triggerBox->openTheDoor = true;
+
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
+
+					}
 				}
 				//debugMessage
 				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
