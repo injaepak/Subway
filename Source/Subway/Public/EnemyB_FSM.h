@@ -39,8 +39,8 @@ public:
 	class AEnemyB* me;
 
 	UPROPERTY(EditAnywhere, Category = Target)
-	class AFPSPlayer* target;
-	//class AVR_Player* target;
+	class AVR_Player* target;
+	//class AFPSPlayer* target;
 
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
 	EEnemyBState m_state_B;
@@ -73,7 +73,7 @@ public:
 
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM)
-	int Health = 5;
+	int Health = 10;
 
 	// 피격 받을 때 넉백 힘
 	UPROPERTY(EditAnywhere, Category = FSM)
@@ -92,7 +92,7 @@ private:
 
 public:
 	// 피격 함수 (데미지, 넉백 방향)
-	void OnDamageProcess(float damage, FVector KBDirection);
+	void OnDamageProcess(float damage, FVector KBDirection, bool isHead);
 
 	void Die();
 	FTimerHandle DieTimerHandle;

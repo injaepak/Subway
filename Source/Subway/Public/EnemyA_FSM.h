@@ -40,8 +40,8 @@ public:
 	class AEnemyA* me;
 
 	UPROPERTY(EditAnywhere, Category = Target)
-	class AFPSPlayer* target;
-	//class AVR_Player* target;
+	class AVR_Player* target;
+	//class AFPSPlayer* target;
 
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
 	EEnemyAState m_state_A;
@@ -64,7 +64,7 @@ public:
 
 	//범위
 	UPROPERTY(EditAnywhere, Category = FSM)
-	float attackRange = 100;
+	float attackRange = 150;
 
 	//Boss Movement
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
@@ -74,12 +74,12 @@ public:
 
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
-	int Health = 5;
+	int Health = 10;
 
 
 	// 피격 받을 때 넉백 힘
 	UPROPERTY(EditAnywhere, Category = FSM)
-	float knockback = 50;
+	float knockback = 65;
 
 	// 피격 받을 때 넉백 종료 지점
 	UPROPERTY()
@@ -95,7 +95,7 @@ private:
 
 public:
 	// 피격 함수
-	void OnDamageProcess(float damage, FVector KBDirection);
+	void OnDamageProcess(float damage, FVector KBDirection, bool isHead);
 	
 	void Die();
 	FTimerHandle DieTimerHandle;

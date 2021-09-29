@@ -20,6 +20,7 @@ UEnemyA_FSM::UEnemyA_FSM()
 	PrimaryComponentTick.bCanEverTick = true;
 	bCanDie = true;
 	bCanHit = false;
+
 }
 
 // Called when the game starts
@@ -31,19 +32,25 @@ void UEnemyA_FSM::BeginPlay()
 	me = Cast<AEnemyA>(GetOwner());
 	anim = Cast<UEnemyAAnimInstance>(me->GetMesh()->GetAnimInstance());
 	//target 찾기
+	/*
 	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFPSPlayer::StaticClass(), actors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AVR_Player::StaticClass(), actors);
 	for (auto tgt : actors)
 	{
-		target = Cast<AFPSPlayer>(tgt);
+		target = Cast<AVR_Player>(tgt);
 		break;
-	}
+	}*/
 }
 
 // Called every frame
 void UEnemyA_FSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (target == nullptr)
+	{
+		target = Cast<AVR_Player>(UGameplayStatics::GetActorOfClass(GetWorld(), AVR_Player::StaticClass()));
+	}
 
 	switch (m_state_A)
 	{
@@ -90,6 +97,11 @@ void UEnemyA_FSM::IdleState()
 
 void UEnemyA_FSM::MoveState()
 {
+	if (target == nullptr)
+	{
+		return;
+	}
+
 	me->GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
 	// Target인 Player 방향으로 이동
 	// 	방향이 필요
@@ -155,6 +167,10 @@ void UEnemyA_FSM::MoveState()
 
 void UEnemyA_FSM::RunState()
 {
+	if (target == nullptr)
+	{
+		return;
+	}
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("RUNNING!!")));
 	me->GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
 	// Target인 Player 방향으로 이동
@@ -179,7 +195,7 @@ void UEnemyA_FSM::RunState()
 	DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
 	// 공격 범위에 가까워지면
 
-	if (distance <= attackRange)
+	if (distance < attackRange)
 	{
 		m_state_A = EEnemyAState::Attack;
 		anim->isMoving = false;
@@ -204,6 +220,7 @@ void UEnemyA_FSM::AttackState()
 	// 시간이 흐른다.
 	currentTime += GetWorld()->DeltaTimeSeconds;
 
+
 	// HP = 0, isDie가 False라면
 	if (Health == 0 && anim->isDie == false)
 	{
@@ -219,7 +236,7 @@ void UEnemyA_FSM::DamageState()
 	anim->isRunning = false;
 	anim->isDamaging = true;
 
-	// Lerp 를 이용하여 knock back 구현
+	// Lerp로 knock back 구현
 	FVector myPos = me->GetActorLocation();
 	//knockbackPos 는 OnDamageProcess에서 계산
 	myPos = FMath::Lerp(myPos, knockbackPos, 10 * GetWorld()->DeltaTimeSeconds);
@@ -230,7 +247,7 @@ void UEnemyA_FSM::DamageState()
 
 	currentTime += GetWorld()->DeltaTimeSeconds;
 
-	if (currentTime > 1.2f)
+	if (currentTime > 1.3f)
 	{
 		anim->isRunning = true;
 		anim->isDamaging = false;
@@ -254,14 +271,13 @@ void UEnemyA_FSM::DieState()
 	}
 }
 
-void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection)
+void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead)
 {
 	if (Health > 0)
 	{
 		if (bCanHit == false)
 		{
 			bCanHit = true;
-			//anim->isRunning = true;
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("bCanHit In!!")));
 			return;
 		}

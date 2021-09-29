@@ -16,6 +16,10 @@ class SUBWAY_API UEnemyAAnimInstance : public UAnimInstance
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isHead = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isBody = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
 	bool isMoving = false;
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
 	bool isRunning = false;

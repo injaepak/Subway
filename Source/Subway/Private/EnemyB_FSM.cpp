@@ -30,13 +30,14 @@ void UEnemyB_FSM::BeginPlay()
 	me = Cast<AEnemyB>(GetOwner());
 	anim = Cast<UEnemyBAnimInstance>(me->GetMesh()->GetAnimInstance());
 	//target 찾기
+	/*
 	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFPSPlayer::StaticClass(), actors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AVR_Player::StaticClass(), actors);
 	for (auto tgt : actors)
 	{
-		target = Cast<AFPSPlayer>(tgt);
+		target = Cast<AVR_Player>(tgt);
 		break;
-	}
+	}*/
 }
 
 
@@ -44,6 +45,12 @@ void UEnemyB_FSM::BeginPlay()
 void UEnemyB_FSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
+	if (target == nullptr)
+	{
+		target = Cast<AVR_Player>(UGameplayStatics::GetActorOfClass(GetWorld(), AVR_Player::StaticClass()));
+	}
+
 	switch (m_state_B)
 	{
 	case EEnemyBState::Idle:
@@ -85,7 +92,11 @@ void UEnemyB_FSM::IdleState()
 
 void UEnemyB_FSM::MoveState()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Move STATE!!")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Move STATE!!")));
+	if (target == nullptr)
+	{
+		return;
+	}
 
 	me->GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
 	// Target인 Player 방향으로 이동
@@ -155,9 +166,9 @@ void UEnemyB_FSM::AttackState()
 
 void UEnemyB_FSM::DamageState()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DAMAGE STATE!!")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DAMAGE STATE!!")));
 	anim->isMoving = false;
-	anim->isDamaging = true;
+	//anim->isDamaging = true;
 
 	// Lerp 를 이용하여 knock back 구현
 	FVector myPos = me->GetActorLocation();
@@ -173,7 +184,8 @@ void UEnemyB_FSM::DamageState()
 	if (currentTime > 1.2f)
 	{
 		anim->isMoving = true;
-		anim->isDamaging = false;
+		anim->isHead = false;
+		anim->isBody = false;
 		m_state_B = EEnemyBState::Move;
 		currentTime = 0;
 	}
@@ -199,7 +211,7 @@ void UEnemyB_FSM::DamageState()
 void UEnemyB_FSM::DieState()
 {
 	me->bCanAttack = false;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Dead!!")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Dead!!")));
 	//anim->isTransA = false;
 	anim->isMoving = false;
 	anim->isAttacking = false;
@@ -212,7 +224,7 @@ void UEnemyB_FSM::DieState()
 	}
 }
 
-void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection)
+void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead)
 {
 	if (Health > 0)
 	{
@@ -225,6 +237,19 @@ void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection)
 
 		// 상태를 Damage 로 이동
 		m_state_B = EEnemyBState::Damage;
+
+		if (isHead == true)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEADSHOT!!")));
+			anim->isHead = true;
+			anim->isBody = false;
+		}
+		else if (isHead == false)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODYSHOT!!")));
+			anim->isHead = false;
+			anim->isBody = true;
+		}
 
 		// 데미지 처리
 		Health -= damage;
