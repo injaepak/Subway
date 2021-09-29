@@ -59,6 +59,8 @@ void UGrabActorComponent::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("RightGrip", IE_Pressed, this, &UGrabActorComponent::GrabAction);
 	PlayerInputComponent->BindAction("RightGrip", IE_Released, this, &UGrabActorComponent::ReleaseAction);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &UGrabActorComponent::Fire);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &UGrabActorComponent::Reload);
+	PlayerInputComponent->BindAction("ShotgunReload", IE_Pressed, this, &UGrabActorComponent::ShotgunReload);
 
 	//PlayerInputComponent->BindAction("RightTrigger", IE_Pressed, this, &UGrabActorComponent::);
 	//PlayerInputComponent->BindAction("RightTrigger", IE_Released, this, &UGrabActorComponent::);
@@ -132,11 +134,11 @@ void UGrabActorComponent::GrabAction()
 	if (pickObject == nullptr)
 	{
 		FString gunName = grabActor->GetName();
-		if(gunName.Contains("PickUpActor"))
+		if (gunName.Contains("PickUpActor"))
 		{
 			pickObject = Cast<APickUpActor>(grabActor);
 			pistol = Cast<AWeaponPistol>(pickObject->gun->GetChildActor());
-	
+
 			/*if (pistol)
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Blue, pistol->GetName());
@@ -203,13 +205,13 @@ void UGrabActorComponent::ReleaseAction()
 		pickObject->AttachToComponent(player->gunComp, attachRules);
 
 		pickObject->boxComp->SetSimulatePhysics(false);
-		
+
 		pickObject->SetActorLocation(player->gunComp->GetComponentLocation());
 		player->gun->SetRelativeRotation(FRotator(0, 90.f, 90.0f));
 		pickObject->SetActorRelativeRotation(FRotator(-90.f, 0.f, 0.f));
 		// 오른손 피는 애니메이션
 		player->handComp->targetGripValueRight = 0.0f;
-		
+
 		pickObject = nullptr;
 	}
 
@@ -218,7 +220,7 @@ void UGrabActorComponent::ReleaseAction()
 		shotgunobject->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		
+
 		FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
 
 		shotgunobject->AttachToComponent(player->shotgunComp, attachRules);
@@ -270,7 +272,7 @@ void UGrabActorComponent::Fire()
 		GetWorld()->GetFirstPlayerController()->PlayHapticEffect(shotHaptic, EControllerHand::Right, 1.f, false);
 
 		// 여기에 사운드 추가
-		
+
 	}
 
 	if (shotgunobject && shotgun)
@@ -286,5 +288,15 @@ void UGrabActorComponent::Fire()
 		// 여기에 사운드 추가
 
 	}
+}
+
+void UGrabActorComponent::Reload()
+{
+	pistol->Reload();
+}
+
+void UGrabActorComponent::ShotgunReload()
+{
+	shotgun->Reload();
 }
 

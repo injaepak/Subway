@@ -8,12 +8,12 @@
 
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SUBWAY_API UGrabActorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UGrabActorComponent();
 
@@ -21,7 +21,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -37,6 +37,7 @@ private:
 	void Test2();
 	void Fire();
 	void Reload();
+	void ShotgunReload();
 
 	bool bIsShowing = false;
 	class APickUpActor* pickObject;
@@ -45,16 +46,16 @@ private:
 	class AActor* gunTarget;
 	class AWeaponPistol* pistol;
 	class AWeaponShotgun* shotgun;
-	
+
 	FHitResult grabObject;
 
 public:
 
 	UPROPERTY(EditAnywhere, Category = GravSettings)
-	float grabDistance = 1000.f;
+		float grabDistance = 1000.f;
 
 	UPROPERTY(EditAnywhere, Category = GravSettings)
-	class UHapticFeedbackEffect_Base* shotHaptic;
+		class UHapticFeedbackEffect_Base* shotHaptic;
 
 	bool bIsPistol = false;
 	bool bIsShotgun = false;
