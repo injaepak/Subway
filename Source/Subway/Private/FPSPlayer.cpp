@@ -73,7 +73,12 @@ void AFPSPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void AFPSPlayer::OnFire()
 {
-	CurrentWeapon->Fire();
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->Fire();
+		TArray<int32> CurrentAmmo = CurrentWeapon->GetCurrentAmmo();
+		OnAmmoChanged.Broadcast(CurrentAmmo[0], CurrentAmmo[1]);
+	}
 }
 
 void AFPSPlayer::Reload()
