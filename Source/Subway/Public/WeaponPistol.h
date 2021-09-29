@@ -19,4 +19,5 @@ public:
 	virtual void Reload() override;
 
 	float WaitHandle;
+
 };

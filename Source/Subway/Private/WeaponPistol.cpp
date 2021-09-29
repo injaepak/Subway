@@ -5,6 +5,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
 #include "FPSPlayer.h" // 테스트용 플레이어 참조
+#include "Kismet/GameplayStatics.h" // 파티클시스템 위해 참조
 #include "EnemyA.h"
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"
@@ -49,13 +50,26 @@ void AWeaponPistol::Fire()
 
 			if (bHit)
 			{
+				// 라인트레이스 발사 시 디버그라인 생성
 				DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
+
+				// 라인트레이스 발사 시 디버그라인 생성 후 Shoot Effect 파티클효과 재생
+				FTransform startTrans2;
+				startTrans2.SetLocation(Start + Rot * 1.0f);
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletShootEffect, startTrans2);
+
+				// 충돌이 발생했다면
 				if (HitResults.GetComponent()->GetAttachmentRootActor() != NULL) // 지오메트리(Brush 타입)일 때 크래시 나지 않게 한다
 				{
 					//타격한 대상의 이름을 출력
 					//debugMessage
 					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
 					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetComponent()->GetName());
+
+					// 라인트레이스 부딪혔을 때 부딪힌 지점에 파티클효과 재생
+					FTransform hitTrans;
+					hitTrans.SetLocation(HitResults.ImpactPoint);
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletHitEffect, hitTrans);
 				}
 				//debugMessage
 				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());

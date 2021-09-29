@@ -51,4 +51,10 @@ public:
 		int32 CurrentMagazineAmmo;
 	UPROPERTY(EditAnywhere, Category = "Test")
 		int32 MagazineMaxAmmo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Test")
+		class UParticleSystem* bulletShootEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Test")
+		class UParticleSystem* bulletHitEffect;
 };
