@@ -77,6 +77,9 @@ AVR_Player::AVR_Player()
 	shotgun = CreateDefaultSubobject<UChildActorComponent>(TEXT("Shotgun"));
 	shotgun->SetupAttachment(weaponsMain);
 
+	mag = CreateDefaultSubobject<UChildActorComponent>(TEXT("Mag"));
+	mag->SetupAttachment(weaponsMain);
+
     //플레이어 컨트롤러 빙의
     AutoPossessPlayer = EAutoReceiveInput::Player0;
 

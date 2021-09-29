@@ -3,6 +3,7 @@
 
 #include "GrabActorComponent.h"
 #include "PickUpActor.h"
+#include "MagazineActor.h"
 #include "ShotGunActor.h"
 #include "VR_Player.h"
 #include "DrawDebugHelpers.h"
@@ -61,6 +62,8 @@ void UGrabActorComponent::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &UGrabActorComponent::Fire);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &UGrabActorComponent::Reload);
 	PlayerInputComponent->BindAction("ShotgunReload", IE_Pressed, this, &UGrabActorComponent::ShotgunReload);
+	PlayerInputComponent->BindAction("LeftGrip", IE_Pressed, this, &UGrabActorComponent::LeftGrabAction);
+	PlayerInputComponent->BindAction("LeftGrip", IE_Released, this, &UGrabActorComponent::LeftReleaseAction);
 
 	//PlayerInputComponent->BindAction("RightTrigger", IE_Pressed, this, &UGrabActorComponent::);
 	//PlayerInputComponent->BindAction("RightTrigger", IE_Released, this, &UGrabActorComponent::);
@@ -298,5 +301,117 @@ void UGrabActorComponent::Reload()
 void UGrabActorComponent::ShotgunReload()
 {
 	shotgun->Reload();
+}
+
+void UGrabActorComponent::LeftDrawGrabLine()
+{
+	FHitResult hitInfo;
+	FVector startPos = player->leftHand->GetComponentLocation();
+	FVector endPos = startPos + player->leftHand->GetForwardVector() * grabDistance;
+
+	FCollisionObjectQueryParams objParams;
+	objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+	objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+
+	FCollisionQueryParams queryParams;
+	queryParams.AddIgnoredActor(player);
+
+	if (GetWorld()->SweepSingleByObjectType(hitInfo, startPos, startPos, FQuat::Identity, objParams, FCollisionShape::MakeSphere(15.f), queryParams))
+	{
+		grabObject = hitInfo;
+
+		// 오른손 쥐는 애니메이션
+		//player->handComp->targetGripValueRight = 1.0f;
+	}
+	else
+	{
+		grabObject = FHitResult();
+	}
+	DrawDebugSphere(GetWorld(), startPos, 15.f, 30, FColor::Green, false, -1, 0, 1);
+}
+
+
+void UGrabActorComponent::LeftGrabAction()
+{
+	LeftDrawGrabLine();
+
+	AActor* grabActor = grabObject.GetActor();
+
+	if (grabActor == nullptr)
+	{
+		return;
+	}
+
+	if (magzineActor == nullptr)
+	{
+		FString mag = grabActor->GetName();
+		if (mag.Contains("MagazineActor"))
+		{
+			magzineActor = Cast<AMagazineActor>(grabActor);
+			
+
+			/*if (pistol)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Blue, pistol->GetName());
+			}*/
+
+			if (magzineActor)
+			{
+				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+				// 손에 붙이기
+				magzineActor->boxComp->SetSimulatePhysics(false);
+				magzineActor->AttachToComponent(player->leftHand, attachRules, TEXT("GrabPoint"));
+				// 오브젝트를 잡았을때 위치 잡기
+				magzineActor->boxComp->SetRelativeLocation((magzineActor->grabOffset));
+
+				magzineActor->boxComp->SetEnableGravity(false);
+
+				// 왼손 쥐는 애니메이션
+				player->handComp->targetGripValueLeft = 1.0f;
+			}
+		}
+	}
+}
+
+void UGrabActorComponent::LeftReleaseAction()
+{
+	if (magzineActor)
+	{
+		magzineActor->boxComp->SetEnableGravity(false);
+		// 그 자리에서 떨어지게
+		magzineActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+		FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+		magzineActor->AttachToComponent(player->magComp, attachRules);
+
+		magzineActor->boxComp->SetSimulatePhysics(false);
+
+		magzineActor->SetActorLocation(player->magComp->GetComponentLocation());
+		player->mag->SetRelativeRotation(FRotator(0, 90.f, 90.0f));
+		magzineActor->SetActorRelativeRotation(FRotator(-90.f, 0.f, 0.f));
+		// 오른손 피는 애니메이션
+		player->handComp->targetGripValueLeft = 0.0f;
+
+		magzineActor = nullptr;
+	}
+}
+
+void UGrabActorComponent::Test3()
+{
+	if (magzineActor == nullptr)
+	{
+		FHitResult hitInfo;
+		FVector startPos = player->leftHand->GetComponentLocation();
+
+		FCollisionObjectQueryParams objParams;
+		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+
+		FCollisionQueryParams queryParams;
+		queryParams.AddIgnoredActor(player);
+	}
 }
 

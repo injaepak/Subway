@@ -82,6 +82,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		class UChildActorComponent* shotgun;
 
+	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+		class UChildActorComponent* mag;
+
 private:
 	void Fire1();
 	void Fire2();

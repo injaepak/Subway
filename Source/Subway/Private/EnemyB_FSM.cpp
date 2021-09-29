@@ -112,11 +112,11 @@ void UEnemyB_FSM::MoveState()
 	dir.Normalize();
 
 	//AIController를 이용해서 이동
-	if (ai)
+	/*if (ai)
 	{
 		ai->MoveToActor(target);
 		anim->isMoving = true;
-	}
+	}*/
 
 	// character movement로 사용해서 따라가게 만들기
 	me->AddMovementInput(dir, true);
@@ -127,13 +127,13 @@ void UEnemyB_FSM::MoveState()
 
 	//회전 부드럽게
 	myRot = FMath::Lerp(myRot, targetRot, 5 * GetWorld()->DeltaTimeSeconds);
-	//me->SetActorRotation(myRot);
+	me->SetActorRotation(myRot);
 
 	//Debug Sphere 시각화
 	//DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 16, FColor::Red);
 
 	// 속도가 있을 때, AnimInstance Bool 변경
-	/*
+	
 	if (anim->isMoving == false)
 	{
 		//속도 구하기
@@ -142,7 +142,7 @@ void UEnemyB_FSM::MoveState()
 		{
 			anim->isMoving = true;
 		}
-	}*/
+	}
 
 	// state 경과
 	// 공격 범위에 가까워지면

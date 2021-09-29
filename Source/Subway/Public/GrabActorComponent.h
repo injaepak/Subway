@@ -39,9 +39,12 @@ private:
 	void Reload();
 	void ShotgunReload();
 
+	
+
 	bool bIsShowing = false;
 	class APickUpActor* pickObject;
 	class AShotGunActor* shotgunobject;
+	class AMagazineActor* magzineActor;
 	class AVR_Player* player;
 	class AActor* gunTarget;
 	class AWeaponPistol* pistol;
@@ -50,6 +53,11 @@ private:
 	FHitResult grabObject;
 
 public:
+	void LeftDrawGrabLine();
+	void LeftGrabAction();
+	void LeftReleaseAction();
+	void Test3();
+
 
 	UPROPERTY(EditAnywhere, Category = GravSettings)
 		float grabDistance = 1000.f;
