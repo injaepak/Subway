@@ -13,6 +13,9 @@
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 #include "DrawDebugHelpers.h"
+#include "AIController.h"
+#include "NavigationSystem.h"
+#include "NavigationInvokerComponent.h"
 
 // Sets default values for this component's properties
 UEnemyA_FSM::UEnemyA_FSM()
@@ -31,6 +34,9 @@ void UEnemyA_FSM::BeginPlay()
 	// EnemyA = me
 	me = Cast<AEnemyA>(GetOwner());
 	anim = Cast<UEnemyAAnimInstance>(me->GetMesh()->GetAnimInstance());
+	// AIController 할당
+	ai = Cast<AAIController>(me->GetController());
+
 	//target 찾기
 	/*
 	TArray<AActor*> actors;

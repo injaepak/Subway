@@ -42,6 +42,10 @@ public:
 	class AVR_Player* target;
 	//class AFPSPlayer* target;
 
+	// Enemy 가 사용하고 있는 AIController 기억
+	UPROPERTY()
+	class AAIController* ai;
+
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
 	EEnemyBState m_state_B;
 	UPROPERTY()

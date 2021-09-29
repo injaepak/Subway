@@ -57,6 +57,7 @@ AEnemyA::AEnemyA()
 	bCanOverlap = true;
 	bCanAttack = false;
 
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
