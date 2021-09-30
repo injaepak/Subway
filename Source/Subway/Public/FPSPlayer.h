@@ -29,13 +29,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Test")
 	TSubclassOf<class AWeaponBase> StartingWeaponClass;
 
-	class AWeaponBase* CurrentWeapon; // 웨폰베이스 타입의 커런트웨폰 클래스를 지정함
 	//int32 WeaponIndex;
 	//TArray <AWeaponBase*> WeaponArray;
 
 	bool blsAiming;
 
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Weapon)
+	class AWeaponBase* CurrentWeapon; // 웨폰베이스 타입의 커런트웨폰 클래스를 지정함
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
