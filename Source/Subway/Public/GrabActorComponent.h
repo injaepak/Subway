@@ -67,4 +67,10 @@ public:
 
 	bool bIsPistol = false;
 	bool bIsShotgun = false;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundBase* gunSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundBase* shotgunSound;
 };

@@ -275,7 +275,7 @@ void UGrabActorComponent::Fire()
 		GetWorld()->GetFirstPlayerController()->PlayHapticEffect(shotHaptic, EControllerHand::Right, 1.f, false);
 
 		// 여기에 사운드 추가
-
+		UGameplayStatics::PlaySound2D(GetWorld(), gunSound);
 	}
 
 	if (shotgunobject && shotgun)
@@ -289,7 +289,7 @@ void UGrabActorComponent::Fire()
 		GetWorld()->GetFirstPlayerController()->PlayHapticEffect(shotHaptic, EControllerHand::Left, 10.f, false);
 
 		// 여기에 사운드 추가
-
+		UGameplayStatics::PlaySound2D(GetWorld(), shotgunSound);
 	}
 }
 

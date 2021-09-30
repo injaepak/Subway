@@ -24,17 +24,17 @@ AWeaponShotgun::AWeaponShotgun()
 
 	CurrentTotalAmmo = WeaponMaxAmmo;
 	CurrentMagazineAmmo = MagazineMaxAmmo;
-	needToReroad = false;
+	//needToReroad = false;
 }
 
 void AWeaponShotgun::Fire()
 {
 	// 재장전이 필요한 상태라면
-	if(needToReroad == true)
-	{GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("put the bullet")));}
+	//if(needToReroad == true)
+	//{GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("put the bullet")));}
 	// 아니라면 
-	else
-	{
+	/*else
+	{*/
 		if (CurrentMagazineAmmo > 0)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("SHOOTING SHOTGUN"));
@@ -174,7 +174,7 @@ void AWeaponShotgun::Fire()
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
 		}
-	}
+	//}
 }
 
 void AWeaponShotgun::Reload()
@@ -184,7 +184,7 @@ void AWeaponShotgun::Reload()
 	{
 		// 탄환을 1개 장전
 		CurrentMagazineAmmo++;
-		needToReroad = false;
+		//needToReroad = false;
 	}
 	else
 	{

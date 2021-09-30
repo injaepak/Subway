@@ -50,4 +50,10 @@ public:
 	// 소켓에 넣을떄 Offset 값을 조정
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		FVector grabOffset;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundBase* gunMagSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+		class USoundBase* shotgunMagSound;
 };

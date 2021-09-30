@@ -62,14 +62,17 @@ void AMagazineActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp
 	
 	if (pickupActor)
 	{
+		//PRINTLOG(TEXT("RRRRRRRRRRR"))
 		pistol->Reload();
 		player->grabComp->LeftReleaseAction();
+		UGameplayStatics::PlaySound2D(GetWorld(), gunMagSound);
 	}
 
 	else if (shotgunActor)
 	{
 		shotgun->Reload();
 		player->grabComp->LeftReleaseAction();
+		UGameplayStatics::PlaySound2D(GetWorld(), shotgunMagSound);
 	}
 }
 
