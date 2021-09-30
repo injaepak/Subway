@@ -29,6 +29,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "TargetMesh")
 	class UStaticMeshComponent* Mesh;
 
+
 	//½Ã°£
 	UPROPERTY(EditAnywhere, Category = FSM)
 	float returnDelayTime = 4;
@@ -39,13 +40,23 @@ public:
 
 	void OnDamageProcess();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Test)
+	bool OpenDoor = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Test)
+	bool Open;
+	
+	float RotateValue;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Rotator)
+	FRotator TargetRotation;
+
 	// declare our float variables 	
-	UPROPERTY(EditAnywhere, Category = Movement)
-	float PitchValue;
+	//UPROPERTY(EditAnywhere, Category = Movement)
+	//float PitchValue;
 
-	UPROPERTY(EditAnywhere, Category = Movement)
-	float YawValue;
+	//UPROPERTY(EditAnywhere, Category = Movement)
+	//float YawValue;
 
-	UPROPERTY(EditAnywhere, Category = Movement)
-	float RollValue;
+	//UPROPERTY(EditAnywhere, Category = Movement)
+	//float RollValue;
 };
