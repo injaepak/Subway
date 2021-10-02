@@ -13,6 +13,8 @@
 #include "HandActorComponent.h"
 #include "GrabActorComponent.h"
 #include "PickUpActor.h"
+#include <Kismet/GameplayStatics.h>
+
 
 // Sets default values
 AVR_Player::AVR_Player()
@@ -99,7 +101,7 @@ void AVR_Player::BeginPlay()
     // HMD 장치의 위치를 초기화하기
     UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 
-   
+    cameraFade();
 }
 
 // Called every frame
@@ -153,5 +155,24 @@ void AVR_Player::VerticalMove(float value)
 void AVR_Player::ResetHMD()
 {
     UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
+}
+
+void AVR_Player::cameraFade()
+{
+    bCamera = true;
+    auto cameraCheck = FString::FromInt(bCamera);
+
+    auto cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+    if (cameraManager)
+    {
+        cameraManager->StartCameraFade(0.f, 1.f, 3.f, FLinearColor::Red, true, true);
+
+        cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+        if (cameraManager)
+        {
+            cameraManager->StopCameraFade();
+            cameraManager->StartCameraFade(1.5f, 0.f, 3.f, FLinearColor::Red, false, false);
+        }
+    }
 }
 

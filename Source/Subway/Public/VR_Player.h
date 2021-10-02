@@ -91,6 +91,7 @@ private:
 	void HorizontalMove(float value);
 	void VerticalMove(float value);
 	void ResetHMD();
+	void cameraFade();
 
 	FRotator hmdRotate;
 	FVector hmdLocation;
@@ -99,4 +100,6 @@ private:
 	FVector WeaponsLocation;
 
 	float weaponsRotateYaw;
+
+	bool bCamera = false;
 };

@@ -136,6 +136,7 @@ void UGrabActorComponent::GrabAction()
 
 	if (pickObject == nullptr)
 	{
+		bIsPistol = true;
 		FString gunName = grabActor->GetName();
 		if (gunName.Contains("PickUpActor"))
 		{
@@ -166,6 +167,7 @@ void UGrabActorComponent::GrabAction()
 		}
 		else if (gunName.Contains("ShotgunActor"))
 		{
+			bIsShotgun = true;
 			shotgunobject = Cast<AShotGunActor>(grabActor);
 			shotgun = Cast<AWeaponShotgun>(shotgunobject->shotgun->GetChildActor());
 
@@ -199,6 +201,8 @@ void UGrabActorComponent::ReleaseAction()
 {
 	if (pickObject)
 	{
+		bIsPistol = false;
+
 		pickObject->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		pickObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -220,6 +224,7 @@ void UGrabActorComponent::ReleaseAction()
 
 	else if (shotgunobject)
 	{
+	bIsShotgun = false;
 		shotgunobject->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -241,27 +246,27 @@ void UGrabActorComponent::ReleaseAction()
 	}
 }
 
-void UGrabActorComponent::Test1()
-{
-	if (pickObject == nullptr)
-	{
-		FHitResult hitInfo;
-		FVector startPos = player->rightHand->GetComponentLocation();
+//void UGrabActorComponent::Test1()
+//{
+//	if (pickObject == nullptr)
+//	{
+//		FHitResult hitInfo;
+//		FVector startPos = player->rightHand->GetComponentLocation();
+//
+//		FCollisionObjectQueryParams objParams;
+//		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+//		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+//
+//		FCollisionQueryParams queryParams;
+//		queryParams.AddIgnoredActor(player);
+//	}
+//}
 
-		FCollisionObjectQueryParams objParams;
-		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
-
-		FCollisionQueryParams queryParams;
-		queryParams.AddIgnoredActor(player);
-	}
-}
-
-void UGrabActorComponent::Test2()
-{
-	// 오른손 피는 애니메이션
-	player->handComp->targetGripValueRight = 0.0f;
-}
+//void UGrabActorComponent::Test2()
+//{
+//	// 오른손 피는 애니메이션
+//	player->handComp->targetGripValueRight = 0.0f;
+//}
 
 void UGrabActorComponent::Fire()
 {
@@ -289,7 +294,7 @@ void UGrabActorComponent::Fire()
 		GetWorld()->GetFirstPlayerController()->PlayHapticEffect(shotHaptic, EControllerHand::Left, 10.f, false);
 
 		// 여기에 사운드 추가
-		UGameplayStatics::PlaySound2D(GetWorld(), shotgunSound);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), gunSound, player->GetActorLocation(), FRotator::ZeroRotator, 1.f, 1.f, 0.0f, nullptr, nullptr);
 	}
 }
 
@@ -373,6 +378,28 @@ void UGrabActorComponent::LeftGrabAction()
 			}
 		}
 	}
+
+	//else if (shotgunobject)
+	//{
+	//	shotgunobject->boxComp->SetEnableGravity(false);
+	//	// 그 자리에서 떨어지게
+	//	shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+	//	FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+	//	shotgunobject->AttachToComponent(player->shotgunComp, attachRules);
+
+	//	shotgunobject->boxComp->SetSimulatePhysics(false);
+
+	//	shotgunobject->SetActorLocation(player->shotgunComp->GetComponentLocation());
+	//	player->shotgun->SetRelativeRotation(FRotator(0, 90.f, 90.0f));
+	//	shotgunobject->SetActorRelativeRotation(FRotator(-90.f, 0.f, 0.f));
+
+	//	// 오른손 피는 애니메이션
+	//	player->handComp->targetGripValueRight = 0.0f;
+
+	//	shotgunobject = nullptr;
+	//}
 }
 
 void UGrabActorComponent::LeftReleaseAction()
@@ -399,19 +426,19 @@ void UGrabActorComponent::LeftReleaseAction()
 	}
 }
 
-void UGrabActorComponent::Test3()
-{
-	if (magzineActor == nullptr)
-	{
-		FHitResult hitInfo;
-		FVector startPos = player->leftHand->GetComponentLocation();
-
-		FCollisionObjectQueryParams objParams;
-		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
-
-		FCollisionQueryParams queryParams;
-		queryParams.AddIgnoredActor(player);
-	}
-}
+//void UGrabActorComponent::Test3()
+//{
+//	if (magzineActor == nullptr)
+//	{
+//		FHitResult hitInfo;
+//		FVector startPos = player->leftHand->GetComponentLocation();
+//
+//		FCollisionObjectQueryParams objParams;
+//		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+//		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
+//
+//		FCollisionQueryParams queryParams;
+//		queryParams.AddIgnoredActor(player);
+//	}
+//}
 
