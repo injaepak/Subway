@@ -13,6 +13,8 @@
 #include "HandActorComponent.h"
 #include "GrabActorComponent.h"
 #include "PickUpActor.h"
+#include "EnemyA.h"
+#include "EnemyB.h"
 #include <Kismet/GameplayStatics.h>
 
 
@@ -101,7 +103,8 @@ void AVR_Player::BeginPlay()
     // HMD 장치의 위치를 초기화하기
     UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 
-    cameraFade();
+    enemyA = Cast<AEnemyA>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyA::StaticClass()));
+    enemyB = Cast<AEnemyB>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyB::StaticClass()));
 }
 
 // Called every frame
@@ -112,6 +115,18 @@ void AVR_Player::Tick(float DeltaTime)
 	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(WeaponsRotate, WeaponsLocation);
     weaponsRotateYaw = WeaponsRotate.Yaw;
     weaponsMain->SetRelativeRotation(FRotator(0.f, weaponsRotateYaw, 0.f));
+
+   
+
+    if (enemyA->bCanAttack == true)
+	{
+		currentTime += GetWorld()->DeltaTimeSeconds;
+        if (currentTime > 2.f)
+        {
+            OnDamageProcess();
+            currentTime = 0;
+        }
+    }
 }
 
 // Called to bind functionality to input
@@ -165,14 +180,41 @@ void AVR_Player::cameraFade()
     auto cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
     if (cameraManager)
     {
-        cameraManager->StartCameraFade(0.f, 1.f, 3.f, FLinearColor::Red, true, true);
+        cameraManager->StartCameraFade(0.f, 0.5f, 1.f, FLinearColor::Red, true, true);
 
         cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
         if (cameraManager)
         {
             cameraManager->StopCameraFade();
-            cameraManager->StartCameraFade(1.5f, 0.f, 3.f, FLinearColor::Red, false, false);
+            cameraManager->StartCameraFade(0.5f, 0.f, 1.f, FLinearColor::Red, false, false);
         }
+    }
+}
+
+void AVR_Player::OnDamageProcess()
+{
+    if (PlayerHP > 0)
+    {
+        cameraFade();
+        
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("TEST HIT!!")));
+        PlayerHP--;
+        if (PlayerHP <=0)
+        {
+            this->Destroy();
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DEADDD!!")));
+        }
+    }
+}
+
+void AVR_Player::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    enemyA = Cast<AEnemyA>(OtherActor);
+    enemyB = Cast<AEnemyB>(OtherActor);
+
+    if (enemyA->LtCollision || enemyA->RtCollision || enemyB->LtCollision || enemyB->RtCollision)
+    {
+        OnDamageProcess();
     }
 }
 

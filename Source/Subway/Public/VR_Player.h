@@ -92,6 +92,16 @@ private:
 	void VerticalMove(float value);
 	void ResetHMD();
 	void cameraFade();
+	void OnDamageProcess();
+
+	UFUNCTION()
+		void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(EditAnywhere)
+		class AEnemyA* enemyA;
+
+	UPROPERTY(EditAnywhere)
+		class AEnemyB* enemyB;
 
 	FRotator hmdRotate;
 	FVector hmdLocation;
@@ -101,5 +111,10 @@ private:
 
 	float weaponsRotateYaw;
 
+	float currentTime = 0;
+
 	bool bCamera = false;
+
+	UPROPERTY(EditAnywhere, Category = PlayerHP)
+		int PlayerHP = 5;
 };

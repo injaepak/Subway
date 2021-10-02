@@ -418,7 +418,7 @@ void UGrabActorComponent::LeftReleaseAction()
 
 		magzineActor->SetActorLocation(player->magComp->GetComponentLocation());
 		player->mag->SetRelativeRotation(FRotator(0, 90.f, 0.0f));
-		magzineActor->SetActorRelativeRotation(FRotator(0.f, -90.f, 90.f));
+		magzineActor->SetActorRelativeRotation(FRotator(180.f, 90.f, 180.f));
 		// 오른손 피는 애니메이션
 		player->handComp->targetGripValueLeft = 0.0f;
 

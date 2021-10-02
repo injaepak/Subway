@@ -32,19 +32,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		class UStaticMeshComponent* meshComp;
 
-	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+	UPROPERTY(EditAnywhere)
 	class AVR_Player* player;
 
-	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+	UPROPERTY(EditAnywhere)
 	class APickUpActor* pickupActor;
 
-	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+	UPROPERTY(EditAnywhere)
 	class AShotGunActor* shotgunActor;
 
-	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+	UPROPERTY(EditAnywhere)
 	class AWeaponPistol* pistol;
 
-	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+	UPROPERTY(EditAnywhere)
 	class AWeaponShotgun* shotgun;
 
 	// 소켓에 넣을떄 Offset 값을 조정
