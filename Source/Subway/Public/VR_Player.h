@@ -55,10 +55,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class UCameraComponent* playerCam;
 
-	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
 		class UMotionControllerComponent* leftController;
 
-	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
 		class UMotionControllerComponent* rightController;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
