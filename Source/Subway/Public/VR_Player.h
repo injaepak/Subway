@@ -47,7 +47,7 @@ public:
 		class UStaticMeshComponent* shotgunComp;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
-		class UStaticMeshComponent* gunComp;
+		class USkeletalMeshComponent* gunComp;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class USceneComponent* cameraRoot;
@@ -92,6 +92,7 @@ private:
 	void VerticalMove(float value);
 	void ResetHMD();
 	void cameraFade();
+	void cameraFadeHeal();
 	void OnDamageProcess();
 
 	UFUNCTION()
@@ -111,10 +112,16 @@ private:
 
 	float weaponsRotateYaw;
 
-	float currentTime = 0;
+	float enemyAFirstCurrentTime = 0;
+	float enemyASecondCurrentTime = 0;
+	float enemyBFirstCurrentTime = 0;
+	float enemyBSecondCurrentTime = 0;
+	float healCurrentTime = 0;
 
 	bool bCamera = false;
+	bool bEnemyAtime = false;
+	bool bEnemyBtime = false;
 
 	UPROPERTY(EditAnywhere, Category = PlayerHP)
-		int PlayerHP = 5;
+		int playerHP = 10;
 };

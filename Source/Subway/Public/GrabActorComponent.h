@@ -33,8 +33,6 @@ private:
 	void DrawGrabLine();
 	void GrabAction();
 	void ReleaseAction();
-	void Test1();
-	void Test2();
 	void Fire();
 	void Reload();
 	void ShotgunReload();
@@ -56,7 +54,6 @@ public:
 	void LeftDrawGrabLine();
 	void LeftGrabAction();
 	void LeftReleaseAction();
-	void Test3();
 
 
 	UPROPERTY(EditAnywhere, Category = GravSettings)

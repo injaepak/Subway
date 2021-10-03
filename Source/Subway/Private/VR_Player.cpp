@@ -59,7 +59,7 @@ AVR_Player::AVR_Player()
     shotgunComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShotgunComp"));
     shotgunComp->SetupAttachment(weaponsMain);
 
-	gunComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunComp"));
+	gunComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunComp"));
 	gunComp->SetupAttachment(weaponsMain);
 
     leftHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Left Hand"));
@@ -117,16 +117,100 @@ void AVR_Player::Tick(float DeltaTime)
     weaponsMain->SetRelativeRotation(FRotator(0.f, weaponsRotateYaw, 0.f));
 
    
+   // EnemyA 플레이어 데미지 처리
+    if(enemyA)
+    {
+        if (enemyA->bCanAttack == true)
+	    {
+            enemyAFirstCurrentTime += GetWorld()->DeltaTimeSeconds;
+            
+            if(bEnemyAtime == false)
+            {
+                if (enemyAFirstCurrentTime >= 1.5f)
+                {
+                    OnDamageProcess();
+                    PRINTLOG(TEXT("First"));
+                    bEnemyAtime = true;
+                }
+            }
 
-    if (enemyA->bCanAttack == true)
-	{
-		currentTime += GetWorld()->DeltaTimeSeconds;
-        if (currentTime > 2.f)
-        {
-            OnDamageProcess();
-            currentTime = 0;
+            else if(bEnemyAtime == true)
+            {
+                enemyASecondCurrentTime += GetWorld()->DeltaTimeSeconds;
+                    if (enemyASecondCurrentTime >= 3.8f)
+                    {
+                        OnDamageProcess();
+				        PRINTLOG(TEXT("Second"));
+                        enemyASecondCurrentTime = 0.f;
+                    }
+            }
         }
+		else if (enemyA->bCanAttack == false && (!enemyB || enemyB->bCanAttack == false))
+		{
+			healCurrentTime += GetWorld()->DeltaTimeSeconds;
+			if (healCurrentTime >= 5.f && playerHP <= 9)
+			{
+				cameraFadeHeal();
+				PRINTLOG(TEXT("Heal"));
+				playerHP++;
+				healCurrentTime = 0;
+			}
+		}
     }
+
+    // EnemyB 플레이어 데미지 처리
+	if (enemyB)
+	{
+		if (enemyB->bCanAttack == true)
+		{
+            enemyBFirstCurrentTime += GetWorld()->DeltaTimeSeconds;
+
+			if (bEnemyBtime == false)
+			{
+				if (enemyBFirstCurrentTime >= 1.f)
+				{
+					OnDamageProcess();
+					PRINTLOG(TEXT("First"));
+                    bEnemyBtime = true;
+				}
+			}
+
+			else if (bEnemyBtime == true)
+			{
+                enemyBSecondCurrentTime += GetWorld()->DeltaTimeSeconds;
+				if (enemyBSecondCurrentTime >= 4.2f)
+				{
+					OnDamageProcess();
+					PRINTLOG(TEXT("Second"));
+                    enemyBSecondCurrentTime = 0.f;
+				}
+			}
+		}
+		else if (enemyB->bCanAttack == false && (!enemyA || enemyA->bCanAttack == false))
+		{
+			healCurrentTime += GetWorld()->DeltaTimeSeconds;
+			if (healCurrentTime >= 5.f && playerHP <= 9)
+			{
+				cameraFadeHeal();
+				PRINTLOG(TEXT("Heal"));
+				playerHP++;
+				healCurrentTime = 0;
+			}
+		}
+	}
+    else if (!enemyA && !enemyB)
+    {
+        healCurrentTime += GetWorld()->DeltaTimeSeconds;
+        if (healCurrentTime >= 5.f && playerHP <= 9)
+        {
+            cameraFadeHeal();
+            PRINTLOG(TEXT("Heal"));
+            playerHP++;
+            healCurrentTime = 0;
+        }
+        
+    }
+    
 }
 
 // Called to bind functionality to input
@@ -178,31 +262,147 @@ void AVR_Player::cameraFade()
     auto cameraCheck = FString::FromInt(bCamera);
 
     auto cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
-    if (cameraManager)
+    if (playerHP >= 9)
     {
-        cameraManager->StartCameraFade(0.f, 0.5f, 1.f, FLinearColor::Red, true, true);
-
-        cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
         if (cameraManager)
         {
-            cameraManager->StopCameraFade();
-            cameraManager->StartCameraFade(0.5f, 0.f, 1.f, FLinearColor::Red, false, false);
+            cameraManager->StartCameraFade(0.f, 0.1f, 1.f, FLinearColor::Red, true, true);
+
+            cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+            if (cameraManager)
+            {
+                cameraManager->StopCameraFade();
+                cameraManager->StartCameraFade(0.1f, 0.f, 1.0f, FLinearColor::Red, false, false);
+            }
         }
+    }
+	else if (playerHP <= 8 || playerHP >= 6)
+    {
+		if (cameraManager)
+		{
+			cameraManager->StartCameraFade(0.f, 0.5f, 2.0f, FLinearColor::Red, true, true);
+
+			cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+			if (cameraManager)
+			{
+				cameraManager->StopCameraFade();
+				cameraManager->StartCameraFade(0.5f, 0.f, 2.0f, FLinearColor::Red, false, false);
+			}
+		}
+    }
+	else if (playerHP <= 5 || playerHP >= 3)
+    {
+		if (cameraManager)
+		{
+			cameraManager->StartCameraFade(0.f, 0.7f, 4.0f, FLinearColor::Red, true, true);
+
+			cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+			if (cameraManager)
+			{
+				cameraManager->StopCameraFade();
+				cameraManager->StartCameraFade(0.7f, 0.f, 4.0f, FLinearColor::Red, false, false);
+			}
+		}
+    }
+	else if (playerHP <= 2 || playerHP >= 0)
+    {
+		if (cameraManager)
+		{
+			cameraManager->StartCameraFade(0.f, 0.9f, 5.0f, FLinearColor::Red, true, true);
+
+			cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+			if (cameraManager)
+			{
+				cameraManager->StopCameraFade();
+				cameraManager->StartCameraFade(0.9f, 0.f, 5.0f, FLinearColor::Red, false, false);
+
+				PRINTLOG(TEXT("why"))
+			}
+		}
+    }
+}
+
+void AVR_Player::cameraFadeHeal()
+{
+    if(playerHP <= 9)
+    {
+	    bCamera = true;
+	    auto cameraCheck = FString::FromInt(bCamera);
+
+	    auto cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+		if (playerHP <= 2 || playerHP >= 0)
+		{
+			if (cameraManager)
+			{
+				cameraManager->StartCameraFade(0.f, 0.1f, 1.f, FLinearColor::Blue, true, true);
+
+				cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+				if (cameraManager)
+				{
+					cameraManager->StopCameraFade();
+					cameraManager->StartCameraFade(0.1f, 0.f, 1.f, FLinearColor::Blue, false, false);
+				}
+			}
+		}
+		else if (playerHP <= 5 || playerHP >= 3)
+		{
+			if (cameraManager)
+			{
+				cameraManager->StartCameraFade(0.f, 0.2f, 1.0f, FLinearColor::Blue, true, true);
+
+				cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+				if (cameraManager)
+				{
+					cameraManager->StopCameraFade();
+					cameraManager->StartCameraFade(0.2f, 0.f, 1.0f, FLinearColor::Blue, false, false);
+				}
+			}
+		}
+		else if (playerHP <= 8 || playerHP >= 6)
+		{
+			if (cameraManager)
+			{
+				cameraManager->StartCameraFade(0.f, 0.3f, 1.0f, FLinearColor::Blue, true, true);
+
+				cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+				if (cameraManager)
+				{
+					cameraManager->StopCameraFade();
+					cameraManager->StartCameraFade(0.3f, 0.f, 1.0f, FLinearColor::Blue, false, false);
+				}
+			}
+		}
+		else if (playerHP >= 9)
+		{
+			if (cameraManager)
+			{
+				cameraManager->StartCameraFade(0.f, 0.5f, 5.0f, FLinearColor::Blue, true, true);
+
+				cameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+				if (cameraManager)
+				{
+					cameraManager->StopCameraFade();
+					cameraManager->StartCameraFade(0.5f, 0.f, 5.0f, FLinearColor::Blue, false, false);
+
+					PRINTLOG(TEXT("why"))
+				}
+			}
+		}
     }
 }
 
 void AVR_Player::OnDamageProcess()
 {
-    if (PlayerHP > 0)
+    if (playerHP > 0)
     {
         cameraFade();
         
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("TEST HIT!!")));
-        PlayerHP--;
-        if (PlayerHP <=0)
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("TEST HIT!!")));
+        playerHP--;
+        if (playerHP <=0)
         {
             this->Destroy();
-            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DEADDD!!")));
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("DEADDD!!")));
         }
     }
 }

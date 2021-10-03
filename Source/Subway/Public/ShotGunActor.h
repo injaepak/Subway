@@ -34,5 +34,8 @@ public:
 		FVector grabOffset;
 
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
+		FVector leftgrabOffset;
+
+	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		class UChildActorComponent* shotgun;
 };

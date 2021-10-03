@@ -224,7 +224,7 @@ void UGrabActorComponent::ReleaseAction()
 
 	else if (shotgunobject)
 	{
-	bIsShotgun = false;
+		bIsShotgun = false;
 		shotgunobject->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -245,28 +245,6 @@ void UGrabActorComponent::ReleaseAction()
 		shotgunobject = nullptr;
 	}
 }
-
-//void UGrabActorComponent::Test1()
-//{
-//	if (pickObject == nullptr)
-//	{
-//		FHitResult hitInfo;
-//		FVector startPos = player->rightHand->GetComponentLocation();
-//
-//		FCollisionObjectQueryParams objParams;
-//		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-//		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
-//
-//		FCollisionQueryParams queryParams;
-//		queryParams.AddIgnoredActor(player);
-//	}
-//}
-
-//void UGrabActorComponent::Test2()
-//{
-//	// 오른손 피는 애니메이션
-//	player->handComp->targetGripValueRight = 0.0f;
-//}
 
 void UGrabActorComponent::Fire()
 {
@@ -379,27 +357,40 @@ void UGrabActorComponent::LeftGrabAction()
 		}
 	}
 
-	//else if (shotgunobject)
-	//{
-	//	shotgunobject->boxComp->SetEnableGravity(false);
-	//	// 그 자리에서 떨어지게
-	//	shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	if (grabActor == nullptr)
+	{
+		return;
+	}
 
-	//	FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+	if (shotgunobject == nullptr)
+	{
+		bIsPistol = true;
+		FString gunName = grabActor->GetName();
+		if (gunName.Contains("ShotgunActor"))
+		{
+			bIsShotgun = true;
+			shotgunobject = Cast<AShotGunActor>(grabActor);
+			shotgun = Cast<AWeaponShotgun>(shotgunobject->shotgun->GetChildActor());
 
-	//	shotgunobject->AttachToComponent(player->shotgunComp, attachRules);
+			if (shotgunobject)
+			{
+				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
 
-	//	shotgunobject->boxComp->SetSimulatePhysics(false);
+				// 손에 붙이기
+				shotgunobject->boxComp->SetSimulatePhysics(false);
+				shotgunobject->AttachToComponent(player->leftHand, attachRules, TEXT("leftGrabPoint"));
 
-	//	shotgunobject->SetActorLocation(player->shotgunComp->GetComponentLocation());
-	//	player->shotgun->SetRelativeRotation(FRotator(0, 90.f, 90.0f));
-	//	shotgunobject->SetActorRelativeRotation(FRotator(-90.f, 0.f, 0.f));
+				// 오브젝트를 잡았을때 위치 잡기
+				shotgunobject->boxComp->SetRelativeLocation((shotgunobject->grabOffset));
 
-	//	// 오른손 피는 애니메이션
-	//	player->handComp->targetGripValueRight = 0.0f;
+				shotgunobject->boxComp->SetEnableGravity(false);
 
-	//	shotgunobject = nullptr;
-	//}
+				// 오른손 쥐는 애니메이션
+				player->handComp->targetGripValueRight = 1.0f;
+			}
+		}
+	}
 }
 
 void UGrabActorComponent::LeftReleaseAction()
@@ -425,20 +416,3 @@ void UGrabActorComponent::LeftReleaseAction()
 		magzineActor = nullptr;
 	}
 }
-
-//void UGrabActorComponent::Test3()
-//{
-//	if (magzineActor == nullptr)
-//	{
-//		FHitResult hitInfo;
-//		FVector startPos = player->leftHand->GetComponentLocation();
-//
-//		FCollisionObjectQueryParams objParams;
-//		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-//		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
-//
-//		FCollisionQueryParams queryParams;
-//		queryParams.AddIgnoredActor(player);
-//	}
-//}
-
