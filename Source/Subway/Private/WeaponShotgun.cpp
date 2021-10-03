@@ -24,6 +24,7 @@ AWeaponShotgun::AWeaponShotgun()
 
 	CurrentTotalAmmo = WeaponMaxAmmo;
 	CurrentMagazineAmmo = MagazineMaxAmmo;
+
 	//needToReroad = false;
 }
 

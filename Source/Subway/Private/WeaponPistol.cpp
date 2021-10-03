@@ -22,6 +22,8 @@ AWeaponPistol::AWeaponPistol()
 
 	CurrentTotalAmmo = WeaponMaxAmmo;
 	CurrentMagazineAmmo = MagazineMaxAmmo;
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), currentAmmo));
+
 }
 
 void AWeaponPistol::Fire()

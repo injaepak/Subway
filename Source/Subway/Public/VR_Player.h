@@ -73,7 +73,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
 		class UHandActorComponent* handComp;
 
-	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = PlayerSettings)
 		class UGrabActorComponent* grabComp;
 
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
@@ -85,6 +85,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		class UChildActorComponent* mag;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerHP)
+		int playerHP = 10;
 private:
 	void Fire1();
 	void Fire2();
@@ -122,6 +124,4 @@ private:
 	bool bEnemyAtime = false;
 	bool bEnemyBtime = false;
 
-	UPROPERTY(EditAnywhere, Category = PlayerHP)
-		int playerHP = 10;
 };

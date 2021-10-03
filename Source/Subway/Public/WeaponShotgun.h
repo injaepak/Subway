@@ -20,4 +20,5 @@ public:
 
 	UPROPERTY()
 	bool needToReroad;
+
 };

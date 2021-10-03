@@ -45,12 +45,14 @@ private:
 	class AMagazineActor* magzineActor;
 	class AVR_Player* player;
 	class AActor* gunTarget;
-	class AWeaponPistol* pistol;
-	class AWeaponShotgun* shotgun;
 
 	FHitResult grabObject;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GravSettings)
+	class AWeaponShotgun* shotgun;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GravSettings)
+	class AWeaponPistol* pistol;
 	void LeftDrawGrabLine();
 	void LeftGrabAction();
 	void LeftReleaseAction();
@@ -59,7 +61,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = GravSettings)
 		float grabDistance = 1000.f;
 
-	UPROPERTY(EditAnywhere, Category = GravSettings)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GravSettings)
 		class UHapticFeedbackEffect_Base* shotHaptic;
 
 	bool bIsPistol = false;
