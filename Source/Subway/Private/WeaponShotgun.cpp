@@ -1,12 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "WeaponShotgun.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
-#include "FPSPlayer.h" // Å×½ºÆ®¿ë ÇÃ·¹ÀÌ¾î ÂüÁ¶
-#include "Kismet/GameplayStatics.h" // ÆÄÆ¼Å¬½Ã½ºÅÛ À§ÇØ ÂüÁ¶
-#include "TriggerBoxBase.h" // Æ®¸®°Å¹Ú½ºÀÎÁö °Ë»ç¸¦ À§ÇØ ÂüÁ¶
+#include "FPSPlayer.h" // í…ŒìŠ¤íŠ¸ìš© í”Œë ˆì´ì–´ ì°¸ì¡°
+#include "Kismet/GameplayStatics.h" // íŒŒí‹°í´ì‹œìŠ¤í…œ ìœ„í•´ ì°¸ì¡°
+#include "TriggerBoxBase.h" // íŠ¸ë¦¬ê±°ë°•ìŠ¤ì¸ì§€ ê²€ì‚¬ë¥¼ ìœ„í•´ ì°¸ì¡°
 #include "EnemyA.h"
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"
@@ -30,10 +30,10 @@ AWeaponShotgun::AWeaponShotgun()
 
 void AWeaponShotgun::Fire()
 {
-	// ÀçÀåÀüÀÌ ÇÊ¿äÇÑ »óÅÂ¶ó¸é
+	// ì¬ì¥ì „ì´ í•„ìš”í•œ ìƒíƒœë¼ë©´
 	//if(needToReroad == true)
 	//{GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("put the bullet")));}
-	// ¾Æ´Ï¶ó¸é 
+	// ì•„ë‹ˆë¼ë©´ 
 	/*else
 	{*/
 		if (CurrentMagazineAmmo > 0)
@@ -50,50 +50,55 @@ void AWeaponShotgun::Fire()
 			FCollisionObjectQueryParams QuaryParams;
 
 			CollisionParams.AddIgnoredActor(this);
-			// ÇÃ·¹ÀÌ¾î º¯¼öÀÌ¸§ ³Ö¾îÁÖ¸é ÇÃ·¹ÀÌ¾îµµ ¹«½ÃÇÔ
+			// í”Œë ˆì´ì–´ ë³€ìˆ˜ì´ë¦„ ë„£ì–´ì£¼ë©´ í”Œë ˆì´ì–´ë„ ë¬´ì‹œí•¨
 			//CollisionParams.AddIgnoredActor(ShootingPlayer);
-
-			// Åº¾à ¼Ò¸ğ
+			
+			// ImpactPointë¥¼ ì´ìš©í•  ê²ƒì´ë¯€ë¡œ, ë§ì€ ëŒ€ìƒì˜ ìœ„ì¹˜ Tramsformì„ ì•Œì•„ë‚¼ ë³€ìˆ˜ ì„ ì–¸
+			FTransform hitTrans;
+			
+			// íƒ„ì•½ ì†Œëª¨
 			CurrentMagazineAmmo--;
-			// ÀçÀåÀüÀÌ ÇÊ¿äÇÑ »óÅÂ·Î ÀüÈ¯
-			needToReroad = true;
+			// ì¬ì¥ì „ì´ í•„ìš”í•œ ìƒíƒœë¡œ ì „í™˜
+			//needToReroad = true;
 
 			//bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_GameTraceChannel12, CollisionParams, CollisionResponse);
 			//bool bHit = GetWorld()->LineTraceSingleByChannel(HitResults, Start, End, ECollisionChannel::ECC_Pawn, CollisionParams, CollisionResponse);
 			
-			// LineTrace¸¦ 5000.f °Å¸®±îÁö ¹ß»ç
+			// LineTraceë¥¼ 5000.f ê±°ë¦¬ê¹Œì§€ ë°œì‚¬
 			bool bHit = GetWorld()->LineTraceSingleByObjectType
 			(HitResults, Start, End, QuaryParams, CollisionParams);
 
-			// HitÇÏÁö ¾Ê¾Ò´õ¶óµµ ³²Àº Åº¾à ¼ö ºäÆ÷Æ®»ó¿¡ Ãâ·Â
+			// Hití•˜ì§€ ì•Šì•˜ë”ë¼ë„ ë‚¨ì€ íƒ„ì•½ ìˆ˜ ë·°í¬íŠ¸ìƒì— ì¶œë ¥
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
 
 			if (bHit)
 			{
-				// ¶óÀÎÆ®·¹ÀÌ½º ¹ß»ç ½Ã µğ¹ö±×¶óÀÎ »ı¼º
+				// ë¼ì¸íŠ¸ë ˆì´ìŠ¤ ë°œì‚¬ ì‹œ ë””ë²„ê·¸ë¼ì¸ ìƒì„±
 				DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f, 0.f, 5.f);
 
-				// ¶óÀÎÆ®·¹ÀÌ½º ¹ß»ç ½Ã µğ¹ö±×¶óÀÎ »ı¼º ÈÄ Shoot Effect ÆÄÆ¼Å¬È¿°ú Àç»ı
+				// ë¼ì¸íŠ¸ë ˆì´ìŠ¤ ë°œì‚¬ ì‹œ ë””ë²„ê·¸ë¼ì¸ ìƒì„± í›„ Shoot Effect íŒŒí‹°í´íš¨ê³¼ ì¬ìƒ
 				FTransform startTrans2;
 				startTrans2.SetLocation(Start + Rot * 1.0f);
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletShootEffect, startTrans2);
 
-				// Ãæµ¹ÀÌ ¹ß»ıÇß´Ù¸é
-				if (HitResults.GetComponent()->GetAttachmentRootActor() != NULL) // Áö¿À¸ŞÆ®¸®(Brush Å¸ÀÔ)ÀÏ ¶§ Å©·¡½Ã ³ªÁö ¾Ê°Ô ÇÑ´Ù
+				// ì¶©ëŒì´ ë°œìƒí–ˆë‹¤ë©´
+				if (HitResults.GetComponent()->GetAttachmentRootActor() != NULL) // ì§€ì˜¤ë©”íŠ¸ë¦¬(Brush íƒ€ì…)ì¼ ë•Œ í¬ë˜ì‹œ ë‚˜ì§€ ì•Šê²Œ í•œë‹¤
 				{
-					//Å¸°İÇÑ ´ë»óÀÇ ÀÌ¸§À» Ãâ·Â
+					//íƒ€ê²©í•œ ëŒ€ìƒì˜ ì´ë¦„ì„ ì¶œë ¥
 					//debugMessage
 					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
 					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetComponent()->GetName());
 
-					// ¶óÀÎÆ®·¹ÀÌ½º ºÎµúÇûÀ» ¶§ ºÎµúÈù ÁöÁ¡¿¡ ÆÄÆ¼Å¬È¿°ú Àç»ı
-					FTransform hitTrans;
+					// ë¼ì¸íŠ¸ë ˆì´ìŠ¤ ë¶€ë”ªí˜”ì„ ë•Œ ë¶€ë”ªíŒ ì§€ì ì— íŒŒí‹°í´íš¨ê³¼ ì¬ìƒ
+					
+					auto worldHitPoint = Cast<UStaticMesh>(HitResults.GetComponent());
 					hitTrans.SetLocation(HitResults.ImpactPoint);
-					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletHitEffect, hitTrans);
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletAnotherHitEffect, hitTrans);
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, HitResults.GetComponent()->GetName());
 
 					// ----------------------------------------------------------------------
 
-					// ¸¸¾à Æ®¸®°Å¹Ú½º¸¦ ÃÆ´Ù¸é ¹® ¿©´Â º¯¼ö¸¦ true·Î º¯°æ
+					// ë§Œì•½ íŠ¸ë¦¬ê±°ë°•ìŠ¤ë¥¼ ì³¤ë‹¤ë©´ ë¬¸ ì—¬ëŠ” ë³€ìˆ˜ë¥¼ trueë¡œ ë³€ê²½
 					auto triggerBox = Cast<ATriggerBoxBase>(HitResults.GetActor());
 
 					if (triggerBox)
@@ -107,13 +112,13 @@ void AWeaponShotgun::Fire()
 						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
 
 					}
-					// ¸¸¾à GunTargetActor¸¦ ÃÆ´Ù¸é
+					// ë§Œì•½ GunTargetActorë¥¼ ì³¤ë‹¤ë©´
 					auto GunTargetActor = Cast<AGunTargetActor>(HitResults.GetActor());
 					if (GunTargetActor)
 					{
 						GunTargetActor->OnDamageProcess();
 					}
-					//¸¸¾à DoorOpenActor¸¦ ÃÆ´Ù¸é
+					//ë§Œì•½ DoorOpenActorë¥¼ ì³¤ë‹¤ë©´
 					auto DoorOpenActor = Cast<ADoorOpenActor>(HitResults.GetActor());
 					if (DoorOpenActor)
 					{
@@ -121,10 +126,10 @@ void AWeaponShotgun::Fire()
 					}
 				}
 
-				//½ÃÀÛÁ¡, Á¾ÂøÁ¡, »ö»ó, persistentLine À¯¹«, LifeTime, Thickness
+				//ì‹œì‘ì , ì¢…ì°©ì , ìƒ‰ìƒ, persistentLine ìœ ë¬´, LifeTime, Thickness
 				//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
 				
-				// ±¸Ã¼ ¸ğ¾çÀ» ½úÀ¸¹Ç·Î µğ¹ö±×½ºÇÇ¾î¸¦ HitÇÑ ActorÀÇ À§Ä¡¿¡, ±¸Ã¼ÀÇ Å©±â¸¸Å­, 2ÃÊ µ¿¾È º¸¿©ÁØ´Ù.
+				// êµ¬ì²´ ëª¨ì–‘ì„ ìˆìœ¼ë¯€ë¡œ ë””ë²„ê·¸ìŠ¤í”¼ì–´ë¥¼ Hití•œ Actorì˜ ìœ„ì¹˜ì—, êµ¬ì²´ì˜ í¬ê¸°ë§Œí¼, 2ì´ˆ ë™ì•ˆ ë³´ì—¬ì¤€ë‹¤.
 				//DrawDebugSphere(GetWorld(), HitResults.GetActor()->GetActorLocation(), 50, 30, FColor::Red, false, 2.0f, 10, 0);
 				
 				/*
@@ -139,8 +144,9 @@ void AWeaponShotgun::Fire()
 				*/
 
 
-				// EnemyA¿¡ µ¥¹ÌÁö Ã³¸®
-				// EnemyB¿¡ µ¥¹ÌÁö Ã³¸®
+				// EnemyAì— ë°ë¯¸ì§€ ì²˜ë¦¬ 
+				// EnemyBì— ë°ë¯¸ì§€ ì²˜ë¦¬
+				// Enemyë¥¼ ì³¤ë‹¤ë©´ bulletEnemyHitEffect ë¥¼ Spawn
 				auto enemyA = Cast<AEnemyA>(HitResults.GetActor());
 				auto enemyB = Cast<AEnemyB>(HitResults.GetActor());
 				if (enemyA)
@@ -155,6 +161,11 @@ void AWeaponShotgun::Fire()
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
 						enemyA->enemyAFSM->OnDamageProcess(3.f, Rot, false);
 					}
+					// ë§ì€ ëŒ€ìƒì´ EnemyAì´ë¯€ë¡œ EnemyHit ì´í™íŠ¸ë¥¼ Spawn
+					hitTrans.SetLocation(HitResults.ImpactPoint);
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
+					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemyë¥¼ íƒ€ê²©!!!!")));
+
 				}
 				else if (enemyB)
 				{
@@ -168,6 +179,12 @@ void AWeaponShotgun::Fire()
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
 						enemyB->enemyBFSM->OnDamageProcess(3.f, Rot, false);
 					}
+					// ë§ì€ ëŒ€ìƒì´ EnemyBì´ë¯€ë¡œ EnemyHit ì´í™íŠ¸ë¥¼ Spawn
+					hitTrans.SetLocation(HitResults.ImpactPoint);
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
+					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemyë¥¼ íƒ€ê²©!!!!")));
+
+
 				}
 			}
 		}
@@ -180,10 +197,10 @@ void AWeaponShotgun::Fire()
 
 void AWeaponShotgun::Reload()
 {
-		// ¸¸¾à ÇöÀç ÅºÃ¢ÀÌ 7º¸´Ù ÀÛ´Ù¸é
+		// ë§Œì•½ í˜„ì¬ íƒ„ì°½ì´ 7ë³´ë‹¤ ì‘ë‹¤ë©´
 	if (CurrentMagazineAmmo < 7)
 	{
-		// ÅºÈ¯À» 1°³ ÀåÀü
+		// íƒ„í™˜ì„ 1ê°œ ì¥ì „
 		CurrentMagazineAmmo++;
 		//needToReroad = false;
 	}

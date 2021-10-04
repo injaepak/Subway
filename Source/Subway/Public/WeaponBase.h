@@ -56,5 +56,8 @@ public:
 		class UParticleSystem* bulletShootEffect;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Test")
-		class UParticleSystem* bulletHitEffect;
+		class UParticleSystem* bulletEnemyHitEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Test")
+		class UParticleSystem* bulletAnotherHitEffect;
 };
