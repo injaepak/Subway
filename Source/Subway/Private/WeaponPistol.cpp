@@ -8,6 +8,8 @@
 #include "FPSPlayer.h" // 테스트용 플레이어 참조
 #include "Kismet/GameplayStatics.h" // 파티클시스템 위해 참조
 #include "TriggerBoxBase.h" // 트리거박스인지 검사를 위해 참조
+#include "PickUpActor.h" // 총이 부모 클래스를 치지 않도록 참조
+#include "ShotGunActor.h" // 총이 부모 클래스를 치지 않도록 참조
 #include "EnemyA.h"
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"
@@ -23,6 +25,9 @@ AWeaponPistol::AWeaponPistol()
 
 	CurrentTotalAmmo = WeaponMaxAmmo;
 	CurrentMagazineAmmo = MagazineMaxAmmo;
+
+	pistolParentActor = Cast<APickUpActor>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpActor::StaticClass()));
+	shotGunParentActor = Cast<AShotGunActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AShotGunActor::StaticClass()));
 	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), currentAmmo));
 
 }
@@ -40,7 +45,10 @@ void AWeaponPistol::Fire()
 			FHitResult HitResults;
 			FCollisionQueryParams CollisionParams;
 			FCollisionResponseParams CollisionResponse;
+
 			CollisionParams.AddIgnoredActor(this);
+			CollisionParams.AddIgnoredActor(pistolParentActor);
+			CollisionParams.AddIgnoredActor(shotGunParentActor);
 			// 플레이어 변수이름 넣어주면 플레이어도 무시함
 			//CollisionParams.AddIgnoredActor(ShootingPlayer);
 

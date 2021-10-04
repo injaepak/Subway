@@ -18,5 +18,6 @@ public:
 	virtual void Fire() override;
 	virtual void Reload() override;
 
-	
+	class APickUpActor* pistolParentActor;
+	class AShotGunActor* shotGunParentActor;
 };
