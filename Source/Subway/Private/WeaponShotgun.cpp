@@ -115,7 +115,7 @@ void AWeaponShotgun::Fire()
 
 						triggerBox->openTheDoor = true;
 
-						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
 
 					}
 					// 만약 GunTargetActor를 쳤다면
