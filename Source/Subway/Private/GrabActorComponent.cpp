@@ -90,7 +90,7 @@ void UGrabActorComponent::DrawGrabLine()
 	if (pickObject == nullptr)
 	{
 		FHitResult hitInfo;
-		FVector startPos = player->rightHand->GetComponentLocation() + FVector(15.f, 10.f, 0.f);
+		FVector startPos = player->rightHand->GetComponentLocation() + FVector(0.f, 10.f, 0.f);
 		FVector endPos = startPos + player->rightHand->GetForwardVector() * grabDistance;
 
 		FCollisionObjectQueryParams objParams;
