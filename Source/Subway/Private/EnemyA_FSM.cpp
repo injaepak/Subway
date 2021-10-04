@@ -128,7 +128,7 @@ void UEnemyA_FSM::MoveState()
 	me->SetActorRotation(myRot);
 
 	//Debug Sphere ½Ã°¢È­
-	DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
+	//DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
 
 	// Timing
 	currentTime += GetWorld()->DeltaTimeSeconds;
