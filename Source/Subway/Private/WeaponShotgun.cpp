@@ -75,12 +75,12 @@ void AWeaponShotgun::Fire()
 			(HitResults, Start, End, QuaryParams, CollisionParams);
 
 			// Hit하지 않았더라도 남은 탄약 수 뷰포트상에 출력
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
+			//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
 
 			if (bHit)
 			{
 				// 라인트레이스 발사 시 디버그라인 생성
-				DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f, 0.f, 5.f);
+				//DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f, 0.f, 5.f);
 
 				// 라인트레이스 발사 시 디버그라인 생성 후 Shoot Effect 파티클효과 재생
 				FTransform startTrans2;
@@ -92,15 +92,15 @@ void AWeaponShotgun::Fire()
 				{
 					//타격한 대상의 이름을 출력
 					//debugMessage
-					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
-					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetComponent()->GetName());
+					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
+					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetComponent()->GetName());
 
 					// 라인트레이스 부딪혔을 때 부딪힌 지점에 파티클효과 재생
 					
 					auto worldHitPoint = Cast<UStaticMesh>(HitResults.GetComponent());
 					hitTrans.SetLocation(HitResults.ImpactPoint);
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletAnotherHitEffect, hitTrans);
-					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, HitResults.GetComponent()->GetName());
+					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, HitResults.GetComponent()->GetName());
 
 					// ----------------------------------------------------------------------
 
@@ -110,12 +110,12 @@ void AWeaponShotgun::Fire()
 					if (triggerBox)
 					{
 
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("TRIGGER IN!!")));
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
+						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("TRIGGER IN!!")));
+						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
 
 						triggerBox->openTheDoor = true;
 
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
+						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
 
 					}
 					// 만약 GunTargetActor를 쳤다면
@@ -170,7 +170,7 @@ void AWeaponShotgun::Fire()
 					// 맞은 대상이 EnemyA이므로 EnemyHit 이펙트를 Spawn
 					hitTrans.SetLocation(HitResults.ImpactPoint);
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
-					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemy를 타격!!!!")));
+					//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemy를 타격!!!!")));
 
 				}
 				else if (enemyB)
@@ -188,7 +188,7 @@ void AWeaponShotgun::Fire()
 					// 맞은 대상이 EnemyB이므로 EnemyHit 이펙트를 Spawn
 					hitTrans.SetLocation(HitResults.ImpactPoint);
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
-					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemy를 타격!!!!")));
+					//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemy를 타격!!!!")));
 
 
 				}
@@ -196,7 +196,7 @@ void AWeaponShotgun::Fire()
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
 		}
 	//}
 }
@@ -212,7 +212,7 @@ void AWeaponShotgun::Reload()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("No reload required!!!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("No reload required!!!")));
 	}
 }
 
