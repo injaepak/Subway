@@ -115,9 +115,16 @@ void UEnemyA_FSM::MoveState()
 	// 둘사이의 거리
 	float distance = dir.Size();
 	dir.Normalize();
-
+	
+	//AIController를 이용해서 이동
+	if (ai)
+	{
+		ai->MoveToActor(target);
+		anim->isMoving = true;
+	}
+	
 	// character movement로 사용해서 따라가게 만들기
-	me->AddMovementInput(dir, true);
+	//me->AddMovementInput(dir, true);
 
 	// 타겟 방향으로 회전한다.		
 	FRotator targetRot = dir.ToOrientationRotator();
@@ -125,7 +132,7 @@ void UEnemyA_FSM::MoveState()
 
 	//회전 부드럽게
 	myRot = FMath::Lerp(myRot, targetRot, 5 * GetWorld()->DeltaTimeSeconds);
-	me->SetActorRotation(myRot);
+	//me->SetActorRotation(myRot);
 
 	//Debug Sphere 시각화
 	//DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
@@ -134,15 +141,15 @@ void UEnemyA_FSM::MoveState()
 	currentTime += GetWorld()->DeltaTimeSeconds;
 
 	// 속도가 있을 때, AnimInstance Bool 변경
-	if (anim->isMoving == false)
-	{
-		//속도 구하기
-		float velocity = me->GetVelocity().Size();
-		if (velocity > 0.1f)
-		{
-			anim->isMoving = true;
-		}
-	}
+	//if (anim->isMoving == false)
+	//{
+	//	//속도 구하기
+	//	float velocity = me->GetVelocity().Size();
+	//	if (velocity > 0.1f)
+	//	{
+	//		anim->isMoving = true;
+	//	}
+	//}
 	// 피격을 받으면 bCAnHit이 true로 변경
 	// 피격을 받으면 RUN state로 이동
 	if (bCanHit == true && currentTime > RunDelayTime)
@@ -186,8 +193,16 @@ void UEnemyA_FSM::RunState()
 	float distance = dir.Size();
 	dir.Normalize();
 
+	//AIController를 이용해서 이동
+	if (ai)
+	{
+		ai->MoveToActor(target);
+		anim->isMoving = false;
+		anim->isRunning = true;
+	}
+
 	// character movement로 사용해서 따라가게 만들기
-	me->AddMovementInput(dir, true);
+	//me->AddMovementInput(dir, true);
 
 	// 타겟 방향으로 회전한다.		
 	FRotator targetRot = dir.ToOrientationRotator();
@@ -195,7 +210,7 @@ void UEnemyA_FSM::RunState()
 
 	//회전 부드럽게
 	myRot = FMath::Lerp(myRot, targetRot, 5 * GetWorld()->DeltaTimeSeconds);
-	me->SetActorRotation(myRot);
+	//me->SetActorRotation(myRot);
 
 	//Debug Sphere 시각화
 	DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
