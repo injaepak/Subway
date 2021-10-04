@@ -33,11 +33,13 @@ private:
 	void DrawGrabLine();
 	void GrabAction();
 	void ReleaseAction();
+	void Test1();
+	void Test2();
 	void Fire();
 	void Reload();
 	void ShotgunReload();
 
-	
+
 
 	bool bIsShowing = false;
 	class APickUpActor* pickObject;
@@ -45,23 +47,22 @@ private:
 	class AMagazineActor* magzineActor;
 	class AVR_Player* player;
 	class AActor* gunTarget;
+	class AWeaponPistol* pistol;
+	class AWeaponShotgun* shotgun;
 
 	FHitResult grabObject;
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GravSettings)
-	class AWeaponShotgun* shotgun;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GravSettings)
-	class AWeaponPistol* pistol;
 	void LeftDrawGrabLine();
 	void LeftGrabAction();
 	void LeftReleaseAction();
+	void Test3();
 
 
 	UPROPERTY(EditAnywhere, Category = GravSettings)
 		float grabDistance = 1000.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GravSettings)
+	UPROPERTY(EditAnywhere, Category = GravSettings)
 		class UHapticFeedbackEffect_Base* shotHaptic;
 
 	bool bIsPistol = false;

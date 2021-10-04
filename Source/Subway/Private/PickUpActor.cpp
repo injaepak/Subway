@@ -9,12 +9,12 @@
 // Sets default values
 APickUpActor::APickUpActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Component"));
 	SetRootComponent(boxComp);
-	
+
 	// 물리 관련 설정
 	boxComp->SetSimulatePhysics(true);
 	boxComp->SetEnableGravity(true);
@@ -33,7 +33,7 @@ void APickUpActor::BeginPlay()
 	Super::BeginPlay();
 }
 
- //Called every frame
+//Called every frame
 void APickUpActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
