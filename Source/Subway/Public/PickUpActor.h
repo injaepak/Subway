@@ -10,8 +10,8 @@ UCLASS()
 class SUBWAY_API APickUpActor : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	APickUpActor();
 
@@ -19,23 +19,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
+
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		class UBoxComponent* boxComp;
-	
+
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		class UStaticMeshComponent* meshComp;
 
 	// 소켓에 넣을떄 Offset 값을 조정
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
-	FVector grabOffset;
+		FVector grabOffset;
 
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
-	class UChildActorComponent* gun;
+		class UChildActorComponent* gun;
 
 	class AVR_Player* player;
 
