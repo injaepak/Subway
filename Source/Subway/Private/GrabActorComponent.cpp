@@ -122,7 +122,7 @@ void UGrabActorComponent::DrawGrabLine()
 		{
 			grabObject = FHitResult();
 		}
-		DrawDebugSphere(GetWorld(), startPos, 15.f, 30, FColor::Green, false, -1, 0, 1);
+		//DrawDebugSphere(GetWorld(), startPos, 15.f, 30, FColor::Green, false, -1, 0, 1);
 	}
 }
 

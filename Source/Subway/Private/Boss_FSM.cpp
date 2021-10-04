@@ -150,7 +150,7 @@ void UBoss_FSM::MoveState()
 	me->SetActorRotation(myRot);
 
 	//Debug Sphere 시각화
-	DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
+	//DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
 
 	// 속도가 있을 때, AnimInstance Bool 변경
 	if (anim->isMoving == false)
