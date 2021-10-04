@@ -39,8 +39,8 @@ public:
 	class AEnemyB* me;
 
 	UPROPERTY(EditAnywhere, Category = Target)
-	class AVR_Player* target;
-	//class AFPSPlayer* target;
+	class AFPSPlayer* target;
+	//class AVR_Player* target;
 
 	// Enemy 가 사용하고 있는 AIController 기억
 	UPROPERTY()
@@ -73,7 +73,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = EnemyBStats)
 	float walkSpeed = 80;
 	UPROPERTY(EditAnywhere, Category = EnemyBStats)
-	float RunSpeed = 180;
+	float RunSpeed = 230;
 
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM)
