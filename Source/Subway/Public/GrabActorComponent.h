@@ -47,8 +47,6 @@ private:
 	class AMagazineActor* magzineActor;
 	class AVR_Player* player;
 	class AActor* gunTarget;
-	class AWeaponPistol* pistol;
-	class AWeaponShotgun* shotgun;
 
 	FHitResult grabObject;
 
@@ -58,6 +56,11 @@ public:
 	void LeftReleaseAction();
 	void Test3();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GravSettings)
+	class AWeaponPistol* pistol;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GravSettings)
+	class AWeaponShotgun* shotgun;
 
 	UPROPERTY(EditAnywhere, Category = GravSettings)
 		float grabDistance = 1000.f;

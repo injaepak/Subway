@@ -21,4 +21,6 @@ public:
 	UPROPERTY()
 	bool needToReroad;
 
+	class APickUpActor* pistolParentActor;
+	class AShotGunActor* shotGunParentActor;
 };
