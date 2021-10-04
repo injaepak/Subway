@@ -103,8 +103,7 @@ void AVR_Player::BeginPlay()
     // HMD 장치의 위치를 초기화하기
     UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 
-    enemyA = Cast<AEnemyA>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyA::StaticClass()));
-    enemyB = Cast<AEnemyB>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyB::StaticClass()));
+   
 }
 
 // Called every frame
@@ -115,6 +114,9 @@ void AVR_Player::Tick(float DeltaTime)
 	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(WeaponsRotate, WeaponsLocation);
     weaponsRotateYaw = WeaponsRotate.Yaw;
     weaponsMain->SetRelativeRotation(FRotator(0.f, weaponsRotateYaw, 0.f));
+
+	enemyA = Cast<AEnemyA>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyA::StaticClass()));
+	enemyB = Cast<AEnemyB>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyB::StaticClass()));
 
    
    // EnemyA 플레이어 데미지 처리
