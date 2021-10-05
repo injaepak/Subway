@@ -41,7 +41,8 @@ void AGunTargetActor::Tick(float DeltaTime)
 	TargetRotation = Mesh->GetRelativeRotation();
 	if (Open)
 	{
-		Mesh->SetRelativeRotation(FMath::Lerp(FQuat(TargetRotation), FQuat(FRotator(-90.0f, 0.0f, 0.0f)), 0.02f));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("HIT!!")));
+		Mesh->SetRelativeRotation(FMath::Lerp(FQuat(TargetRotation), FQuat(FRotator(90.0f, 0.0f, 0.0f)), 0.5f));
 		//Mesh->SetRelativeRotation(FMath::Lerp(FQuat(TargetRotation), FQuat(FRotator(-90.0f, 0.0f, 0.0f)), 0.02f));
 		if (currentTime > returnDelayTime)
 		{
@@ -51,7 +52,7 @@ void AGunTargetActor::Tick(float DeltaTime)
 	}
 	else
 	{
-		Mesh->SetRelativeRotation(FMath::Lerp(FQuat(TargetRotation), FQuat(FRotator(0.0f, 00.0f, 0.0f)), 0.01f));
+		Mesh->SetRelativeRotation(FMath::Lerp(FQuat(TargetRotation), FQuat(FRotator(0.0f, 00.0f, 0.0f)), 0.5f));
 		//Mesh->SetRelativeRotation(FMath::Lerp(FQuat(FRotator(0.0f, 00.0f, 0.0f)), FQuat(TargetRotation), 0.01f));
 	}
 

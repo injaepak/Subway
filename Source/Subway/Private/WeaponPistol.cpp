@@ -14,6 +14,8 @@
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"
 #include "EnemyB_FSM.h"
+#include "GunTargetActor.h"
+#include "DoorOpenActor.h"
 
 // Sets default values
 AWeaponPistol::AWeaponPistol()
@@ -26,7 +28,15 @@ AWeaponPistol::AWeaponPistol()
 	CurrentTotalAmmo = WeaponMaxAmmo;
 	CurrentMagazineAmmo = MagazineMaxAmmo;
 
-	pistolParentActor = Cast<APickUpActor>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpActor::StaticClass()));
+	//pistolParentActor = Cast<APickUpActor>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpActor::StaticClass()));
+	TArray<AActor*> actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APickUpActor::StaticClass(), actors);
+	for (auto tgt : actors)
+	{
+		pistolParentActor = Cast<APickUpActor>(tgt);
+		break;
+	}
+	
 	shotGunParentActor = Cast<AShotGunActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AShotGunActor::StaticClass()));
 	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), currentAmmo));
 
@@ -66,7 +76,7 @@ void AWeaponPistol::Fire()
 			if (bHit)
 			{
 				// 라인트레이스 발사 시 디버그라인 생성
-				//DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
+				DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f, 0.f, 1.f);
 
 				// 라인트레이스 발사 시 디버그라인 생성 후 Shoot Effect 파티클효과 재생
 				FTransform startTrans;
@@ -78,7 +88,7 @@ void AWeaponPistol::Fire()
 				{
 					//타격한 대상의 이름을 출력
 					//debugMessage
-					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
 					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetComponent()->GetName());
 
 					// 라인트레이스 부딪혔을 때 부딪힌 지점에 파티클효과 재생
@@ -101,8 +111,21 @@ void AWeaponPistol::Fire()
 
 						triggerBox->openTheDoor = true;
 
-						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
 
+					}
+					// 만약 GunTargetActor를 쳤다면
+					auto GunTargetActor = Cast<AGunTargetActor>(HitResults.GetActor());
+					if (GunTargetActor)
+					{
+						GunTargetActor->OnDamageProcess();
+					}
+					//만약 DoorOpenActor를 쳤다면
+					auto DoorOpenActor = Cast<ADoorOpenActor>(HitResults.GetActor());
+					if (DoorOpenActor)
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
+						DoorOpenActor->OnDamageProcess();
 					}
 				}
 				//debugMessage
