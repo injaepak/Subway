@@ -23,4 +23,6 @@ public:
 
 	class APickUpActor* pistolParentActor;
 	class AShotGunActor* shotGunParentActor;
+	class AVR_Player* vrPlayer;
+	class AFPSPlayer* fpsPlayer;
 };
