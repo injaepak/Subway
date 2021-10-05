@@ -43,7 +43,7 @@ void AWeaponShotgun::Fire()
 		if (CurrentMagazineAmmo > 0)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("SHOOTING SHOTGUN"));
-			FVector Start = WeaponMesh->GetBoneLocation(FName("b_gun_muzzleflash"));
+			FVector Start = WeaponMesh->GetBoneLocation(FName("b_shotgun_muzzleflash"));
 			FVector Rot = WeaponMesh->GetForwardVector();
 			FVector End = Start + Rot * 5000.f;
 
@@ -74,13 +74,13 @@ void AWeaponShotgun::Fire()
 			bool bHit = GetWorld()->LineTraceSingleByObjectType
 			(HitResults, Start, End, QuaryParams, CollisionParams);
 
-			// Hit하지 않았더라도 남은 탄약 수 뷰포트상에 출력
-			//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
+			 //Hit하지 않았더라도 남은 탄약 수 뷰포트상에 출력
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
 
 			if (bHit)
 			{
 				// 라인트레이스 발사 시 디버그라인 생성
-				//DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f, 0.f, 5.f);
+				DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f, 0.f, 5.f);
 
 				// 라인트레이스 발사 시 디버그라인 생성 후 Shoot Effect 파티클효과 재생
 				FTransform startTrans2;
@@ -92,8 +92,8 @@ void AWeaponShotgun::Fire()
 				{
 					//타격한 대상의 이름을 출력
 					//debugMessage
-					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
-					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetComponent()->GetName());
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetActor()->GetName());
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, HitResults.GetComponent()->GetName());
 
 					// 라인트레이스 부딪혔을 때 부딪힌 지점에 파티클효과 재생
 					
