@@ -54,7 +54,6 @@ public:
 	//boolean
 	bool bhit;
 	//bool bIdle = true;
-	bool bAI = true;
 	bool bCanDie;
 	bool bCanHit;
 	bool isHeadPart = false;

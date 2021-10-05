@@ -112,13 +112,10 @@ void UEnemyB_FSM::MoveState()
 	dir.Normalize();
 
 	//AIController를 이용해서 이동
-	if (bAI)
+	if (ai)
 	{
-		if (ai)
-		{
-			ai->MoveToActor(target);
-			anim->isMoving = true;
-		}
+		ai->MoveToActor(target);
+		anim->isMoving = true;
 	}
 
 	// character movement로 사용해서 따라가게 만들기

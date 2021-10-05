@@ -40,8 +40,8 @@ public:
 	class AEnemyA* me;
 
 	UPROPERTY(EditAnywhere, Category = Target)
-	class AVR_Player* target;
-	//class AFPSPlayer* target;
+	class AFPSPlayer* target;
+	//class AVR_Player* target;
 
 	// Enemy 가 사용하고 있는 AIController 기억
 	UPROPERTY()
@@ -53,8 +53,10 @@ public:
 	class UEnemyAAnimInstance* anim;
 public:
 	//boolean
+	bool bhit;
 	bool bCanDie;
 	bool bCanHit;
+	bool isHeadPart = false;
 
 	//시간
 	UPROPERTY(EditAnywhere, Category = FSM)
@@ -68,7 +70,7 @@ public:
 
 	//범위
 	UPROPERTY(EditAnywhere, Category = FSM)
-	float attackRange = 150;
+	float attackRange = 220;
 
 	//Boss Movement
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
@@ -78,7 +80,7 @@ public:
 
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
-	int Health = 10;
+	int Health = 20;
 
 
 	// 피격 받을 때 넉백 힘
@@ -103,4 +105,7 @@ public:
 	
 	void Die();
 	FTimerHandle DieTimerHandle;
+
+	UFUNCTION(BlueprintCallable, Category = Notify)
+	void OnDamageEndEvent();
 };
