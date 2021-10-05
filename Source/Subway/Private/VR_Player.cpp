@@ -66,6 +66,11 @@ AVR_Player::AVR_Player()
     leftHand->SetupAttachment(leftController);
     leftHand->SetRelativeRotation(FRotator(0, 0, -90.0f));
     leftHand->SetRelativeScale3D(FVector(1.0f, -1.0f, 1.0f));
+
+	leftGunLoc = CreateDefaultSubobject<USceneComponent>(TEXT("LeftGunLoc"));
+	leftGunLoc->SetupAttachment(leftHand);
+	leftGunLoc->SetRelativeLocation(FVector(-12.5f, 19.3f, 1.5f));
+	leftGunLoc->SetRelativeRotation(FRotator(0.f, -42.5f, 180.f));
     
     rightHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Right Hand"));
     rightHand->SetupAttachment(rightController);

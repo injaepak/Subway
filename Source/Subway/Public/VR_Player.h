@@ -65,6 +65,9 @@ public:
 		class USkeletalMeshComponent* leftHand;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class USceneComponent* leftGunLoc;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class USkeletalMeshComponent* rightHand;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
@@ -84,6 +87,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		class UChildActorComponent* mag;
+
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerHP)
 		int playerHP = 10;
