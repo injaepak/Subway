@@ -75,6 +75,9 @@ void UEnemyA_FSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	case EEnemyAState::Damage:
 		DamageState();
 		break;
+	case EEnemyAState::HeadBody:
+		HeadBodyState();
+		break;
 	case EEnemyAState::Die:
 		DieState();
 		break;
@@ -281,12 +284,12 @@ void UEnemyA_FSM::DamageState()
 
 	currentTime += GetWorld()->DeltaTimeSeconds;
 
-	if (anim->isHead ==true && currentTime > 2.f)
-	{
-		anim->isAttacking = true;
-		anim->isHead = false;
-	}
-	if (bCanHit == true && currentTime > 5.3f)
+	//if (anim->isHead ==true && currentTime > 1.3f)
+	//{
+	//	anim->isAttacking = true;
+	//	anim->isHead = false;
+	//}
+	if (bCanHit == true && currentTime > 1.3f)
 	{
 		anim->isRunning = true;
 		anim->isDamaging = false;
@@ -298,6 +301,47 @@ void UEnemyA_FSM::DamageState()
 		m_state_A = EEnemyAState::Die;
 		anim->isDamaging = false;
 		anim->isDie = true;
+		currentTime = 0;
+	}
+}
+// Head and Body Damage Statement
+void UEnemyA_FSM::HeadBodyState()
+{
+	// Lerp로 knock back 구현
+	FVector myPos = me->GetActorLocation();
+	//knockbackPos 는 OnDamageProcess에서 계산
+	myPos = FMath::Lerp(myPos, knockbackPos, 10 * GetWorld()->DeltaTimeSeconds);
+	me->SetActorLocation(myPos);
+	
+	currentTime += GetWorld()->DeltaTimeSeconds;
+	PRINTLOG(TEXT("HeadBody"));
+	if (isHeadPart == true)
+	{
+		PRINTLOG(TEXT("HeadHIT"));
+		anim->isHead = true;
+		anim->isBody = false;
+	}
+	else if (isHeadPart == false)
+	{
+		PRINTLOG(TEXT("BodyHit"));
+		anim->isHead = false;
+		anim->isBody = true;
+	}
+
+	if (isHeadPart == true && currentTime > 1.8f)
+	{
+		m_state_A = EEnemyAState::Attack;
+		anim->isHead = false;
+		//anim->isBody = false;
+		anim->isAttacking = true;
+		currentTime = 0;
+	}
+	else if (isHeadPart == false && currentTime > 3.f)
+	{
+		m_state_A = EEnemyAState::Attack;
+		//anim->isHead = false;
+		anim->isBody = false;
+		anim->isAttacking = true;
 		currentTime = 0;
 	}
 }
@@ -338,29 +382,41 @@ void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead
 			return;
 		}
 		this->isHeadPart = isHead;
-		m_state_A = EEnemyAState::Damage;
-		//currentTime = 0;
 
 		//만약 공격 상태일 때, 피격을 받으면
 		if (m_state_A == EEnemyAState::Attack)
 		{
 			//bhit을 true로 변경
 			bhit = true;
-			//bIdle = false;
-			m_state_A = EEnemyAState::Damage;
-			anim->isAttacking = false;
-			anim->isRunning = false;
+			if (isHead == true)
+			{
+				PRINTLOG(TEXT("ATTK HEAD"));
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("ATTK MODE : HEADSHOT!!")));
+				m_state_A = EEnemyAState::HeadBody;
+				anim->isAttacking = false;
+				
+			}
+			else if (isHead == false)
+			{
+				PRINTLOG(TEXT("ATTK BODY"));
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ATTK MODE : BODYSHOT!!")));
+				m_state_A = EEnemyAState::HeadBody;
+				anim->isAttacking = false;
+				
+			}
 
+			/*anim->isAttacking = false;
+			anim->isRunning = false;
 			anim->isHead = isHead;
-			anim->isBody = false;
+			anim->isBody = false;*/
 		}
 		else
 		{
 			anim->isMoving = false;
 			anim->isRunning = false;
-			//bhit = false;
-			//bIdle = true;
 			m_state_A = EEnemyAState::Damage;
+			currentTime = 0;
+
 			// Head 또는 Body 에 따른 상태변화
 			if (isHead == true)
 			{
@@ -405,8 +461,8 @@ void UEnemyA_FSM::OnDamageEndEvent()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("INPUT TEST!!")));
 	//bhit = false;
-	//anim->isAttacking = true;
+	//anim->isAttacking = false;
 	//anim->isMoving = true;
-	anim->isHead = false;
+	anim->isHead = true;
 	anim->isBody = false;
 }

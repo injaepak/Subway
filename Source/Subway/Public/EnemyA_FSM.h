@@ -14,6 +14,7 @@ enum class EEnemyAState : uint8
 	Run,
 	Attack,
 	Damage,
+	HeadBody,
 	Die,
 };
 
@@ -97,6 +98,7 @@ private:
 	void RunState();
 	void AttackState();
 	void DamageState();
+	void HeadBodyState();
 	void DieState();
 
 public:
@@ -108,4 +110,5 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Notify)
 	void OnDamageEndEvent();
+	
 };
