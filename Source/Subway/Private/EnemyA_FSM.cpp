@@ -281,7 +281,7 @@ void UEnemyA_FSM::DamageState()
 
 	currentTime += GetWorld()->DeltaTimeSeconds;
 
-	if (anim->isHead ==true && currentTime > 3.f)
+	if (anim->isHead ==true && currentTime > 2.f)
 	{
 		anim->isAttacking = true;
 		anim->isHead = false;
