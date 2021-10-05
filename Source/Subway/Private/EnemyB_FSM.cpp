@@ -6,7 +6,7 @@
 #include "FPSPlayer.h"
 #include "VR_Player.h"
 #include "EnemyBAnimInstance.h"
-
+#include "Subway.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EngineUtils.h"
@@ -53,7 +53,7 @@ void UEnemyB_FSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	
 	if (target == nullptr)
 	{
-		target = Cast<AVR_Player>(UGameplayStatics::GetActorOfClass(GetWorld(), AVR_Player::StaticClass()));
+		target = Cast<AFPSPlayer>(UGameplayStatics::GetActorOfClass(GetWorld(), AFPSPlayer::StaticClass()));
 	}
 
 	switch (m_state_B)
@@ -102,7 +102,7 @@ void UEnemyB_FSM::MoveState()
 	{
 		return;
 	}
-
+	PRINTLOG(TEXT("Move"));
 	me->GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
 	// Target인 Player 방향으로 이동
 	// 	방향이 필요
@@ -112,10 +112,13 @@ void UEnemyB_FSM::MoveState()
 	dir.Normalize();
 
 	//AIController를 이용해서 이동
-	if (ai)
+	if (bAI)
 	{
-		ai->MoveToActor(target);
-		anim->isMoving = true;
+		if (ai)
+		{
+			ai->MoveToActor(target);
+			anim->isMoving = true;
+		}
 	}
 
 	// character movement로 사용해서 따라가게 만들기
@@ -129,11 +132,9 @@ void UEnemyB_FSM::MoveState()
 	myRot = FMath::Lerp(myRot, targetRot, 5 * GetWorld()->DeltaTimeSeconds);
 	//me->SetActorRotation(myRot);
 
-	//Debug Sphere 시각화
-	//DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 16, FColor::Red);
 
 	// 속도가 있을 때, AnimInstance Bool 변경
-	
+
 	//if (anim->isMoving == false)
 	//{
 	//	//속도 구하기
@@ -164,6 +165,7 @@ void UEnemyB_FSM::MoveState()
 
 void UEnemyB_FSM::AttackState()
 {
+	PRINTLOG(TEXT("ATTACK"));
 	//EnemyB 어택 상태가 true 때만 Player 피격 판정 유효
 	me->bCanAttack = true;
 	// 시간이 흐른다.
@@ -179,6 +181,7 @@ void UEnemyB_FSM::AttackState()
 
 void UEnemyB_FSM::DamageState()
 {
+	PRINTLOG(TEXT("DAMAGE"));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DAMAGE STATE!!")));
 	anim->isMoving = false;
 	//anim->isDamaging = true;
@@ -194,7 +197,17 @@ void UEnemyB_FSM::DamageState()
 
 	currentTime += GetWorld()->DeltaTimeSeconds;
 
-	if (currentTime > 1.2f)
+	/*if (bhit)
+	{
+		if (isHeadPart == true)
+		{
+		}
+		else if (isHeadPart == false)
+		{
+		}
+	}*/
+	//Move 변경
+	if (currentTime > 1.5f)
 	{
 		anim->isMoving = true;
 		anim->isHead = false;
@@ -221,14 +234,23 @@ void UEnemyB_FSM::DamageState()
 
 }
 
+
 void UEnemyB_FSM::DieState()
 {
+	PRINTLOG(TEXT("DIE"));
 	me->bCanAttack = false;
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Dead!!")));
 	//anim->isTransA = false;
 	anim->isMoving = false;
 	anim->isAttacking = false;
 	anim->isDie = true;
+
+	if (ai)
+	{
+		ai->StopMovement();
+		anim->isMoving = false;
+	}
+	
 
 	if (bCanDie == true)
 	{
@@ -243,25 +265,61 @@ void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("KnockBack!!")));
 
+		//isHeadPart와 isHead 변수 연결
+		this->isHeadPart = isHead;
+
 		// Z 방향은 0으로 고정
 		KBDirection.Z = 0;
 		// 맞으면 뒤로 넉백
 		knockbackPos = me->GetActorLocation() + KBDirection * knockback;
-
-		// 상태를 Damage 로 이동
-		m_state_B = EEnemyBState::Damage;
-
-		if (isHead == true)
+		currentTime = 0;
+		//만약 공격 상태일 때, 피격을 받으면
+		if (m_state_B == EEnemyBState::Attack)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEADSHOT!!")));
-			anim->isHead = true;
+			//bhit을 true로 변경
+			bhit = true;
+			//bIdle = false;
+			m_state_B = EEnemyBState::Damage;
+			anim->isAttacking = false;
+			anim->isMoving = false;
+
+			anim->isHead = isHead;
 			anim->isBody = false;
+			//if (isHead == true)
+			//{
+			//	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("ATTK MODE : HEADSHOT!!")));
+			//	anim->isAttacking = false;
+			//	anim->isHead = true;
+			//	anim->isBody = false;
+			//}
+			//else if (isHead == false)
+			//{
+			//	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ATTK MODE : BODYSHOT!!")));
+			//	anim->isAttacking = false;
+			//	anim->isHead = false;
+			//	anim->isBody = true;
+			//}
 		}
-		else if (isHead == false)
+		//attack 상태가 아니라면
+		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODYSHOT!!")));
-			anim->isHead = false;
-			anim->isBody = true;
+			anim->isMoving = false;
+			//bhit = false;
+			//bIdle = true;
+			m_state_B = EEnemyBState::Damage;
+			// Head 또는 Body 에 따른 상태변화
+			if (isHead == true)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("DMG MODE : HEADSHOT!!")));
+				anim->isHead = true;
+				anim->isBody = false;
+			}
+			else if (isHead == false)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DMG MODE : BODYSHOT!!")));
+				anim->isHead = false;
+				anim->isBody = true;
+			}
 		}
 
 		// 데미지 처리
@@ -279,4 +337,15 @@ void UEnemyB_FSM::Die()
 {
 	me->Destroy();
 }
+
+void UEnemyB_FSM::OnDamageEndEvent()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("INPUT TEST!!")));
+	bhit = false;
+	//anim->isAttacking = true;
+	//anim->isMoving = true;
+	anim->isHead = false;
+	anim->isBody = false;
+}
+
 
