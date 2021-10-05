@@ -5,6 +5,7 @@
 #include "EnemyA.h"
 #include "EnemyB.h"
 #include "SpawnPoint.h"
+
 #include <Kismet/GameplayStatics.h>
 
 // Sets default values
@@ -135,6 +136,8 @@ void ASpawnMananger1::Tick(float DeltaTime)
 		{
 			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn2->GetComponentTransform());
 			check = 13;
+
+			
 		}
 	}
 

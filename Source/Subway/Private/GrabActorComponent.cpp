@@ -388,28 +388,30 @@ void UGrabActorComponent::LeftGrabAction()
 		}
 	}
 
-	//else if (shotgunobject)
-	//{
-	//	shotgunobject->boxComp->SetEnableGravity(false);
-	//	// 그 자리에서 떨어지게
-	//	shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		if(bIsShotgun == true)
+		{
+			PRINTLOG(TEXT("ssssssss"));
+			shotgunobject = Cast<AShotGunActor>(grabActor);
+			//shotgun = Cast<AWeaponShotgun>(shotgunobject->shotgun->GetChildActor());
 
-	//	FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+			//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+			FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
 
-	//	shotgunobject->AttachToComponent(player->shotgunComp, attachRules);
+			// 손에 붙이기
+			//shotgunobject->boxComp->SetSimulatePhysics(false);
+			shotgunobject->AttachToComponent(player->leftGunLoc, attachRules, TEXT("LeftGrabPoint"));
 
-	//	shotgunobject->boxComp->SetSimulatePhysics(false);
+			shotgunobject->boxComp->SetEnableGravity(false);
 
-	//	shotgunobject->SetActorLocation(player->shotgunComp->GetComponentLocation());
-	//	player->shotgun->SetRelativeRotation(FRotator(0, 90.f, 90.0f));
-	//	shotgunobject->SetActorRelativeRotation(FRotator(-90.f, 0.f, 0.f));
+			// 오브젝트를 잡았을때 위치 잡기
+			shotgunobject->boxComp->SetRelativeLocation(shotgunobject->leftgrabOffset);
 
-	//	// 오른손 피는 애니메이션
-	//	player->handComp->targetGripValueRight = 0.0f;
+			// 오른손 쥐는 애니메이션
+			player->handComp->targetGripValueLeft = 1.0f;
+		
+		}
+	}
 
-	//	shotgunobject = nullptr;
-	//}
-}
 
 void UGrabActorComponent::LeftReleaseAction()
 {
@@ -430,7 +432,7 @@ void UGrabActorComponent::LeftReleaseAction()
 		player->mag->SetRelativeRotation(FRotator(0, 90.f, 0.0f));
 		magzineActor->SetActorRelativeRotation(FRotator(0.f, -90.f, 90.f));
 		// 오른손 피는 애니메이션
-		player->handComp->targetGripValueLeft = 0.0f;
+		player->handComp->targetGripValueLeft = 0.5f;
 
 		magzineActor = nullptr;
 	}
