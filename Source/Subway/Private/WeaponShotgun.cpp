@@ -38,8 +38,8 @@ AWeaponShotgun::AWeaponShotgun()
 	fpsPlayer = Cast<AFPSPlayer>(UGameplayStatics::GetActorOfClass(GetWorld(), AFPSPlayer::StaticClass()));
 	//needToReroad = false;
 
-	static ConstructorHelpers::FObjectFinder<UAnimSequence>fireAnimation(TEXT("AnimSequence'Game/FPS_Weapon_Bundle/Weapons/Meshes/M1_shotgun/SK_M1_Shotgun_X_Skeleton_Sequence.uasset'"));
-	FireAnimation = fireAnimation.Object;
+	//static ConstructorHelpers::FObjectFinder<UAnimSequence>fireAnimation(TEXT("AnimSequence'Game/FPS_Weapon_Bundle/Weapons/Meshes/M1_shotgun/SK_M1_Shotgun_X_Skeleton_Sequence.uasset'"));
+	//FireAnimation = fireAnimation.Object;
 	
 	bool bLoop = false;
 	
