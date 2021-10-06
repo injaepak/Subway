@@ -245,8 +245,8 @@ void AWeaponShotgun::Fire()
 							boss->BossFSM->OnDamageProcess(6.f, Rot, false);
 						}
 						// 맞은 대상이 Boss이므로 EnemyHit 이펙트를 Spawn
-						hitTrans.SetLocation(Hit.ImpactPoint);
-						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
+						//hitTrans.SetLocation(Hit.ImpactPoint);
+						//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
 						//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Boss를 타격!!!!")));
 
 

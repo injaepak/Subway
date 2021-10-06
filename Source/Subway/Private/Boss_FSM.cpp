@@ -159,6 +159,7 @@ void UBoss_FSM::MoveState()
 	{
 		ai->MoveToActor(target);
 		anim->isMoving = true;
+		anim->isAttacking = false;
 	}
 
 	// character movement로 사용해서 따라가게 만들기
@@ -234,6 +235,7 @@ void UBoss_FSM::DamageState()
 	PRINTLOG(TEXT("DAMAGE"));
 
 	anim->isMoving = false;
+	anim->isAttacking = false;
 	anim->isDamage = true;
 	
 	// Lerp 를 이용하여 knock back 구현
@@ -249,19 +251,20 @@ void UBoss_FSM::DamageState()
 	
 	if (bhit == true && currentTime > 1.5f)
 	{
-		//bhit = false;
+		PRINTLOG(TEXT("MOVE STATE CHANGE!!!"));
+		bhit = false;
 		anim->isDamage = false;
 		anim->isMoving = true;
 		m_state_Boss = EBossState::Move;
 		currentTime = 0;
 	}
-	else if (m_state_Boss == EBossState::Attack && currentTime > 2.f)
+	/*else if (m_state_Boss == EBossState::Attack && currentTime > 2.f)
 	{
 		anim->isDamage = false;
 		anim->isAttacking = true;
 		m_state_Boss = EBossState::Attack;
 		currentTime = 0;
-	}
+	}*/
 	// HP = 0, isDie가 False라면
 	else if (Health == 0 && anim->isDie == false)
 	{
