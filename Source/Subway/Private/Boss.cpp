@@ -23,7 +23,7 @@ ABoss::ABoss()
 	BossFSM = CreateDefaultSubobject<UBoss_FSM>(TEXT("BossFSM"));
 
 	// BossMesh 붙이기
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempMesh(TEXT("SkeletalMesh'/Game/Model/Boss/zombiegirl_w_kurniawan.zombiegirl_w_kurniawan'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempMesh(TEXT("SkeletalMesh'/Game/Model/NewBoss/NewBoss_Ch30_nonPBR.NewBoss_Ch30_nonPBR'"));
 	
 	// Skeletal Mesh Load 성공하면, 데이터 할당
 	if (tempMesh.Succeeded())
@@ -31,9 +31,9 @@ ABoss::ABoss()
 		// 데이터
 		GetMesh()->SetSkeletalMesh(tempMesh.Object);
 	}
-
+	
 	//Anime BP 할당
-	ConstructorHelpers::FClassFinder<UAnimInstance>tempAnim(TEXT("AnimBlueprint'/Game/Animation/ABP_Boss.ABP_Boss_C'"));
+	ConstructorHelpers::FClassFinder<UAnimInstance>tempAnim(TEXT("AnimBlueprint'/Game/Animation/ABP_NewBoss.ABP_NewBoss_C'"));
 	
 	if (tempAnim.Succeeded())
 	{

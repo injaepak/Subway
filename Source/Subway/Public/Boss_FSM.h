@@ -41,16 +41,25 @@ public:
 	class ABoss* me;
 
 	UPROPERTY(EditAnywhere, Category = Target)
-	class AVR_Player* target;
-	//class AFPSPlayer* target;
+	class AFPSPlayer* target;
+	//class AVR_Player* target;
 
 	UPROPERTY(EditAnywhere, Category = FSM, BlueprintReadWrite)
 	EBossState m_state_Boss;
+	
 	UPROPERTY()
 	class UBossAnimInstance* anim;
+
+	// Enemy 가 사용하고 있는 AIController 기억
+	UPROPERTY()
+	class AAIController* ai;
+
 public:
 	//boolean
+	bool bhit = false;
 	bool bCanDie;
+	bool bCanHit;
+	bool isHeadPart = false;
 
 	//시간
 	UPROPERTY(EditAnywhere, Category = FSM)
@@ -66,7 +75,7 @@ public:
 
 	//범위
 	UPROPERTY(EditAnywhere, Category = FSM)
-	float attackRange = 100;
+	float attackRange = 180;
 
 	//Boss Movement
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
@@ -74,21 +83,29 @@ public:
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
 	float RunSpeed = 250;
 
+	// 피격 받을 때 넉백 힘
+	UPROPERTY(EditAnywhere, Category = FSM)
+	float knockback = 200;
+
+	// 피격 받을 때 넉백 종료 지점
+	UPROPERTY()
+	FVector knockbackPos;
+
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM)
-	int Health = 25;
+	int Health = 35;
 private:
 	void IdleState();
 	void TransState();
 	void TauntState();
 	void MoveState();
 	void AttackState();
-	//void DamageState();
+	void DamageState();
 	void DieState();
 
 public:
-	// 피격 함수
-	void OnDamageProcess();
+	// 피격 함수 (데미지, 넉백 방향)
+	void OnDamageProcess(float damage, FVector KBDirection, bool isHead);
 
 	void Die();
 	FTimerHandle DieTimerHandle;

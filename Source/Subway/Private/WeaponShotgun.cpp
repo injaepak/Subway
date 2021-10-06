@@ -230,19 +230,19 @@ void AWeaponShotgun::Fire()
 					}
 					//--------------------------------
 					// Boss 타격 시 데미지프로세스 실행하고, 이펙트 스폰
-					/*else if (boss)	// ▶ 주석 시작
+					else if (boss)	// ▶ 주석 시작
 					{
-						if(Hit.GetComponent()->GetName().Contains(TEXT("Collision"))) // ▶ 콜리젼 구분 있을 시 if, else if 주석 켜시면 됩니다
-						//if (Hit.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
-						{
-							//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
-							boss->BossFSM->OnDamageProcess();
-						}
-						else if (Hit.GetComponent()->GetName().Contains(TEXT("Collision"))) 
+						//if(Hit.GetComponent()->GetName().Contains(TEXT("Collision"))) // ▶ 콜리젼 구분 있을 시 if, else if 주석 켜시면 됩니다
+						////if (Hit.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
+						//{
+						//	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
+						//	boss->BossFSM->OnDamageProcess(6.f, Rot, true);
+						//}
+						if (Hit.GetComponent()->GetName().Contains(TEXT("BoxCollision"))) 
 						//else if (Hit.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
 						{
 							//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
-							boss->BossFSM->OnDamageProcess();
+							boss->BossFSM->OnDamageProcess(6.f, Rot, false);
 						}
 						// 맞은 대상이 Boss이므로 EnemyHit 이펙트를 Spawn
 						hitTrans.SetLocation(Hit.ImpactPoint);
@@ -250,7 +250,7 @@ void AWeaponShotgun::Fire()
 						//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Boss를 타격!!!!")));
 
 
-					}*/		// ▶ 주석 끝
+					}	// ▶ 주석 끝
 					//--------------------------------
 
 				}
