@@ -15,12 +15,13 @@ class SUBWAY_API AWeaponBase : public AActor
 public:
 	// Sets default values for this actor's properties
 	AWeaponBase();
+	
 protected:
 	UPROPERTY(EditAnywhere, Category = "Test")
 		class USkeletalMeshComponent* WeaponMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Test")
-		class UAnimationAsset* FireAnimation;
+		class UAnimSequence* FireAnimation;
 
 	UPROPERTY(EditAnywhere, Category = "Test")
 		class UAnimationAsset* ReloadAnimation;
@@ -45,6 +46,8 @@ public:
 	virtual void Fire();
 	virtual void Reload();
 	TArray<int32> GetCurrentAmmo();
+	/*UPROPERTY()
+		class UEnemyAAnimInstance* anim;*/
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Test")

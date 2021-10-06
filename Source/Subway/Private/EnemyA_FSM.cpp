@@ -55,7 +55,7 @@ void UEnemyA_FSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 	if (target == nullptr)
 	{
-		target = Cast<AFPSPlayer>(UGameplayStatics::GetActorOfClass(GetWorld(), AFPSPlayer::StaticClass()));
+		target = Cast<AVR_Player>(UGameplayStatics::GetActorOfClass(GetWorld(), AVR_Player::StaticClass()));
 	}
 
 	switch (m_state_A)
