@@ -45,7 +45,7 @@ void UBoss_FSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (target == nullptr)
 	{
-		target = Cast<AFPSPlayer>(UGameplayStatics::GetActorOfClass(GetWorld(), AFPSPlayer::StaticClass()));
+		target = Cast<AVR_Player>(UGameplayStatics::GetActorOfClass(GetWorld(), AVR_Player::StaticClass()));
 	}
 
 	switch (m_state_Boss)
@@ -68,6 +68,9 @@ void UBoss_FSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	case EBossState::Damage:
 		DamageState();
 		break;
+	/*case EBossState::HeadBodyArm:
+		HeadBodyArmState();
+		break*/;
 	case EBossState::Die:
 		DieState();
 		break;
@@ -129,7 +132,8 @@ void UBoss_FSM::TauntState()
 	myRot = FMath::Lerp(myRot, targetRot, 5 * GetWorld()->DeltaTimeSeconds);
 	me->SetActorRotation(myRot);
 
-	if (currentTime > 5.7f)
+	//if (currentTime > 5.7f)
+	if (currentTime > 0.7f)
 	{
 		anim->isTaunt = false;
 		anim->isMoving = true;
@@ -195,9 +199,8 @@ void UBoss_FSM::MoveState()
 	if (distance < attackRange)
 	{
 		m_state_Boss = EBossState::Attack;
-		anim->isMoving = false;
-		anim->isAttacking = true;
 		currentTime = attackDelayTime;
+		//currentTime = attackDelayTime;
 	}	
 
 	// HP = 0, isDie가 False라면
@@ -211,16 +214,45 @@ void UBoss_FSM::MoveState()
 void UBoss_FSM::AttackState()
 {
 	PRINTLOG(TEXT("ATTACK"));
+	me->bCanAttack = true;
+
+	// 시간이 흐른다.
+	currentTime += GetWorld()->DeltaTimeSeconds;
+
 	if (ai)
 	{
 		ai->StopMovement();
-		anim->isMoving = false;
-		anim->isAttacking = true;
+		//anim->isMoving = false;
+		//anim->isAttacking = true;
 	}
-	me->bCanAttack = true;
-	
-	// 시간이 흐른다.
-	currentTime += GetWorld()->DeltaTimeSeconds;
+	for (int i = 0; i < 11; i++)
+	{
+		int32 ratio = FMath::RandRange(1, 3);
+		if (ratio == 1)
+		{
+			anim->isMoving = false;
+			anim->isAttkOne = true;
+			anim->isAttkTwo = false;
+			anim->isAttkThree = false;
+			currentTime = 0;
+		}
+		else if (ratio == 2)
+		{
+			anim->isMoving = false;
+			anim->isAttkTwo = false;
+			anim->isAttkTwo = true;
+			anim->isAttkThree = false;
+			currentTime = 0;
+		}
+		else if (ratio == 3)
+		{
+			anim->isMoving = false;
+			anim->isAttkThree = false;
+			anim->isAttkTwo = false;
+			anim->isAttkThree = true;
+			currentTime = 0;
+		}
+	}
 
 	// HP = 0, isDie가 False라면
 	if (Health == 0 && anim->isDie == false)
@@ -236,7 +268,7 @@ void UBoss_FSM::DamageState()
 
 	anim->isMoving = false;
 	anim->isAttacking = false;
-	anim->isDamage = true;
+	//anim->isDamage = true;
 	
 	// Lerp 를 이용하여 knock back 구현
 	FVector myPos = me->GetActorLocation();
@@ -249,22 +281,56 @@ void UBoss_FSM::DamageState()
 
 	currentTime += GetWorld()->DeltaTimeSeconds;
 	
-	if (bhit == true && currentTime > 1.5f)
+	//Head 파트
+	if (isHeadPart == true)
+	{
+		PRINTLOG(TEXT("HeadHIT"));
+		anim->isHead = true;
+		anim->isBody = false;
+		anim->isAttkOne = false;
+		anim->isAttkTwo = false;
+		anim->isAttkThree = false;
+	}
+	else if (isHeadPart == false)
+	{
+		PRINTLOG(TEXT("BodyHit"));
+		anim->isHead = false;
+		anim->isBody = true;
+		anim->isAttkOne = false;
+		anim->isAttkTwo = false;
+		anim->isAttkThree = false;
+	}
+
+	// Arm 파트
+	//if (isArmPart == true)
+	//{
+	//	PRINTLOG(TEXT("RtArm Hit"));
+	//	//anim->isHead = false;
+	//	//anim->isBody = false;
+	//	anim->isRtArm = true;
+	//	anim->isLtArm = false;
+	//}
+	//else if (isArmPart == false)
+	//{
+	//	PRINTLOG(TEXT("LtArm Hit"));
+	//	//anim->isHead = false;
+	//	//anim->isBody = false;
+	//	anim->isRtArm = false;
+	//	anim->isLtArm = true;
+	//}
+
+	if (bhit == true && currentTime > 1.3f)
 	{
 		PRINTLOG(TEXT("MOVE STATE CHANGE!!!"));
 		bhit = false;
-		anim->isDamage = false;
+		//anim->isDamage = false;
+		anim->isHead = false;
+		anim->isBody = false;
 		anim->isMoving = true;
 		m_state_Boss = EBossState::Move;
 		currentTime = 0;
 	}
-	/*else if (m_state_Boss == EBossState::Attack && currentTime > 2.f)
-	{
-		anim->isDamage = false;
-		anim->isAttacking = true;
-		m_state_Boss = EBossState::Attack;
-		currentTime = 0;
-	}*/
+
 	// HP = 0, isDie가 False라면
 	else if (Health == 0 && anim->isDie == false)
 	{
@@ -273,6 +339,12 @@ void UBoss_FSM::DamageState()
 	}
 }
 
+/*
+void UBoss_FSM::HeadBodyArmState()
+{
+
+}
+*/
 void UBoss_FSM::DieState()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Dead!!")));
@@ -282,28 +354,43 @@ void UBoss_FSM::DieState()
 
 	if (bCanDie == true)
 	{
-		GetWorld()->GetTimerManager().SetTimer(DieTimerHandle, this, &UBoss_FSM::Die, 2.5f, false);
+		GetWorld()->GetTimerManager().SetTimer(DieTimerHandle, this, &UBoss_FSM::Die, 4.5f, false);
 		bCanDie = false;
 	}
 }
 
-void UBoss_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead)
+void UBoss_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr, bool isHead)
 {
 	if (Health > 0)
 	{
+		//FSM의 Knockback 값과 KBPwr 동기화
+		this->knockback = KBPwr;
 		//isHeadPart와 isHead 변수 연결
-		//this->isHeadPart = isHead;
-
+		this->isHeadPart = isHead;
+		//this->isArmPart = isArm;
 		// Z 방향은 0으로 고정
 		KBDirection.Z = 0;
 		// 맞으면 뒤로 넉백
 		knockbackPos = me->GetActorLocation() + KBDirection * knockback;
 		currentTime = 0;
 
+		// 피격시 bhit을 통해 Damage > Move 조건부 완성
 		bhit = true;
+
 		m_state_Boss = EBossState::Damage;
 
-
+		//Boss 가 AttackMode라면
+		if (m_state_Boss == EBossState::Attack)
+		{
+			bhit = true;
+			m_state_Boss = EBossState::Damage;
+			anim->isAttacking = false;
+		}
+		else
+		{
+			anim->isMoving = false;
+			m_state_Boss = EBossState::Damage;
+		}
 		// 데미지 처리
 		Health -= damage;
 		if (Health < 0)

@@ -31,6 +31,15 @@ public:
 	class UBoss_FSM* BossFSM;
 
 public:
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class USphereComponent* HeadCollision;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class UBoxComponent* BodyCollision;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class UBoxComponent* RtArmCollision;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class UBoxComponent* LtArmCollision;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 	class USoundBase* gunSound;
 

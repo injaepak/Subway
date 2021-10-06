@@ -21,6 +21,19 @@ ABoss::ABoss()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	BossFSM = CreateDefaultSubobject<UBoss_FSM>(TEXT("BossFSM"));
+	
+	//CollisionComponent Attachment
+	HeadCollision = CreateDefaultSubobject<USphereComponent>(TEXT("HeadCollision"));
+	HeadCollision->SetupAttachment(GetMesh(), "HeadTarget");
+
+	BodyCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
+	BodyCollision->SetupAttachment(GetMesh(), "Spine1");
+
+	RtArmCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("RtArmCollision"));
+	RtArmCollision->SetupAttachment(GetMesh(), "RtArmTarget");
+
+	LtArmCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("LtArmCollision"));
+	LtArmCollision->SetupAttachment(GetMesh(), "LtArmTarget");
 
 	// BossMesh ∫Ÿ¿Ã±‚
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempMesh(TEXT("SkeletalMesh'/Game/Model/NewBoss/NewBoss_Ch30_nonPBR.NewBoss_Ch30_nonPBR'"));

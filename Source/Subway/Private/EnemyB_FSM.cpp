@@ -256,7 +256,7 @@ void UEnemyB_FSM::DieState()
 	}
 }
 
-void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead)
+void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr, bool isHead)
 {
 	if (Health > 0)
 	{
@@ -264,6 +264,7 @@ void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead
 
 		//isHeadPart와 isHead 변수 연결
 		this->isHeadPart = isHead;
+		this->knockback = KBPwr;
 
 		// Z 방향은 0으로 고정
 		KBDirection.Z = 0;

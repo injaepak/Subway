@@ -99,7 +99,7 @@ private:
 
 public:
 	// 피격 함수 (데미지, 넉백 방향)
-	void OnDamageProcess(float damage, FVector KBDirection, bool isHead);
+	void OnDamageProcess(float damage, FVector KBDirection, float KBPwr, bool isHead);
 
 	void Die();
 	FTimerHandle DieTimerHandle;
