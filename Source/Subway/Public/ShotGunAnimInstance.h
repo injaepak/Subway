@@ -18,5 +18,7 @@ public:
 
 UPROPERTY(VisibleAnywhere, Category = "test" , BlueprintReadWrite)
 bool isShooting = false;
+UPROPERTY(VisibleAnywhere, Category = "test", BlueprintReadWrite)
+bool isNotShooting = true;
 	
 };
