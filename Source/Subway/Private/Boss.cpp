@@ -9,6 +9,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/SphereComponent.h"
 #include "Animation/AnimInstance.h"
+#include "FPSPlayer.h"
+#include "VR_Player.h"
+#include "Components/BoxComponent.h"
+
 
 // Sets default values
 ABoss::ABoss()
@@ -39,6 +43,10 @@ ABoss::ABoss()
 
 	//Health System
 	bCanBeDamaged = true;
+	//bCanOverlap = true;
+	bCanAttack = false;
+
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned

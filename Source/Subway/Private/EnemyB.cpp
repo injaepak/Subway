@@ -10,6 +10,7 @@
 #include "Components/SphereComponent.h"
 #include "Animation/AnimInstance.h"
 #include "FPSPlayer.h"
+#include "VR_Player.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -32,7 +33,7 @@ AEnemyB::AEnemyB()
 
 	LtCollision = CreateDefaultSubobject<USphereComponent>(TEXT("LtHandCollision"));
 	LtCollision->SetupAttachment(GetMesh(), "LeftHandTarget");
-	LtCollision->OnComponentBeginOverlap.AddDynamic(this, &AEnemyB::OnOverlapBegin);
+	//LtCollision->OnComponentBeginOverlap.AddDynamic(this, &AEnemyB::OnOverlapBegin);
 
 	// BossMesh 붙이기
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempMesh(TEXT("SkeletalMesh'/Game/Model/EnemyB/ZombieB_jill.ZombieB_jill'"));
@@ -55,7 +56,7 @@ AEnemyB::AEnemyB()
 
 	//Health System
 	bCanBeDamaged = true;
-	bCanOverlap = true;
+	//bCanOverlap = true;
 	bCanAttack = false;
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
@@ -82,29 +83,3 @@ void AEnemyB::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
-void AEnemyB::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	// Player를 OtherActor로 세팅
-	auto Player = Cast<AVR_Player>(OtherActor);
-	// 대상이 Player이고, 자신이 아니라면
-	if (Player && (OtherActor != this))
-	{
-		// bCanOverlap Boolean이 true라면
-		if (bCanOverlap && bCanAttack == true)
-		{
-			bCanOverlap = false;
-			//플레이어의 OnDamageProcess로 이동
-			Player->OnDamageProcess();
-			//타이머 리셋
-			GetWorld()->GetTimerManager().SetTimer(EnemyBOverlapTimerHandle, this, &AEnemyB::ResetOverlapTimer, 2.5f, false);
-		}
-	}
-}
-
-void AEnemyB::ResetOverlapTimer()
-{
-	bCanOverlap = true;
-	GetWorld()->GetTimerManager().ClearTimer(EnemyBOverlapTimerHandle);
-}
-

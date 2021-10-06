@@ -31,16 +31,17 @@ public:
 	class UBoss_FSM* BossFSM;
 
 public:
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	class USoundBase* gunSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	float volumeMultiplier = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	float pitchMultiplier = 1.f;
+public:
 	// Health System
 	bool bCanBeDamaged;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		class USoundBase* gunSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		float volumeMultiplier = 1.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		float pitchMultiplier = 1.f;
+	bool bCanAttack;
 
 };
