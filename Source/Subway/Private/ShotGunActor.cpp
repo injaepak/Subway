@@ -20,6 +20,12 @@ AShotGunActor::AShotGunActor()
 	boxComp->SetEnableGravity(true);
 	boxComp->SetCollisionProfileName(TEXT("PickUP"));
 
+	magComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mag Component"));
+	magComp->SetupAttachment(boxComp);
+
+	gripComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Grip Component"));
+	gripComp->SetupAttachment(boxComp);
+
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
 	meshComp->SetupAttachment(boxComp);
 

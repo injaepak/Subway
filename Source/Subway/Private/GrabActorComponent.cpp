@@ -338,7 +338,8 @@ void UGrabActorComponent::LeftGrabAction()
 
 			if (magzineActor)
 			{
-
+				shotgunobject->magComp->SetHiddenInGame(false);
+				shotgunobject->gripComp->SetHiddenInGame(true);
 				magzineActor->SetActorHiddenInGame(false);
 				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
 				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
@@ -360,6 +361,7 @@ void UGrabActorComponent::LeftGrabAction()
 	if (bIsShotgun == true)
 	{
 		PRINTLOG(TEXT("ssssssss"));
+		shotgunobject->gripComp->SetHiddenInGame(true);
 		player->rightHand->SetHiddenInGame(true);
 		shotgunobject = Cast<AShotGunActor>(grabActor);
 		if (shotgunobject)
@@ -404,6 +406,8 @@ void UGrabActorComponent::LeftReleaseAction()
 		{
 			return;
 		}
+		shotgunobject->magComp->SetHiddenInGame(true);
+		shotgunobject->gripComp->SetHiddenInGame(false);
 
 		magzineActor->SetActorHiddenInGame(true);
 		magzineActor->boxComp->SetEnableGravity(false);
@@ -433,6 +437,7 @@ void UGrabActorComponent::LeftReleaseAction()
 		{
 			return;
 		}
+		shotgunobject->gripComp->SetHiddenInGame(true);
 		FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
 		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		shotgunobject->AttachToComponent(player->rightGunLoc, attachRules, TEXT("GrabPoint"));

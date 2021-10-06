@@ -371,7 +371,7 @@ void UEnemyA_FSM::DieState()
 	}
 }
 
-void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead)
+void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr, bool isHead)
 {
 	if (Health > 0)
 	{
@@ -382,6 +382,7 @@ void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead
 			return;
 		}
 		this->isHeadPart = isHead;
+		this->knockback = KBPwr;
 
 		//만약 공격 상태일 때, 피격을 받으면
 		if (m_state_A == EEnemyAState::Attack)
@@ -404,11 +405,6 @@ void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, bool isHead
 				anim->isAttacking = false;
 				
 			}
-
-			/*anim->isAttacking = false;
-			anim->isRunning = false;
-			anim->isHead = isHead;
-			anim->isBody = false;*/
 		}
 		else
 		{

@@ -159,12 +159,12 @@ void AWeaponPistol::Fire()
 					if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
 					{
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
-						enemyA->enemyAFSM->OnDamageProcess(3.f, Rot, true);
+						enemyA->enemyAFSM->OnDamageProcess(3.f, Rot, 50, true);
 					}
 					else if (HitResults.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
 					{
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
-						enemyA->enemyAFSM->OnDamageProcess(1.f, Rot, false);
+						enemyA->enemyAFSM->OnDamageProcess(1.f, Rot, 50, false);
 					}
 					// 맞은 대상이 EnemyA이므로 EnemyHit 이펙트를 Spawn
 					hitTrans.SetLocation(HitResults.ImpactPoint);
@@ -179,12 +179,12 @@ void AWeaponPistol::Fire()
 					if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
 					{
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
-						enemyB->enemyBFSM->OnDamageProcess(3.f, Rot, true);
+						enemyB->enemyBFSM->OnDamageProcess(3.f, Rot, 50, true);
 					}
 					else if (HitResults.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
 					{
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
-						enemyB->enemyBFSM->OnDamageProcess(1.f, Rot, false);
+						enemyB->enemyBFSM->OnDamageProcess(1.f, Rot, 50, false);
 					}
 					// 맞은 대상이 EnemyB이므로 EnemyHit 이펙트를 Spawn
 					hitTrans.SetLocation(HitResults.ImpactPoint);
@@ -221,10 +221,10 @@ void AWeaponPistol::Fire()
 
 			}
 		}
-		else
-		{
-		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
-		}
+		//else
+		//{
+		////GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
+		//}
 }
 
 void AWeaponPistol::Reload()

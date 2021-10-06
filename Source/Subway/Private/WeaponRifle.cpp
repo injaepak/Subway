@@ -93,12 +93,12 @@ void AWeaponRifle::Fire()
 								if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
 								{
 									//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
-									enemyA->enemyAFSM->OnDamageProcess(2.f, Rot, true);
+									enemyA->enemyAFSM->OnDamageProcess(2.f, Rot, 100, true);
 								}
 								else if (HitResults.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
 								{
 									//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
-									enemyA->enemyAFSM->OnDamageProcess(1.f, Rot, false);
+									enemyA->enemyAFSM->OnDamageProcess(1.f, Rot, 100, false);
 								}
 							}
 							else if (enemyB)
@@ -106,12 +106,12 @@ void AWeaponRifle::Fire()
 								if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
 								{
 									//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
-									enemyB->enemyBFSM->OnDamageProcess(2.f, Rot, true);
+									enemyB->enemyBFSM->OnDamageProcess(2.f, Rot, 100, true);
 								}
 								else if (HitResults.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
 								{
 									//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
-									enemyB->enemyBFSM->OnDamageProcess(3.f, Rot, false);
+									enemyB->enemyBFSM->OnDamageProcess(3.f, Rot, 100, false);
 								}
 							}
 						}

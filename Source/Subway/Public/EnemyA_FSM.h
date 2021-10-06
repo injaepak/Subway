@@ -102,8 +102,8 @@ private:
 	void DieState();
 
 public:
-	// 피격 함수
-	void OnDamageProcess(float damage, FVector KBDirection, bool isHead);
+	// 피격 함수 (데미지, 넉백 방향, 넉백 파워, 피격 부위)
+	void OnDamageProcess(float damage, FVector KBDirection, float KBPwr, bool isHead);
 	
 	void Die();
 	FTimerHandle DieTimerHandle;

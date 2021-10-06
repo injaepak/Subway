@@ -31,17 +31,23 @@ public:
 	class UBoss_FSM* BossFSM;
 
 public:
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-	class USoundBase* gunSound;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class USphereComponent* HeadCollision;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class UBoxComponent* BodyCollision;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class UBoxComponent* RtArmCollision;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class UBoxComponent* LtArmCollision;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 	float volumeMultiplier = 1.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 	float pitchMultiplier = 1.f;
+
 public:
 	// Health System
 	bool bCanBeDamaged;
 	bool bCanAttack;
-
 };

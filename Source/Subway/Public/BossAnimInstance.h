@@ -15,6 +15,21 @@ class SUBWAY_API UBossAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 public:
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isHead = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isBody = false;
+	//UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	//bool isRtArm = false;
+	//UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	//bool isLtArm = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isAttkOne = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isAttkTwo = false;
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
+	bool isAttkThree = false;
+	
+	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
 	bool isTrans = false;
 	UPROPERTY(VisibleAnywhere, Category = FSM, BlueprintReadOnly)
 	bool isTaunt = false;
