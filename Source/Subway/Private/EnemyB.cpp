@@ -86,7 +86,7 @@ void AEnemyB::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AEnemyB::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// Player를 OtherActor로 세팅
-	auto Player = Cast<AFPSPlayer>(OtherActor);
+	auto Player = Cast<AVR_Player>(OtherActor);
 	// 대상이 Player이고, 자신이 아니라면
 	if (Player && (OtherActor != this))
 	{
