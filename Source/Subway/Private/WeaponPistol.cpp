@@ -18,6 +18,7 @@
 #include "Boss_FSM.h" // 보스FSM의 OnDamageProcess 접근할 수 있도록 참조
 #include "GunTargetActor.h"
 #include "DoorOpenActor.h"
+#include "PistolAnimInstance.h" // 애님인스턴스 참조
 
 // Sets default values
 AWeaponPistol::AWeaponPistol()

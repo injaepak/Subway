@@ -71,6 +71,9 @@ public:
 		class USkeletalMeshComponent* rightHand;
 
 	UPROPERTY(EditAnywhere, Category = PlayerSettings)
+		class USceneComponent* rightGunLoc;
+
+	UPROPERTY(EditAnywhere, Category = PlayerSettings)
 		class UMoveActorComponent* moveComp;
 
 	UPROPERTY(VisibleAnywhere, Category = PlayerSettings)

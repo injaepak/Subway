@@ -18,6 +18,8 @@
 #include "Boss_FSM.h" // 보스FSM의 OnDamageProcess 접근할 수 있도록 참조
 #include "GunTargetActor.h"
 #include "DoorOpenActor.h"
+#include "ShotGunAnimInstance.h" // 애님인스턴스 참조
+
 
 // Sets default values
 AWeaponShotgun::AWeaponShotgun()
@@ -35,6 +37,13 @@ AWeaponShotgun::AWeaponShotgun()
 	vrPlayer = Cast<AVR_Player>(UGameplayStatics::GetActorOfClass(GetWorld(), AVR_Player::StaticClass()));
 	fpsPlayer = Cast<AFPSPlayer>(UGameplayStatics::GetActorOfClass(GetWorld(), AFPSPlayer::StaticClass()));
 	//needToReroad = false;
+
+	static ConstructorHelpers::FObjectFinder<UAnimSequence>fireAnimation(TEXT("AnimSequence'Game/FPS_Weapon_Bundle/Weapons/Meshes/M1_shotgun/SK_M1_Shotgun_X_Skeleton_Sequence.uasset'"));
+	FireAnimation = fireAnimation.Object;
+	
+	bool bLoop = false;
+	
+	//PlayAnimation(FireAnimation, bLoop);
 }
 
 void AWeaponShotgun::Fire()
@@ -214,6 +223,7 @@ void AWeaponShotgun::Fire()
 						hitTrans.SetLocation(Hit.ImpactPoint);
 						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
 						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Magenta, FString::Printf(TEXT("에너미B 타격 이펙트 스폰 성공!")));
+						
 						//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemy를 타격!!!!")));
 
 
