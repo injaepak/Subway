@@ -16,6 +16,7 @@
 #include "AIController.h"
 #include "NavigationSystem.h"
 #include "NavigationInvokerComponent.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values for this component's properties
 UEnemyB_FSM::UEnemyB_FSM()
@@ -43,6 +44,7 @@ void UEnemyB_FSM::BeginPlay()
 		target = Cast<AVR_Player>(tgt);
 		break;
 	}*/
+	
 }
 
 

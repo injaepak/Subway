@@ -97,6 +97,7 @@ public:
 	// health System
 	UPROPERTY(EditAnywhere, Category = FSM)
 	int Health = 35;
+
 private:
 	void IdleState();
 	void TransState();

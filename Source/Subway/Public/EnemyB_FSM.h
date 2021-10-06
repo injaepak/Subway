@@ -90,6 +90,8 @@ public:
 	UPROPERTY()
 	FVector knockbackPos;
 
+		bool bPlaySound = true;
+
 private:
 	void IdleState();
 	void MoveState();

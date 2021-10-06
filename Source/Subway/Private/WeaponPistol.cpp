@@ -221,10 +221,10 @@ void AWeaponPistol::Fire()
 
 			}
 		}
-		else
-		{
-		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
-		}
+		//else
+		//{
+		////GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Need To Reload!!!")));
+		//}
 }
 
 void AWeaponPistol::Reload()

@@ -41,16 +41,10 @@ public:
 	class UBoxComponent* LtArmCollision;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-	class USoundBase* gunSound;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 	float volumeMultiplier = 1.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 	float pitchMultiplier = 1.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-	class USoundBase* zombieSound;
 
 public:
 	// Health System

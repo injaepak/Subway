@@ -40,9 +40,6 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Collision)
 	class USphereComponent* LtCollision;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-	class USoundBase* zombieSound;
-
 public:
 	// Health System
 	bool bCanBeDamaged;

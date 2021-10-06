@@ -65,8 +65,6 @@ AEnemyA::AEnemyA()
 void AEnemyA::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), zombieSound, GetActorLocation(), FRotator::ZeroRotator, 1.f, 1.f, 0.0f, nullptr, nullptr);
 }
 
 // Called every frame
