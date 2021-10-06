@@ -75,7 +75,7 @@ void UMoveActorComponent::GripOn()
 		handAnim->gripValue = 1.0f;
 	}*/
 
-	player->handComp->targetGripValueLeft = 1.0f;
+	player->handComp->targetGripValueLeft = 0.f;
 
 }
 

@@ -167,7 +167,7 @@ void UGrabActorComponent::GrabAction()
 				pickObject->boxComp->SetEnableGravity(false);
 
 				// 오른손 쥐는 애니메이션
-				player->handComp->targetGripValueRight = 1.0f;
+				player->handComp->targetGripValueRight = 0.9f;
 			}
 		}
 		else if (gunName.Contains("ShotgunActor"))
@@ -178,12 +178,13 @@ void UGrabActorComponent::GrabAction()
 
 			if (shotgunobject)
 			{
+				player->rightHand->SetHiddenInGame(true);
 				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
 				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
 
 				// 손에 붙이기
 				shotgunobject->boxComp->SetSimulatePhysics(false);
-				shotgunobject->AttachToComponent(player->rightHand, attachRules, TEXT("GrabPoint"));
+				shotgunobject->AttachToComponent(player->rightGunLoc, attachRules, TEXT("GrabPoint"));
 
 				// 오브젝트를 잡았을때 위치 잡기
 				shotgunobject->boxComp->SetRelativeLocation((shotgunobject->grabOffset));
@@ -191,7 +192,7 @@ void UGrabActorComponent::GrabAction()
 				shotgunobject->boxComp->SetEnableGravity(false);
 
 				// 오른손 쥐는 애니메이션
-				player->handComp->targetGripValueRight = 1.0f;
+				player->handComp->targetGripValueRight = 0.9f;
 			}
 		}
 	}
@@ -232,6 +233,8 @@ void UGrabActorComponent::ReleaseAction()
 	else if (shotgunobject)
 	{
 		bIsShotgun = false;
+
+		player->rightHand->SetHiddenInGame(false);
 		shotgunobject->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -252,28 +255,6 @@ void UGrabActorComponent::ReleaseAction()
 		shotgunobject = nullptr;
 	}
 }
-
-//void UGrabActorComponent::Test1()
-//{
-//	if (pickObject == nullptr)
-//	{
-//		FHitResult hitInfo;
-//		FVector startPos = player->rightHand->GetComponentLocation();
-//
-//		FCollisionObjectQueryParams objParams;
-//		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-//		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
-//
-//		FCollisionQueryParams queryParams;
-//		queryParams.AddIgnoredActor(player);
-//	}
-//}
-
-//void UGrabActorComponent::Test2()
-//{
-//	// 오른손 피는 애니메이션
-//	player->handComp->targetGripValueRight = 0.0f;
-//}
 
 void UGrabActorComponent::Fire()
 {
@@ -317,6 +298,7 @@ void UGrabActorComponent::ShotgunReload()
 
 void UGrabActorComponent::LeftDrawGrabLine()
 {
+
 	FHitResult hitInfo;
 	FVector startPos = player->leftHand->GetComponentLocation();
 	FVector endPos = startPos + player->leftHand->GetForwardVector() * grabDistance;
@@ -343,6 +325,7 @@ void UGrabActorComponent::LeftDrawGrabLine()
 }
 
 
+
 void UGrabActorComponent::LeftGrabAction()
 {
 	LeftDrawGrabLine();
@@ -354,9 +337,10 @@ void UGrabActorComponent::LeftGrabAction()
 		return;
 	}
 
+	FString mag = grabActor->GetName();
 	if (magzineActor == nullptr)
 	{
-		FString mag = grabActor->GetName();
+
 		if (mag.Contains("MagazineActor"))
 		{
 			magzineActor = Cast<AMagazineActor>(grabActor);
@@ -383,15 +367,18 @@ void UGrabActorComponent::LeftGrabAction()
 				magzineActor->boxComp->SetEnableGravity(false);
 
 				// 왼손 쥐는 애니메이션
-				player->handComp->targetGripValueLeft = 1.0f;
+				player->handComp->targetGripValueLeft = 0.7f;
 			}
 		}
 	}
 
-		if(bIsShotgun == true)
+	if (bIsShotgun == true)
+	{
+		PRINTLOG(TEXT("ssssssss"));
+		player->rightHand->SetHiddenInGame(true);
+		shotgunobject = Cast<AShotGunActor>(grabActor);
+		if (shotgunobject)
 		{
-			PRINTLOG(TEXT("ssssssss"));
-			shotgunobject = Cast<AShotGunActor>(grabActor);
 			//shotgun = Cast<AWeaponShotgun>(shotgunobject->shotgun->GetChildActor());
 
 			//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
@@ -399,24 +386,40 @@ void UGrabActorComponent::LeftGrabAction()
 
 			// 손에 붙이기
 			//shotgunobject->boxComp->SetSimulatePhysics(false);
-			shotgunobject->AttachToComponent(player->leftGunLoc, attachRules, TEXT("LeftGrabPoint"));
 
-			shotgunobject->boxComp->SetEnableGravity(false);
+			// 오른손에서 떨군다.
+			shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			// 왼손에 붙인다.
+			shotgunobject->AttachToComponent(player->leftGunLoc, attachRules, TEXT("LeftGrabPoint"));
 
 			// 오브젝트를 잡았을때 위치 잡기
 			shotgunobject->boxComp->SetRelativeLocation(shotgunobject->leftgrabOffset);
 
-			// 오른손 쥐는 애니메이션
-			player->handComp->targetGripValueLeft = 1.0f;
-		
+			// 왼손 쥐는 애니메이션
+			player->handComp->targetGripValueLeft = 0.7f;
+		}
+		else
+		{
+			auto gun = Cast<AWeaponShotgun>(grabActor);
+			if (gun)
+			{
+				
+			}
+
 		}
 	}
+}
 
 
 void UGrabActorComponent::LeftReleaseAction()
 {
 	if (magzineActor)
 	{
+		if (magzineActor == nullptr)
+		{
+			return;
+		}
+
 		magzineActor->SetActorHiddenInGame(true);
 		magzineActor->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
@@ -432,25 +435,29 @@ void UGrabActorComponent::LeftReleaseAction()
 		player->mag->SetRelativeRotation(FRotator(0, 90.f, 0.0f));
 		magzineActor->SetActorRelativeRotation(FRotator(0.f, -90.f, 90.f));
 		// 오른손 피는 애니메이션
-		player->handComp->targetGripValueLeft = 0.5f;
+		player->handComp->targetGripValueLeft = 0.0f;
 
 		magzineActor = nullptr;
 	}
-}
 
-//void UGrabActorComponent::Test3()
-//{
-//	if (magzineActor == nullptr)
-//	{
-//		FHitResult hitInfo;
-//		FVector startPos = player->leftHand->GetComponentLocation();
-//
-//		FCollisionObjectQueryParams objParams;
-//		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-//		objParams.AddObjectTypesToQuery(ECC_PhysicsBody);
-//
-//		FCollisionQueryParams queryParams;
-//		queryParams.AddIgnoredActor(player);
-//	}
-//}
+	if (bIsShotgun == true)
+	{
+		// 그 자리에서 떨어지게
+
+		if (shotgunobject == nullptr)
+		{
+			return;
+		}
+		FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		shotgunobject->AttachToComponent(player->rightGunLoc, attachRules, TEXT("GrabPoint"));
+
+		// 오른손 피는 애니메이션
+		player->handComp->targetGripValueLeft = 0.0f;
+	}
+	/*else if (bIsShotgun == false)
+	{
+		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	}*/
+}
 

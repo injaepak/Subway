@@ -69,12 +69,17 @@ AVR_Player::AVR_Player()
 
 	leftGunLoc = CreateDefaultSubobject<USceneComponent>(TEXT("LeftGunLoc"));
 	leftGunLoc->SetupAttachment(leftHand);
-	leftGunLoc->SetRelativeLocation(FVector(-12.5f, 19.3f, 1.5f));
+	leftGunLoc->SetRelativeLocation(FVector(-12.5f, 21.3f, 1.5f));
 	leftGunLoc->SetRelativeRotation(FRotator(0.f, -42.5f, 180.f));
     
     rightHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Right Hand"));
     rightHand->SetupAttachment(rightController);
     rightHand->SetRelativeRotation(FRotator(0, 0, 90.0f));
+
+	rightGunLoc = CreateDefaultSubobject<USceneComponent>(TEXT("RightGunLoc"));
+	rightGunLoc->SetupAttachment(rightHand);
+	rightGunLoc->SetRelativeLocation(FVector(5.f, 0.f, 0.f));
+	rightGunLoc->SetRelativeRotation(FRotator(0.f, 0.f, -90.f));
 
     moveComp = CreateDefaultSubobject<UMoveActorComponent>(TEXT("MoveComponent"));
     handComp = CreateDefaultSubobject<UHandActorComponent>(TEXT("HandComponent"));
