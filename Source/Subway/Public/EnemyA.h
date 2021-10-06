@@ -40,7 +40,7 @@ public:
 	class USphereComponent* LtCollision;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
-		class USoundBase* zombieSound;
+	class USoundBase* zombieSound;
 
 public:
 	// Health System

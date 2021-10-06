@@ -67,7 +67,7 @@ void ABoss::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), gunSound, GetActorLocation(), FRotator::ZeroRotator, 1.f, 1.f, 0.0f, nullptr, nullptr );
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), zombieSound, GetActorLocation(), FRotator::ZeroRotator, 1.f, 1.f, 0.0f, nullptr, nullptr);
 	
 }
 
