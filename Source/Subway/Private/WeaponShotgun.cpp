@@ -14,8 +14,8 @@
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"
 #include "EnemyB_FSM.h"
-#include "Boss.h"
-#include "Boss_FSM.h"
+#include "Boss.h" // 보스를 참조
+#include "Boss_FSM.h" // 보스FSM의 OnDamageProcess 접근할 수 있도록 참조
 #include "GunTargetActor.h"
 #include "DoorOpenActor.h"
 
@@ -107,6 +107,7 @@ void AWeaponShotgun::Fire()
 					FTransform startTrans;
 					startTrans.SetLocation(Start + Rot * 1.0f);
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletShootEffect, startTrans);
+					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("총구 이펙트 스폰 성공")));
 
 					// 충돌이 발생했다면
 					if (Hit.GetComponent()->GetAttachmentRootActor() != NULL) // 지오메트리(Brush 타입)일 때 크래시 나지 않게 한다
@@ -116,10 +117,10 @@ void AWeaponShotgun::Fire()
 						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, Hit.GetActor()->GetName());
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, Hit.GetComponent()->GetName());
 
-						// 부딪혔을 때 부딪힌 지점에 스폰. 기본값 : bulletAnotherHitEffect. Enemy 타격 시 Enemy 캐스팅 후 이펙트 스폰
-						auto worldHitPoint = Cast<UStaticMesh>(Hit.GetComponent());
+						// 사용안함. 부딪혔을 때 부딪힌 지점에 이펙트 스폰. 기본값 : bulletAnotherHitEffect.
+						/*auto worldHitPoint = Cast<UStaticMesh>(Hit.GetComponent());
 						hitTrans.SetLocation(Hit.ImpactPoint);
-						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletAnotherHitEffect, hitTrans);
+						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletAnotherHitEffect, hitTrans);*/
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, HitResults.GetComponent()->GetName());
 
 						// ----------------------------------------------------------------------
@@ -172,9 +173,11 @@ void AWeaponShotgun::Fire()
 
 					// EnemyA에 데미지 처리 
 					// EnemyB에 데미지 처리
-					// Enemy를 쳤다면 bulletEnemyHitEffect 를 Spawn
+					// Boss 에 데미지 처리
+					// Enemy, Boss 를 쳤다면 bulletEnemyHitEffect 를 Spawn
 					auto enemyA = Cast<AEnemyA>(Hit.GetActor());
 					auto enemyB = Cast<AEnemyB>(Hit.GetActor());
+					auto boss = Cast<ABoss>(Hit.GetActor());
 					if (enemyA)
 					{
 						if (Hit.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
@@ -190,6 +193,8 @@ void AWeaponShotgun::Fire()
 						// 맞은 대상이 EnemyA이므로 EnemyHit 이펙트를 Spawn
 						hitTrans.SetLocation(Hit.ImpactPoint);
 						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
+						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Magenta, FString::Printf(TEXT("에너미A 타격 이펙트 스폰 성공!")));
+
 						//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemy를 타격!!!!")));
 
 					}
@@ -208,10 +213,36 @@ void AWeaponShotgun::Fire()
 						// 맞은 대상이 EnemyB이므로 EnemyHit 이펙트를 Spawn
 						hitTrans.SetLocation(Hit.ImpactPoint);
 						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
+						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Magenta, FString::Printf(TEXT("에너미B 타격 이펙트 스폰 성공!")));
 						//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemy를 타격!!!!")));
 
 
 					}
+					//--------------------------------
+					// Boss 타격 시 데미지프로세스 실행하고, 이펙트 스폰
+					/*else if (boss)	// ▶ 주석 시작
+					{
+						if(Hit.GetComponent()->GetName().Contains(TEXT("Collision"))) // ▶ 콜리젼 구분 있을 시 if, else if 주석 켜시면 됩니다
+						//if (Hit.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
+						{
+							//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
+							boss->BossFSM->OnDamageProcess();
+						}
+						else if (Hit.GetComponent()->GetName().Contains(TEXT("Collision"))) 
+						//else if (Hit.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
+						{
+							//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
+							boss->BossFSM->OnDamageProcess();
+						}
+						// 맞은 대상이 Boss이므로 EnemyHit 이펙트를 Spawn
+						hitTrans.SetLocation(Hit.ImpactPoint);
+						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
+						//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Boss를 타격!!!!")));
+
+
+					}*/		// ▶ 주석 끝
+					//--------------------------------
+
 				}
 			}
 		}

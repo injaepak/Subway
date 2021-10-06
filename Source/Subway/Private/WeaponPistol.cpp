@@ -14,6 +14,8 @@
 #include "EnemyA_FSM.h"
 #include "EnemyB.h"
 #include "EnemyB_FSM.h"
+#include "Boss.h" // 보스를 참조
+#include "Boss_FSM.h" // 보스FSM의 OnDamageProcess 접근할 수 있도록 참조
 #include "GunTargetActor.h"
 #include "DoorOpenActor.h"
 
@@ -146,10 +148,11 @@ void AWeaponPistol::Fire()
 
 				// EnemyA에 데미지 처리
 				// EnemyB에 데미지 처리
-				// Enemy를 쳤다면 bulletEnemyHitEffect 를 Spawn
+				// Boss 에 데미지 처리
+				// Enemy, Boss 를 쳤다면 bulletEnemyHitEffect 를 Spawn
 				auto enemyA = Cast<AEnemyA>(HitResults.GetActor());
 				auto enemyB = Cast<AEnemyB>(HitResults.GetActor());
-
+				auto boss = Cast<ABoss>(HitResults.GetActor());
 				if (enemyA)
 				{
 					if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
@@ -190,6 +193,31 @@ void AWeaponPistol::Fire()
 
 
 				}
+			//--------------------------------
+				// Boss 타격 시 데미지프로세스 실행하고, 이펙트 스폰
+				/*else if (boss)	// ▶ 주석 시작
+					{
+						if(Hit.GetComponent()->GetName().Contains(TEXT("Collision"))) // ▶ 콜리젼 구분 있을 시 if, else if 주석 켜시면 됩니다
+						//if (Hit.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
+						{
+							//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
+							boss->BossFSM->OnDamageProcess();
+						}
+						else if (Hit.GetComponent()->GetName().Contains(TEXT("Collision")))
+						//else if (Hit.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
+						{
+							//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("BODY!!")));
+							boss->BossFSM->OnDamageProcess();
+						}
+						// 맞은 대상이 Boss이므로 EnemyHit 이펙트를 Spawn
+						hitTrans.SetLocation(Hit.ImpactPoint);
+						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
+						//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Boss를 타격!!!!")));
+
+
+				}*/		// ▶ 주석 끝
+				//--------------------------------
+
 			}
 		}
 		else
