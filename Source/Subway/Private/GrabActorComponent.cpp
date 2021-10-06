@@ -35,6 +35,8 @@ void UGrabActorComponent::BeginPlay()
 
 	player->handComp->targetGripValueRight = 0.0f;
 
+	auto gun = Cast<UChildActorComponent>(GetOwner()->GetDefaultSubobjectByName(TEXT("Gun")));
+	pickupActor = Cast<APickUpActor>(gun->GetChildActor());
 	// 임시 총 변수
 	bIsPistol = true;
 	bIsShotgun = false;
@@ -55,6 +57,7 @@ void UGrabActorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	{
 		DrawGrabLine();
 	}
+	//DrawDebugSphere(GetWorld(), player->rightHand->GetComponentLocation(), grabRange, 30, FColor::Green, false, -1, 0, 1);
 }
 
 void UGrabActorComponent::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -86,12 +89,13 @@ void UGrabActorComponent::HideGrabLine()
 
 void UGrabActorComponent::DrawGrabLine()
 {
+	// PickupActor 와의 충돌체크
+	// Shootgunactor 와의 충돌체크
 	// 손에 든게 없다면
-	if (pickObject == nullptr)
+	if (pickObject == nullptr && shotgunobject == nullptr)
 	{
 		FHitResult hitInfo;
-		FVector startPos = player->rightHand->GetComponentLocation() + FVector(0.f, 10.f, 0.f);
-		FVector endPos = startPos + player->rightHand->GetForwardVector() * grabDistance;
+		FVector startPos = player->rightHand->GetComponentLocation();// + FVector(0.f, 10.f, 0.f);
 
 		FCollisionObjectQueryParams objParams;
 		objParams.AddObjectTypesToQuery(ECC_WorldDynamic);
@@ -99,107 +103,34 @@ void UGrabActorComponent::DrawGrabLine()
 
 		FCollisionQueryParams queryParams;
 		queryParams.AddIgnoredActor(player);
-		/*
-				if (GetWorld()->LineTraceSingleByObjectType(hitInfo, startPos, endPos, objParams, queryParams))
-				{
-					DrawDebugLine(GetWorld(), startPos, hitInfo.ImpactPoint, FColor::Green, false, -1, 0, 2);
-					grabObject = hitInfo;
-				}
-				else
-				{
-					DrawDebugLine(GetWorld(), startPos, endPos, FColor::Green, false, -1, 0, 2);;
-					grabObject = FHitResult();
-				}
-		*/
-		if (GetWorld()->SweepSingleByObjectType(hitInfo, startPos, startPos, FQuat::Identity, objParams, FCollisionShape::MakeSphere(15.f), queryParams))
+		if (GetWorld()->SweepSingleByObjectType(hitInfo, startPos, startPos, FQuat::Identity, objParams, FCollisionShape::MakeSphere(grabRange), queryParams))
 		{
 			grabObject = hitInfo;
-
+			auto pick = Cast<APickUpActor>(hitInfo.Actor);
+			if (pick)
+			{
+				auto c = Cast<UChildActorComponent>(pickupActor->GetDefaultSubobjectByName(TEXT("Gun")));
+				if (c)
+				{
+					pickObject = Cast<AWeaponBase>(c->GetChildActor());
+				}
+			}
+			shotgunobject = Cast<AShotGunActor>(hitInfo.Actor);
+			
 			// 오른손 쥐는 애니메이션
 			//player->handComp->targetGripValueRight = 1.0f;
 		}
-		else
-		{
-			grabObject = FHitResult();
-		}
-		//DrawDebugSphere(GetWorld(), startPos, 15.f, 30, FColor::Green, false, -1, 0, 1);
 	}
+	
 }
 
 void UGrabActorComponent::GrabAction()
 {
 	DrawGrabLine();
 
-	AActor* grabActor = grabObject.GetActor();
-
-	if (grabActor == nullptr)
-	{
-		return;
-	}
-
-	if (pickObject == nullptr)
-	{
-		bIsPistol = true;
-		FString gunName = grabActor->GetName();
-		if (gunName.Contains("PickUpActor"))
-		{
-			pickObject = Cast<APickUpActor>(grabActor);
-			pistol = Cast<AWeaponPistol>(pickObject->gun->GetChildActor());
-
-			/*if (pistol)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Blue, pistol->GetName());
-			}*/
-
-			if (pickObject)
-			{
-
-				pickObject->SetActorHiddenInGame(false);
-				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
-				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
-
-				// 손에 붙이기
-				pickObject->boxComp->SetSimulatePhysics(false);
-				pickObject->AttachToComponent(player->rightHand, attachRules, TEXT("GrabPoint"));
-				// 오브젝트를 잡았을때 위치 잡기
-				pickObject->boxComp->SetRelativeLocation((pickObject->grabOffset));
-
-				pickObject->boxComp->SetEnableGravity(false);
-
-				// 오른손 쥐는 애니메이션
-				player->handComp->targetGripValueRight = 0.9f;
-			}
-		}
-		else if (gunName.Contains("ShotgunActor"))
-		{
-			bIsShotgun = true;
-			shotgunobject = Cast<AShotGunActor>(grabActor);
-			shotgun = Cast<AWeaponShotgun>(shotgunobject->shotgun->GetChildActor());
-
-			if (shotgunobject)
-			{
-				player->rightHand->SetHiddenInGame(true);
-				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
-				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
-
-				// 손에 붙이기
-				shotgunobject->boxComp->SetSimulatePhysics(false);
-				shotgunobject->AttachToComponent(player->rightGunLoc, attachRules, TEXT("GrabPoint"));
-
-				// 오브젝트를 잡았을때 위치 잡기
-				shotgunobject->boxComp->SetRelativeLocation((shotgunobject->grabOffset));
-
-				shotgunobject->boxComp->SetEnableGravity(false);
-
-				// 오른손 쥐는 애니메이션
-				player->handComp->targetGripValueRight = 0.9f;
-			}
-		}
-	}
-	else
-	{
-		return;
-	}
+	GrabPickObject();
+	GrabShotgunObject();
+	
 
 }
 
@@ -211,7 +142,8 @@ void UGrabActorComponent::ReleaseAction()
 
 		bIsPistol = false;
 
-		pickObject->boxComp->SetEnableGravity(false);
+		auto boxComp = Cast<UBoxComponent>(pickupActor->GetRootComponent());
+		boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
 		pickObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
@@ -219,7 +151,7 @@ void UGrabActorComponent::ReleaseAction()
 
 		pickObject->AttachToComponent(player->gunComp, attachRules);
 
-		pickObject->boxComp->SetSimulatePhysics(false);
+		boxComp->SetSimulatePhysics(false);
 
 		pickObject->SetActorLocation(player->gunComp->GetComponentLocation());
 		player->gun->SetRelativeRotation(FRotator(0, 90.f, 90.0f));
@@ -258,10 +190,10 @@ void UGrabActorComponent::ReleaseAction()
 
 void UGrabActorComponent::Fire()
 {
-	if (pickObject && pistol)
+	if (pickObject)
 	{
 		PRINTLOG(TEXT("ddddddddddd"));
-
+		
 		pistol->Fire();
 
 		// 진동효과
@@ -296,6 +228,59 @@ void UGrabActorComponent::ShotgunReload()
 	shotgun->Reload();
 }
 
+void UGrabActorComponent::GrabShotgunObject()
+{
+	if (shotgunobject)
+	{
+		bIsShotgun = true;
+		
+		shotgun = Cast<AWeaponShotgun>(shotgunobject->shotgun->GetChildActor());
+
+		if (shotgunobject)
+		{
+			player->rightHand->SetHiddenInGame(true);
+			//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+			FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+			// 손에 붙이기
+			shotgunobject->boxComp->SetSimulatePhysics(false);
+			shotgunobject->AttachToComponent(player->rightGunLoc, attachRules, TEXT("GrabPoint"));
+
+			// 오브젝트를 잡았을때 위치 잡기
+			shotgunobject->boxComp->SetRelativeLocation((shotgunobject->grabOffset));
+
+			shotgunobject->boxComp->SetEnableGravity(false);
+
+			// 오른손 쥐는 애니메이션
+			player->handComp->targetGripValueRight = 0.9f;
+		}
+	}
+}
+void UGrabActorComponent::GrabPickObject()
+{
+	if (pickObject)
+	{
+	pistol = Cast<AWeaponPistol>(pickupActor->gun->GetChildActor());
+		auto boxComp = Cast<UBoxComponent>(pickupActor->GetRootComponent());
+		bIsPistol = true;
+
+		pickObject->SetActorHiddenInGame(false);
+		//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+		FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+		// 손에 붙이기
+		boxComp->SetSimulatePhysics(false);
+		pickObject->AttachToComponent(player->rightHand, attachRules, TEXT("GrabPoint"));
+		// 오브젝트를 잡았을때 위치 잡기
+		boxComp->SetRelativeLocation(pickupActor->grabOffset);
+
+		boxComp->SetEnableGravity(false);
+
+		// 오른손 쥐는 애니메이션
+		player->handComp->targetGripValueRight = 0.9f;
+	}
+}
+
 void UGrabActorComponent::LeftDrawGrabLine()
 {
 
@@ -310,7 +295,7 @@ void UGrabActorComponent::LeftDrawGrabLine()
 	FCollisionQueryParams queryParams;
 	queryParams.AddIgnoredActor(player);
 
-	if (GetWorld()->SweepSingleByObjectType(hitInfo, startPos, startPos, FQuat::Identity, objParams, FCollisionShape::MakeSphere(15.f), queryParams))
+	if (GetWorld()->SweepSingleByObjectType(hitInfo, startPos, startPos, FQuat::Identity, objParams, FCollisionShape::MakeSphere(grabRange), queryParams))
 	{
 		grabObject = hitInfo;
 
@@ -321,7 +306,7 @@ void UGrabActorComponent::LeftDrawGrabLine()
 	{
 		grabObject = FHitResult();
 	}
-	DrawDebugSphere(GetWorld(), startPos, 15.f, 30, FColor::Green, false, -1, 0, 1);
+	//DrawDebugSphere(GetWorld(), startPos, 15.f, 30, FColor::Green, false, -1, 0, 1);
 }
 
 

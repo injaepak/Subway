@@ -43,6 +43,7 @@ void AMagazineActor::BeginPlay()
 	
 	boxComp->OnComponentBeginOverlap.AddDynamic(this, &AMagazineActor::OnComponentBeginOverlap);
 	player = Cast<AVR_Player>(UGameplayStatics::GetActorOfClass(GetWorld(), AVR_Player::StaticClass()));
+	pickupActor = Cast<APickUpActor>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpActor::StaticClass()));
 	pistol =Cast<AWeaponPistol>(UGameplayStatics::GetActorOfClass(GetWorld(), AWeaponPistol::StaticClass()));
 	shotgun = Cast<AWeaponShotgun>(UGameplayStatics::GetActorOfClass(GetWorld(), AWeaponShotgun::StaticClass()));
 
@@ -57,18 +58,20 @@ void AMagazineActor::Tick(float DeltaTime)
 
 void AMagazineActor::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	pickupActor = Cast<APickUpActor>(OtherActor);
+	
+	pistol = Cast<AWeaponPistol>(OtherActor);
 	shotgunActor = Cast<AShotGunActor>(OtherActor);
 	
-	if (pickupActor)
+	if (pickupActor || pistol)
 	{
 		//PRINTLOG(TEXT("RRRRRRRRRRR"))
+		
 		pistol->Reload();
 		player->grabComp->LeftReleaseAction();
 		UGameplayStatics::PlaySound2D(GetWorld(), gunMagSound);
 	}
 
-	else if (shotgunActor)
+	if (shotgunActor)
 	{
 		shotgun->Reload();
 		player->grabComp->LeftReleaseAction();

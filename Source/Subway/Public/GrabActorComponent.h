@@ -42,7 +42,7 @@ private:
 
 
 	bool bIsShowing = false;
-	class APickUpActor* pickObject;
+	class AWeaponBase* pickObject;
 	class AShotGunActor* shotgunobject;
 	class AMagazineActor* magzineActor;
 	class AVR_Player* player;
@@ -50,7 +50,17 @@ private:
 
 	FHitResult grabObject;
 
+	void GrabPickObject();
+	void GrabShotgunObject();
 public:
+	UPROPERTY(EditAnywhere, Category=AAA)
+	FVector grabOffset;
+	UPROPERTY(EditAnywhere, Category = AAA)
+	class APickUpActor* pickupActor;
+
+	UPROPERTY(EditAnywhere, Category = AAA)
+	float grabRange = 15;
+
 	void LeftDrawGrabLine();
 	void LeftGrabAction();
 	void LeftReleaseAction();
