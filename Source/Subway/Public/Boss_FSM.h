@@ -86,7 +86,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
 	float walkSpeed = 150;
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)
-	float RunSpeed = 250;
+	float RunSpeed = 300;
 
 	// ÇÇ°Ý ¹ÞÀ» ¶§ ³Ë¹é Èû
 	UPROPERTY(EditAnywhere, Category = FSM)
