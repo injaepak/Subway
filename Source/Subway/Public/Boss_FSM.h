@@ -63,6 +63,8 @@ public:
 	bool isHeadPart = false;
 	bool isArmPart = false;
 	bool whichPart = false; // false = head, body & true = shoulders
+	UPROPERTY (BlueprintReadWrite, Category = GameEnd)
+	bool gameEnd = false;
 
 	//½Ã°£
 	UPROPERTY(EditAnywhere, Category = FSM)

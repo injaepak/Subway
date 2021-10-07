@@ -133,7 +133,7 @@ void UBoss_FSM::TauntState()
 	me->SetActorRotation(myRot);
 
 	//if (currentTime > 5.7f)
-	if (currentTime > 0.7f)
+	if (currentTime > 5.7f)
 	{
 		anim->isTaunt = false;
 		anim->isMoving = true;
@@ -355,6 +355,7 @@ void UBoss_FSM::DieState()
 	if (bCanDie == true)
 	{
 		GetWorld()->GetTimerManager().SetTimer(DieTimerHandle, this, &UBoss_FSM::Die, 4.5f, false);
+
 		bCanDie = false;
 	}
 }
@@ -404,6 +405,7 @@ void UBoss_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr, 
 
 void UBoss_FSM::Die()
 {
+	gameEnd = true;
 	me->Destroy();
 }
 
