@@ -86,4 +86,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 		class USoundBase* shotgunSound;
+private:
+	void GrabMagzine(AActor* grabActor);
+	void GrabLeftShotgunObject(AActor* grabActor);
 };

@@ -260,7 +260,7 @@ void UGrabActorComponent::GrabPickObject()
 {
 	if (pickObject)
 	{
-	pistol = Cast<AWeaponPistol>(pickupActor->gun->GetChildActor());
+		pistol = Cast<AWeaponPistol>(pickupActor->gun->GetChildActor());
 		auto boxComp = Cast<UBoxComponent>(pickupActor->GetRootComponent());
 		bIsPistol = true;
 
@@ -315,86 +315,17 @@ void UGrabActorComponent::LeftGrabAction()
 {
 	LeftDrawGrabLine();
 
+	
 	AActor* grabActor = grabObject.GetActor();
 
 	if (grabActor == nullptr)
 	{
 		return;
 	}
-
-	FString mag = grabActor->GetName();
-	if (magzineActor == nullptr)
-	{
-
-		if (mag.Contains("MagazineActor"))
-		{
-			magzineActor = Cast<AMagazineActor>(grabActor);
-
-
-			/*if (pistol)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Blue, pistol->GetName());
-			}*/
-
-			if (magzineActor)
-			{
-				shotgunobject->magComp->SetHiddenInGame(false);
-				shotgunobject->gripComp->SetHiddenInGame(true);
-				magzineActor->SetActorHiddenInGame(false);
-				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
-				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
-
-				// 손에 붙이기
-				magzineActor->boxComp->SetSimulatePhysics(false);
-				magzineActor->AttachToComponent(player->leftHand, attachRules, TEXT("GrabPoint"));
-				// 오브젝트를 잡았을때 위치 잡기
-				magzineActor->boxComp->SetRelativeLocation((magzineActor->grabOffset));
-
-				magzineActor->boxComp->SetEnableGravity(false);
-
-				// 왼손 쥐는 애니메이션
-				player->handComp->targetGripValueLeft = 0.7f;
-			}
-		}
-	}
-
-	if (bIsShotgun == true)
-	{
-		PRINTLOG(TEXT("ssssssss"));
-		shotgunobject->gripComp->SetHiddenInGame(true);
-		player->rightHand->SetHiddenInGame(true);
-		shotgunobject = Cast<AShotGunActor>(grabActor);
-		if (shotgunobject)
-		{
-			//shotgun = Cast<AWeaponShotgun>(shotgunobject->shotgun->GetChildActor());
-
-			//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
-			FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
-
-			// 손에 붙이기
-			//shotgunobject->boxComp->SetSimulatePhysics(false);
-
-			// 오른손에서 떨군다.
-			shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-			// 왼손에 붙인다.
-			shotgunobject->AttachToComponent(player->leftGunLoc, attachRules, TEXT("LeftGrabPoint"));
-
-			// 오브젝트를 잡았을때 위치 잡기
-			shotgunobject->boxComp->SetRelativeLocation(shotgunobject->leftgrabOffset);
-
-			// 왼손 쥐는 애니메이션
-			player->handComp->targetGripValueLeft = 0.7f;
-		}
-		else
-		{
-			auto gun = Cast<AWeaponShotgun>(grabActor);
-			if (gun)
-			{
-				
-			}
-
-		}
-	}
+	GrabMagzine(grabActor);
+	//GrabLeftShotgunObject(grabActor);
+	
+	
 }
 
 
@@ -406,9 +337,11 @@ void UGrabActorComponent::LeftReleaseAction()
 		{
 			return;
 		}
-		shotgunobject->magComp->SetHiddenInGame(true);
-		shotgunobject->gripComp->SetHiddenInGame(false);
-
+		if(shotgunobject)
+		{
+			shotgunobject->magComp->SetHiddenInGame(true);
+			shotgunobject->gripComp->SetHiddenInGame(false);
+		}
 		magzineActor->SetActorHiddenInGame(true);
 		magzineActor->boxComp->SetEnableGravity(false);
 		// 그 자리에서 떨어지게
@@ -449,5 +382,86 @@ void UGrabActorComponent::LeftReleaseAction()
 	{
 		shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	}*/
+}
+
+void UGrabActorComponent::GrabMagzine(AActor* grabActor)
+{
+	FString mag = grabActor->GetName();
+	if (magzineActor == nullptr)
+	{
+		if (mag.Contains("MagazineActor"))
+		{
+			magzineActor = Cast<AMagazineActor>(grabActor);
+
+			/*if (pistol)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Blue, pistol->GetName());
+			}*/
+
+			if (magzineActor)
+			{
+				if(shotgunobject)
+				{
+					shotgunobject->magComp->SetHiddenInGame(false);
+					shotgunobject->gripComp->SetHiddenInGame(true);
+				}
+				magzineActor->SetActorHiddenInGame(false);
+				//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+				FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+				// 손에 붙이기
+				magzineActor->boxComp->SetSimulatePhysics(false);
+				magzineActor->AttachToComponent(player->leftHand, attachRules, TEXT("GrabPoint"));
+				// 오브젝트를 잡았을때 위치 잡기
+				magzineActor->boxComp->SetRelativeLocation((magzineActor->grabOffset));
+
+				magzineActor->boxComp->SetEnableGravity(false);
+
+				// 왼손 쥐는 애니메이션
+				player->handComp->targetGripValueLeft = 0.7f;
+			}
+		}
+	}
+}
+
+void UGrabActorComponent::GrabLeftShotgunObject(AActor* grabActor)
+{
+	if (bIsShotgun == true)
+	{
+		PRINTLOG(TEXT("ssssssss"));
+		shotgunobject->gripComp->SetHiddenInGame(true);
+		player->rightHand->SetHiddenInGame(true);
+		shotgunobject = Cast<AShotGunActor>(grabActor);
+		if (shotgunobject)
+		{
+			//shotgun = Cast<AWeaponShotgun>(shotgunobject->shotgun->GetChildActor());
+
+			//FAttachmentTransformRules attachRules = FAttachmentTransformRules::KeepWorldTransform;
+			FAttachmentTransformRules attachRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+
+			// 손에 붙이기
+			//shotgunobject->boxComp->SetSimulatePhysics(false);
+
+			// 오른손에서 떨군다.
+			shotgunobject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			// 왼손에 붙인다.
+			shotgunobject->AttachToComponent(player->leftGunLoc, attachRules, TEXT("LeftGrabPoint"));
+
+			// 오브젝트를 잡았을때 위치 잡기
+			shotgunobject->boxComp->SetRelativeLocation(shotgunobject->leftgrabOffset);
+
+			// 왼손 쥐는 애니메이션
+			player->handComp->targetGripValueLeft = 0.7f;
+		}
+		else
+		{
+			auto gun = Cast<AWeaponShotgun>(grabActor);
+			if (gun)
+			{
+
+			}
+
+		}
+	}
 }
 
