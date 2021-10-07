@@ -29,9 +29,9 @@ AWeaponShotgun::AWeaponShotgun()
 	WeaponMaxAmmo = 98;
 	MagazineMaxAmmo = 7;
 
-	CurrentTotalAmmo = WeaponMaxAmmo;
+	CurrentTotalAmmo = WeaponMaxAmmo;	
+	CurrentMagazineAmmo = MagazineMaxAmmo;
 	
-	CurrentMagazineAmmo = MagazineMaxAmmo; 
 	pistolParentActor = Cast<APickUpActor>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpActor::StaticClass()));
 	shotGunParentActor = Cast<AShotGunActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AShotGunActor::StaticClass()));
 	vrPlayer = Cast<AVR_Player>(UGameplayStatics::GetActorOfClass(GetWorld(), AVR_Player::StaticClass()));
@@ -56,6 +56,9 @@ void AWeaponShotgun::Fire()
 	{*/
 		if (CurrentMagazineAmmo > 0)
 		{
+			auto animInstance = Cast<UShotGunAnimInstance>(WeaponMesh->GetAnimInstance());
+			animInstance->Montage_Play(anim);			
+			
 			UE_LOG(LogTemp, Warning, TEXT("SHOOTING SHOTGUN"));
 			FVector Start = WeaponMesh->GetBoneLocation(FName("b_shotgun_muzzleflash"));
 			FVector Rot = WeaponMesh->GetForwardVector();

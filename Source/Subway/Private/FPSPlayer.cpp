@@ -76,8 +76,8 @@ void AFPSPlayer::OnFire()
 	if (CurrentWeapon)
 	{
 		CurrentWeapon->Fire();
-		TArray<int32> CurrentAmmo = CurrentWeapon->GetCurrentAmmo();
-		OnAmmoChanged.Broadcast(CurrentAmmo[0], CurrentAmmo[1]);
+		//TArray<int32> CurrentAmmo = CurrentWeapon->GetCurrentAmmo();
+		//OnAmmoChanged.Broadcast(CurrentAmmo[0], CurrentAmmo[1]);
 	}
 }
 

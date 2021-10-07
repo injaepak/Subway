@@ -15,8 +15,14 @@ public:
 	// Sets default values for this actor's properties
 	AWeaponPistol();
 
+	UFUNCTION(BlueprintCallable)
 	virtual void Fire() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void Reload() override;
+
+	//UPROPERTY(EditAnywhere, Category=Setting) // 애님 몽타주 가져올 애님몽타주 타입의 anim 변수 선언
+	//class UAnimMontage* anim;
 
 	class APickUpActor* pistolParentActor;
 	class AShotGunActor* shotGunParentActor;
