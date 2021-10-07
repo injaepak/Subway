@@ -218,7 +218,7 @@ void UEnemyA_FSM::RunState()
 	//me->SetActorRotation(myRot);
 
 	//Debug Sphere 시각화
-	DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
+	//DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 8, FColor::Red);
 	// 공격 범위에 가까워지면
 
 	if (distance < attackRange)
@@ -378,7 +378,7 @@ void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr
 		if (bCanHit == false)
 		{
 			bCanHit = true;
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("bCanHit In!!")));
+			G//Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("bCanHit In!!")));
 			return;
 		}
 		this->isHeadPart = isHead;
@@ -392,7 +392,7 @@ void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr
 			if (isHead == true)
 			{
 				PRINTLOG(TEXT("ATTK HEAD"));
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("ATTK MODE : HEADSHOT!!")));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("ATTK MODE : HEADSHOT!!")));
 				m_state_A = EEnemyAState::HeadBody;
 				anim->isAttacking = false;
 				
@@ -400,7 +400,7 @@ void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr
 			else if (isHead == false)
 			{
 				PRINTLOG(TEXT("ATTK BODY"));
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ATTK MODE : BODYSHOT!!")));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("ATTK MODE : BODYSHOT!!")));
 				m_state_A = EEnemyAState::HeadBody;
 				anim->isAttacking = false;
 				
@@ -416,13 +416,13 @@ void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr
 			// Head 또는 Body 에 따른 상태변화
 			if (isHead == true)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("DMG MODE : HEADSHOT!!")));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("DMG MODE : HEADSHOT!!")));
 				anim->isHead = true;
 				anim->isBody = false;
 			}
 			else if (isHead == false)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DMG MODE : BODYSHOT!!")));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DMG MODE : BODYSHOT!!")));
 				anim->isHead = false;
 				anim->isBody = true;
 			}
@@ -439,7 +439,7 @@ void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr
 			return;
 		}
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("KnockBack!!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("KnockBack!!")));
 
 		// Z 방향은 0으로 고정
 		KBDirection.Z = 0;
@@ -455,7 +455,7 @@ void UEnemyA_FSM::Die()
 
 void UEnemyA_FSM::OnDamageEndEvent()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("INPUT TEST!!")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("INPUT TEST!!")));
 	//bhit = false;
 	//anim->isAttacking = false;
 	//anim->isMoving = true;

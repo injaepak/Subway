@@ -262,7 +262,7 @@ void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr
 {
 	if (Health > 0)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("KnockBack!!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("KnockBack!!")));
 
 		//isHeadPart와 isHead 변수 연결
 		this->isHeadPart = isHead;
@@ -310,13 +310,13 @@ void UEnemyB_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr
 			// Head 또는 Body 에 따른 상태변화
 			if (isHead == true)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("DMG MODE : HEADSHOT!!")));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("DMG MODE : HEADSHOT!!")));
 				anim->isHead = true;
 				anim->isBody = false;
 			}
 			else if (isHead == false)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DMG MODE : BODYSHOT!!")));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("DMG MODE : BODYSHOT!!")));
 				anim->isHead = false;
 				anim->isBody = true;
 			}
@@ -340,7 +340,7 @@ void UEnemyB_FSM::Die()
 
 void UEnemyB_FSM::OnDamageEndEvent()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("INPUT TEST!!")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("INPUT TEST!!")));
 	bhit = false;
 	//anim->isAttacking = true;
 	//anim->isMoving = true;

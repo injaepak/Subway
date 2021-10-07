@@ -192,7 +192,7 @@ void UBoss_FSM::MoveState()
 		}
 	}*/
 
-	DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 16, FColor::Red);
+	//DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 16, FColor::Red);
 
 	// state 경과
 	// 공격 범위에 가까워지면
@@ -347,7 +347,7 @@ void UBoss_FSM::HeadBodyArmState()
 */
 void UBoss_FSM::DieState()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Dead!!")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Dead!!")));
 	anim->isMoving = false;
 	anim->isAttacking = false;
 	anim->isDie = true;
