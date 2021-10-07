@@ -4,6 +4,7 @@
 #include "SpawnMananger1.h"
 #include "EnemyA.h"
 #include "EnemyB.h"
+#include "Boss.h"
 #include "SpawnPoint.h"
 
 #include <Kismet/GameplayStatics.h>
@@ -36,6 +37,7 @@ void ASpawnMananger1::Tick(float DeltaTime)
 		if (currentTime >= 10.f)
 		{
 			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn5->GetComponentTransform());
+
 			check = 2;
 		}
 	}
@@ -98,7 +100,7 @@ void ASpawnMananger1::Tick(float DeltaTime)
 	{
 		if (currentTime >= 107.f)
 		{
-			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn10->GetComponentTransform());
+			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn9->GetComponentTransform());
 			check = 9;
 		}
 	}
@@ -171,7 +173,7 @@ void ASpawnMananger1::Tick(float DeltaTime)
 
 	if (check == 16)
 	{
-		if(currentTime >= 174.f)
+		if (currentTime >= 174.f)
 		{
 			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn1->GetComponentTransform());
 			check = 17;
@@ -180,139 +182,28 @@ void ASpawnMananger1::Tick(float DeltaTime)
 
 	if (check == 17)
 	{
-		if (currentTime >= 175.f)
+		if (currentTime >= 185.f)
 		{
-			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn4->GetComponentTransform());
+			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn1->GetComponentTransform());
 			check = 18;
 		}
 	}
 
 	if (check == 18)
 	{
-		if (currentTime >= 185.f)
+		if (currentTime >= 187.f)
 		{
-			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn1->GetComponentTransform());
+			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn3->GetComponentTransform());
 			check = 19;
 		}
 	}
 
 	if (check == 19)
 	{
-		if (currentTime >= 187.f)
+		if (currentTime >= 200.f)
 		{
-			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn3->GetComponentTransform());
+			GetWorld()->SpawnActor<ABoss>(bossEnemyFactory, spawnPoint->spawn12->GetComponentTransform());
 			check = 20;
-		}
-	}
-
-	/*if (check == 20)
-	{
-		if (currentTime >= 204.f)
-		{
-			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn6->GetComponentTransform());
-			check = 21;
-		}
-	}*/
-
-	// Fast Enemy
-	if (check == 21)
-	{
-		if (currentTime >= 215.f)
-		{
-			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn6->GetComponentTransform());
-			check = 22;
-		}
-	}
-
-	// Fast Enemy
-	if (check == 22)
-	{
-		if (currentTime >= 226.f)
-		{
-			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn9->GetComponentTransform());
-			check = 23;
-		}
-	}
-
-	if (check == 23)
-	{
-		if (currentTime >= 231.f)
-		{
-			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn9->GetComponentTransform());
-			check = 24;
-		}
-	}
-
-	if (check == 24)
-	{
-		if (currentTime >= 241.f)
-		{
-			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn7->GetComponentTransform());
-			check = 25;
-		}
-	}
-
-	if (check == 25)
-	{
-		if (currentTime >= 248.f)
-		{
-			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn8->GetComponentTransform());
-			check = 26;
-		}
-	}
-
-	if (check == 26)
-	{
-		if (currentTime >= 251.f)
-		{
-			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn9->GetComponentTransform());
-			check = 27;
-		}
-	}
-
-	if (check == 27)
-	{
-		if (currentTime >= 275.f)
-		{
-			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn1->GetComponentTransform());
-			check = 28;
-		}
-	}
-
-	if (check == 28)
-	{
-		if (currentTime >= 285.f)
-		{
-			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn5->GetComponentTransform());
-			check = 29;
-		}
-	}
-
-	if (check == 29)
-	{
-		if (currentTime >= 295.f)
-		{
-			GetWorld()->SpawnActor<AEnemyB>(bEnemyFactory, spawnPoint->spawn6->GetComponentTransform());
-			check = 30;
-		}
-	}
-
-	//// Fast Enemy
-	//if (check == 30)
-	//{
-	//	if (currentTime >= 303.f)
-	//	{
-	//		GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn6->GetComponentTransform());
-	//		check = 31;
-	//	}
-	//}
-
-	if (check == 31)
-	{
-		if (currentTime >= 304.f)
-		{
-			GetWorld()->SpawnActor<AEnemyA>(aEnemyFactory, spawnPoint->spawn8->GetComponentTransform());
-			check = 32;
 		}
 	}
 }

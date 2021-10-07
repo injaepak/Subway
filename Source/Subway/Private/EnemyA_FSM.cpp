@@ -241,6 +241,13 @@ void UEnemyA_FSM::RunState()
 void UEnemyA_FSM::AttackState()
 {
 	PRINTLOG(TEXT("ATTACK"));
+	if (ai)
+	{
+		ai->StopMovement();
+		anim->isRunning = false;
+		//anim->isAttacking = true;
+	}
+
 	//EnemyA 어택 상태가 true 때만 Player 피격 판정 유효
 	me->bCanAttack = true;
 

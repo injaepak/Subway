@@ -21,6 +21,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Reload() override;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool isFire = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	FHitResult HitResults;
+
+
 	//UPROPERTY(EditAnywhere, Category=Setting) // 애님 몽타주 가져올 애님몽타주 타입의 anim 변수 선언
 	//class UAnimMontage* anim;
 

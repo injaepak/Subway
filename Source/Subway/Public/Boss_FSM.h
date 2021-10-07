@@ -63,8 +63,7 @@ public:
 	bool isHeadPart = false;
 	bool isArmPart = false;
 	bool whichPart = false; // false = head, body & true = shoulders
-	UPROPERTY (BlueprintReadWrite, Category = GameEnd)
-	bool gameEnd = false;
+
 
 	//시간
 	UPROPERTY(EditAnywhere, Category = FSM)
@@ -80,7 +79,7 @@ public:
 
 	//범위
 	UPROPERTY(EditAnywhere, Category = FSM)
-	float attackRange = 180;
+	float attackRange = 350;
 
 	//Boss Movement
 	UPROPERTY(EditAnywhere, Category = EnemyAStats)

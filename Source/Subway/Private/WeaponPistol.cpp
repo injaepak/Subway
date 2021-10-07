@@ -53,13 +53,15 @@ void AWeaponPistol::Fire()
 	animInstance->Montage_Play(anim);*/
 		if (CurrentMagazineAmmo > 0)
 		{
+			isFire = true;
+			
 			UE_LOG(LogTemp, Warning, TEXT("SHOOTING PISTOL"));
 			FVector Start = WeaponMesh->GetBoneLocation(FName("b_gun_muzzleflash"));
 			FVector Rot = WeaponMesh->GetForwardVector();
 			FVector End = Start + Rot * 5000.f;
 
 			//TArray<FHitResult> HitResults;
-			FHitResult HitResults;
+			HitResults;
 			FCollisionQueryParams CollisionParams;
 			FCollisionResponseParams CollisionResponse;
 
@@ -163,7 +165,7 @@ void AWeaponPistol::Fire()
 					if (HitResults.GetComponent()->GetName().Contains(TEXT("HeadCollision")))
 					{
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("HEAD!!")));
-						enemyA->enemyAFSM->OnDamageProcess(3.f, Rot, 50, true);
+						enemyA->enemyAFSM->OnDamageProcess(3.f, Rot, 1, true);
 					}
 					else if (HitResults.GetComponent()->GetName().Contains(TEXT("BoxCollision")))
 					{

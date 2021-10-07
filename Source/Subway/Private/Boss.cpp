@@ -73,7 +73,10 @@ void ABoss::BeginPlay()
 void ABoss::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (BossFSM->Health <= 0)
+	{
+		gameEnd = true;
+	}
 }
 
 // Called to bind functionality to input

@@ -405,7 +405,7 @@ void UBoss_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr, 
 
 void UBoss_FSM::Die()
 {
-	gameEnd = true;
+	//gameEnd = true;
 	me->Destroy();
 }
 

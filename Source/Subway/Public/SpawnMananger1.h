@@ -29,6 +29,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "EnemyFactory")
 		TSubclassOf<class AEnemyB> bEnemyFactory;
 
+	UPROPERTY(EditDefaultsOnly, Category = "EnemyFactory")
+		TSubclassOf<class ABoss> bossEnemyFactory;
+
+	UPROPERTY(EditDefaultsOnly, Category = "EnemyFactory")
+		class UParticleSystem* particle;
+
 	UPROPERTY(EditAnywhere, Category = "SpawnPoint")
 		class ASpawnPoint* spawnPoint;
 

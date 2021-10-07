@@ -15,6 +15,7 @@
 #include "PickUpActor.h"
 #include "EnemyA.h"
 #include "EnemyB.h"
+#include "Boss.h"
 #include <Kismet/GameplayStatics.h>
 
 
@@ -120,13 +121,14 @@ void AVR_Player::BeginPlay()
 void AVR_Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	playerHP = 10;
 	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(WeaponsRotate, WeaponsLocation);
     weaponsRotateYaw = WeaponsRotate.Yaw;
     weaponsMain->SetRelativeRotation(FRotator(0.f, weaponsRotateYaw, 0.f));
 
 	enemyA = Cast<AEnemyA>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyA::StaticClass()));
 	enemyB = Cast<AEnemyB>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyB::StaticClass()));
+	boss = Cast<ABoss>(UGameplayStatics::GetActorOfClass(GetWorld(), ABoss::StaticClass()));
 
    
    // EnemyA 플레이어 데미지 처리
@@ -157,7 +159,7 @@ void AVR_Player::Tick(float DeltaTime)
                     }
             }
         }
-		else if (enemyA->bCanAttack == false && (!enemyB || enemyB->bCanAttack == false))
+		else if ((!enemyA || enemyA->bCanAttack == false) && (!enemyB || enemyB->bCanAttack == false) && (!boss || boss->bCanAttack == false))
 		{
 			healCurrentTime += GetWorld()->DeltaTimeSeconds;
 			if (healCurrentTime >= 5.f && playerHP <= 9)
@@ -198,7 +200,7 @@ void AVR_Player::Tick(float DeltaTime)
 				}
 			}
 		}
-		else if (enemyB->bCanAttack == false && (!enemyA || enemyA->bCanAttack == false))
+		else if ((!enemyA || enemyA->bCanAttack == false) && (!enemyB || enemyB->bCanAttack == false) && (!boss || boss->bCanAttack == false))
 		{
 			healCurrentTime += GetWorld()->DeltaTimeSeconds;
 			if (healCurrentTime >= 5.f && playerHP <= 9)
@@ -222,6 +224,46 @@ void AVR_Player::Tick(float DeltaTime)
         }
         
     }
+
+	if (boss)
+	{
+		if (boss->bCanAttack == true)
+		{
+			enemyAFirstCurrentTime += GetWorld()->DeltaTimeSeconds;
+
+			if (bEnemyAtime == false)
+			{
+				if (enemyAFirstCurrentTime >= 1.5f)
+				{
+					OnDamageProcess();
+					PRINTLOG(TEXT("First"));
+					bEnemyAtime = true;
+				}
+			}
+
+			else if (bEnemyAtime == true)
+			{
+				enemyASecondCurrentTime += GetWorld()->DeltaTimeSeconds;
+				if (enemyASecondCurrentTime >= 3.8f)
+				{
+					OnDamageProcess();
+					PRINTLOG(TEXT("Second"));
+					enemyASecondCurrentTime = 0.f;
+				}
+			}
+		}
+		else if ((!enemyA || enemyA->bCanAttack == false) && (!enemyB || enemyB->bCanAttack == false) && (!boss || boss->bCanAttack == false))
+		{
+			healCurrentTime += GetWorld()->DeltaTimeSeconds;
+			if (healCurrentTime >= 5.f && playerHP <= 9)
+			{
+				cameraFadeHeal();
+				PRINTLOG(TEXT("Heal"));
+				playerHP++;
+				healCurrentTime = 0;
+			}
+		}
+	}
     
 }
 

@@ -45,6 +45,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 	float pitchMultiplier = 1.f;
+	
+	UPROPERTY(BlueprintReadWrite, Category = GameEnd)
+	bool gameEnd = false;
 
 public:
 	// Health System

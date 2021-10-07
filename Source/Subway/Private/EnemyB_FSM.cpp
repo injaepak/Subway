@@ -165,6 +165,13 @@ void UEnemyB_FSM::MoveState()
 void UEnemyB_FSM::AttackState()
 {
 	PRINTLOG(TEXT("ATTACK"));
+	if (ai)
+	{
+		ai->StopMovement();
+		anim->isMoving = false;
+		//anim->isAttacking = true;
+	}
+
 	//EnemyB 어택 상태가 true 때만 Player 피격 판정 유효
 	me->bCanAttack = true;
 	// 시간이 흐른다.
@@ -248,6 +255,7 @@ void UEnemyB_FSM::DieState()
 	{
 		ai->StopMovement();
 		anim->isMoving = false;
+		//anim->isAttacking = false;
 	}
 	
 

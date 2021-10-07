@@ -91,10 +91,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = PickUPSettings)
 		class UChildActorComponent* mag;
 
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerHP)
-		int playerHP = 10;
+		int32 playerHP = 10;
 private:
 	void Fire1();
 	void Fire2();
@@ -113,6 +111,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		class AEnemyB* enemyB;
+
+	UPROPERTY(EditAnywhere)
+		class ABoss* boss;
 
 	FRotator hmdRotate;
 	FVector hmdLocation;

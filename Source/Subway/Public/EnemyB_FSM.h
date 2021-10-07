@@ -70,7 +70,7 @@ public:
 
 	//¹üÀ§
 	UPROPERTY(EditAnywhere, Category = FSM)
-	float attackRange = 260;
+	float attackRange = 250;
 
 	//Boss Movement
 	UPROPERTY(EditAnywhere, Category = EnemyBStats)

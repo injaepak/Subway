@@ -56,6 +56,8 @@ void AWeaponShotgun::Fire()
 	{*/
 		if (CurrentMagazineAmmo > 0)
 		{
+			isFire = true;
+
 			auto animInstance = Cast<UShotGunAnimInstance>(WeaponMesh->GetAnimInstance());
 			animInstance->Montage_Play(anim);			
 			
@@ -102,7 +104,7 @@ void AWeaponShotgun::Fire()
 			//------
 			for (int32 i = 0; i < HitResults.Num(); i++)
 			{
-				FHitResult Hit = HitResults[i];
+				Hit = HitResults[i];
 				
 				// DrawDebugSphere(GetWorld(), Hit.ImpactPoint, CollisionShape.GetSphereRadius(), 10.0f, FColor::Magenta, false, 10.0f, 1, 1.f);
 				//DrawDebugSphere(GetWorld(), Start, CollisionShape.GetSphereRadius(), 10.0f, FColor::Magenta, true, 10.0f, 1, 1.f);
