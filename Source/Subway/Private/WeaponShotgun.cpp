@@ -88,7 +88,7 @@ void AWeaponShotgun::Fire()
 			// 탄약 소모
 			CurrentMagazineAmmo--;
 			//Hit하지 않았더라도 남은 탄약 수 뷰포트상에 출력
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
+			// GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Extra Ammo: %d"), CurrentMagazineAmmo));
 			// 재장전이 필요한 상태로 전환
 			//needToReroad = true;
 
@@ -104,7 +104,7 @@ void AWeaponShotgun::Fire()
 			{
 				FHitResult Hit = HitResults[i];
 				
-				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, CollisionShape.GetSphereRadius(), 10.0f, FColor::Magenta, false, 10.0f, 1, 1.f);
+				// DrawDebugSphere(GetWorld(), Hit.ImpactPoint, CollisionShape.GetSphereRadius(), 10.0f, FColor::Magenta, false, 10.0f, 1, 1.f);
 				//DrawDebugSphere(GetWorld(), Start, CollisionShape.GetSphereRadius(), 10.0f, FColor::Magenta, true, 10.0f, 1, 1.f);
 			//------
 			
@@ -119,14 +119,14 @@ void AWeaponShotgun::Fire()
 					FTransform startTrans;
 					startTrans.SetLocation(Start + Rot * 1.0f);
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletShootEffect, startTrans);
-					GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("총구 이펙트 스폰 성공")));
+					// GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("총구 이펙트 스폰 성공")));
 
 					// 충돌이 발생했다면
 					if (Hit.GetComponent()->GetAttachmentRootActor() != NULL) // 지오메트리(Brush 타입)일 때 크래시 나지 않게 한다
 					{
 						//타격한 대상(액터)의 이름을 출력
 						//debugMessage
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, Hit.GetActor()->GetName());
+						// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, Hit.GetActor()->GetName());
 						//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, Hit.GetComponent()->GetName());
 
 						// 사용안함. 부딪혔을 때 부딪힌 지점에 이펙트 스폰. 기본값 : bulletAnotherHitEffect.
@@ -148,7 +148,7 @@ void AWeaponShotgun::Fire()
 
 							triggerBox->openTheDoor = true;
 
-							GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
+							// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%d"), triggerBox->openTheDoor));
 
 						}
 						// 만약 GunTargetActor를 쳤다면
@@ -205,7 +205,7 @@ void AWeaponShotgun::Fire()
 						// 맞은 대상이 EnemyA이므로 EnemyHit 이펙트를 Spawn
 						hitTrans.SetLocation(Hit.ImpactPoint);
 						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
-						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Magenta, FString::Printf(TEXT("에너미A 타격 이펙트 스폰 성공!")));
+						// GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Magenta, FString::Printf(TEXT("에너미A 타격 이펙트 스폰 성공!")));
 
 						//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemy를 타격!!!!")));
 
@@ -225,7 +225,7 @@ void AWeaponShotgun::Fire()
 						// 맞은 대상이 EnemyB이므로 EnemyHit 이펙트를 Spawn
 						hitTrans.SetLocation(Hit.ImpactPoint);
 						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEnemyHitEffect, hitTrans);
-						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Magenta, FString::Printf(TEXT("에너미B 타격 이펙트 스폰 성공!")));
+						// GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Magenta, FString::Printf(TEXT("에너미B 타격 이펙트 스폰 성공!")));
 						
 						//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("Enemy를 타격!!!!")));
 
