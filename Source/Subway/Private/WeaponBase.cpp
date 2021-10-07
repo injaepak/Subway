@@ -32,8 +32,8 @@ void AWeaponBase::Reload()
 {
 }
 
-TArray<int32> AWeaponBase::GetCurrentAmmo()
-{
-	return { CurrentMagazineAmmo, CurrentTotalAmmo };
-}
+//TArray<int32> AWeaponBase::GetCurrentAmmo()
+//{
+//	return { CurrentMagazineAmmo, CurrentTotalAmmo };
+//}
 
