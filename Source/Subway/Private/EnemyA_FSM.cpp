@@ -378,7 +378,7 @@ void UEnemyA_FSM::OnDamageProcess(float damage, FVector KBDirection, float KBPwr
 		if (bCanHit == false)
 		{
 			bCanHit = true;
-			G//Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("bCanHit In!!")));
+			//Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("bCanHit In!!")));
 			return;
 		}
 		this->isHeadPart = isHead;
